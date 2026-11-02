@@ -28,12 +28,46 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            menuStrip1 = new MenuStrip();
+            listaResidentesToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
+            SuspendLayout();
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.TabIndex = 0;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // listaResidentesToolStripMenuItem
+            // 
+            listaResidentesToolStripMenuItem.Name = "listaResidentesToolStripMenuItem";
+            listaResidentesToolStripMenuItem.Size = new Size(102, 20);
+            listaResidentesToolStripMenuItem.Text = "Lista Residentes";
+            listaResidentesToolStripMenuItem.Click += listaResidentesToolStripMenuItem_Click;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(menuStrip1);
+            IsMdiContainer = true;
+            Name = "Form1";
             Text = "Form1";
+            WindowState = FormWindowState.Maximized;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem listaResidentesToolStripMenuItem;
     }
 }
