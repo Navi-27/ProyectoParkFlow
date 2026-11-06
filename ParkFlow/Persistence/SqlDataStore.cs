@@ -2,7 +2,7 @@
 using ParkFlow.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+//using System.Security.Cryptography; no se sabe porque anda aqui, no se usa
 using System.Text;
 
 namespace ParkFlow.Persistence
@@ -18,7 +18,7 @@ namespace ParkFlow.Persistence
         public IEnumerable<T> LoadAll()
         {
             List<T> list = new List<T>();
-            using (MySqlConnection con = new MySqlConnection())
+            using MySqlConnection con = Database.CreateConnection();
             {
                 con.Open();
                 using (MySqlCommand cmd = new MySqlCommand(SelectSql, con))
@@ -26,7 +26,7 @@ namespace ParkFlow.Persistence
                 {
                     while(reader.Read())
                     {
-                        list.Append(Map(reader));
+                        list.Add(Map(reader));
                     }
                 }
             }
@@ -38,7 +38,7 @@ namespace ParkFlow.Persistence
             List<T> nuevosElementos = list.ToList();
             List<T> elementosBase = LoadAll().ToList();
 
-            using(MySqlConnection con = new MySqlConnection())
+            using MySqlConnection con = Database.CreateConnection();
             {
                 con.Open();
                 using (MySqlTransaction tran = con.BeginTransaction())
@@ -64,8 +64,8 @@ namespace ParkFlow.Persistence
                                 SetParameters(cmd, itemNuevo);
                                 cmd.ExecuteNonQuery();
                             }
-                            tran.Commit();
                         }
+                        tran.Commit();
                     }
                     catch (Exception)
                     {

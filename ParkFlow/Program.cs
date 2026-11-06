@@ -11,12 +11,6 @@ namespace ParkFlow
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            //RepositoryEstancias repo = new RepositoryEstancias();
-            //Estancia e = Estancia.Create();
-            //e.VehiculoPlaca = "ABC123";
-            //repo.Add(e);
-            //MessageBox.Show("Estancia creada con id " + e.Id + ". Activas: " + repo.GetActivas().Count());
-            //repo.Delete(e.Id);
             Application.Run(new Form1());
         }
     }
