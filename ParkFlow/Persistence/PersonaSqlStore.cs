@@ -1,9 +1,9 @@
 ﻿using MySqlConnector;
 using ParkFlow.models;
 
-namespace ParkFlow.Persistence
+namespace ParkFlow.Persistence // cambiar torres a string , mirar lo de movilidad reducida, eliminar sino no se usa la fecha de cxreacion y actualizacion en la base, quitar fecha de ocupacion por tiempo , mirar coordenadas 
 {
-    internal class PersonaSql : SqlDataStore<Persona, string>
+    internal class PersonaSqlStore : SqlDataStore<Persona, string>
     {
         protected override string SelectSql
         {
@@ -36,6 +36,7 @@ namespace ParkFlow.Persistence
             }
         }
 
+        // Convierte una fila de la base en una Persona
         protected override Persona Map(MySqlDataReader reader)
         {
             Persona persona;
@@ -57,12 +58,14 @@ namespace ParkFlow.Persistence
             persona.MovilidadReducida = reader.GetBoolean(reader.GetOrdinal("movilidad_reducida"));
             persona.Telefono = reader.GetString(reader.GetOrdinal("telefono"));
 
+            // Esta columna puede ser NULL en la base
             int posCorreo = reader.GetOrdinal("correo");
             persona.Correo = reader.IsDBNull(posCorreo) ? string.Empty : reader.GetString(posCorreo);
 
             return persona;
         }
 
+        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Persona p)
         {
             cmd.Parameters.AddWithValue("@documento", p.Id);

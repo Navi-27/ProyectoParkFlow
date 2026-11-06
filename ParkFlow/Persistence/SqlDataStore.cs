@@ -18,13 +18,13 @@ namespace ParkFlow.Persistence
         public IEnumerable<T> LoadAll()
         {
             List<T> list = new List<T>();
-            using (MySqlConnection con = new MySqlConnection())
+            using (MySqlConnection con = Database.CreateConnection())
             {
                 con.Open();
                 using (MySqlCommand cmd = new MySqlCommand(SelectSql, con))
-                using(MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         list.Append(Map(reader));
                     }
@@ -38,7 +38,7 @@ namespace ParkFlow.Persistence
             List<T> nuevosElementos = list.ToList();
             List<T> elementosBase = LoadAll().ToList();
 
-            using(MySqlConnection con = new MySqlConnection())
+            using(MySqlConnection con = Database.CreateConnection())
             {
                 con.Open();
                 using (MySqlTransaction tran = con.BeginTransaction())
@@ -64,8 +64,8 @@ namespace ParkFlow.Persistence
                                 SetParameters(cmd, itemNuevo);
                                 cmd.ExecuteNonQuery();
                             }
-                            tran.Commit();
                         }
+                        tran.Commit();
                     }
                     catch (Exception)
                     {
