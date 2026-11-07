@@ -9,12 +9,14 @@ namespace ParkFlow.models
     {
         public int Id { get; set; }
         public string PersonaDocumento { get; set; }
-        public int Torre { get; set; }
+        // Torre como texto: A1, A2, B1...
+        public string Torre { get; set; }
         public int Piso { get; set; }
         public int Apartamento { get; set; }
         private Vivienda()
         {
             PersonaDocumento = string.Empty;
+            Torre = string.Empty;
         }
 
         public static Vivienda Create()

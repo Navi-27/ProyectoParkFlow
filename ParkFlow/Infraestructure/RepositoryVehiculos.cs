@@ -11,15 +11,15 @@ namespace ParkFlow.Infraestructure
 {
     internal class RepositoryVehiculos : IRepository<Vehiculo, string> ,IUnitOfWork
     {
-        #region Singletoon
-        private static RepositoryVehiculos? _instancie;
-        private static RepositoryVehiculos? GetInstancie(IDataStore<Vehiculo> store)
+        #region Singleton
+        private static RepositoryVehiculos? _instance;
+        public static RepositoryVehiculos GetInstance(IDataStore<Vehiculo> store)
         {
-            if(_instancie == null)
+            if(_instance == null)
             {
-                _instancie = new RepositoryVehiculos(store);
+                _instance = new RepositoryVehiculos(store);
             }
-            return _instancie;
+            return _instance;
         }
         #endregion
 
@@ -29,9 +29,9 @@ namespace ParkFlow.Infraestructure
             _repository = new Repository<Vehiculo, string>(store);
         }
 
-        public void Add(Vehiculo envtity)
+        public void Add(Vehiculo vehiculo)
         {
-            _repository.Add(v);
+            _repository.Add(vehiculo);
         }
 
         public void Update(Vehiculo v)

@@ -9,7 +9,7 @@ namespace ParkFlow.Persistence
         {
             get 
             { 
-                return "SELECT id_estancia, vehiculo_placa, id_parqueo, fecha_llegada, fecha_ocupacion, fecha_salida FROM estancia ORDER BY fecha_llegada"; 
+                return "SELECT id_estancia, vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida FROM estancia ORDER BY fecha_llegada"; 
             }
         }
 
@@ -18,12 +18,12 @@ namespace ParkFlow.Persistence
             get
             {
                 return @"INSERT INTO estancia
-                    (id_estancia, vehiculo_placa, id_parqueo, fecha_llegada, fecha_ocupacion, fecha_salida)
+                    (id_estancia, vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida)
                     VALUES
-                    (@id, @placa, @parqueo, @llegada, @ocupacion, @salida)
+                    (@id, @placa, @parqueo, @llegada, @salida)
                     ON DUPLICATE KEY UPDATE
                     vehiculo_placa = @placa, id_parqueo = @parqueo, fecha_llegada = @llegada,
-                    fecha_ocupacion = @ocupacion, fecha_salida = @salida;";
+                    fecha_salida = @salida;";
             }
         }
 
@@ -38,15 +38,10 @@ namespace ParkFlow.Persistence
             Estancia estancia = Estancia.Create();
             estancia.Id = reader.GetInt32(reader.GetOrdinal("id_estancia"));
             estancia.VehiculoPlaca = reader.GetString(reader.GetOrdinal("vehiculo_placa"));
+            estancia.IdParqueadero = reader.GetInt32(reader.GetOrdinal("id_parqueo"));
             estancia.FechaLlegada = reader.GetDateTime(reader.GetOrdinal("fecha_llegada"));
 
-            // Estas tres columnas pueden ser NULL en la base
-            int posParqueo = reader.GetOrdinal("id_parqueo");
-            estancia.IdParqueadero = reader.IsDBNull(posParqueo) ? null : reader.GetInt32(posParqueo);
-
-            int posOcupacion = reader.GetOrdinal("fecha_ocupacion");
-            estancia.FechaOcupacion = reader.IsDBNull(posOcupacion) ? null : reader.GetDateTime(posOcupacion);
-
+            // NULL mientras el vehículo sigue en la plaza
             int posSalida = reader.GetOrdinal("fecha_salida");
             estancia.FechaSalida = reader.IsDBNull(posSalida) ? null : reader.GetDateTime(posSalida);
 
@@ -58,9 +53,8 @@ namespace ParkFlow.Persistence
         {
             cmd.Parameters.AddWithValue("@id", e.Id);
             cmd.Parameters.AddWithValue("@placa", e.VehiculoPlaca);
-            cmd.Parameters.AddWithValue("@parqueo", (object?)e.IdParqueadero ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@parqueo", e.IdParqueadero);
             cmd.Parameters.AddWithValue("@llegada", e.FechaLlegada);
-            cmd.Parameters.AddWithValue("@ocupacion", (object?)e.FechaOcupacion ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@salida", (object?)e.FechaSalida ?? DBNull.Value);
         }
 

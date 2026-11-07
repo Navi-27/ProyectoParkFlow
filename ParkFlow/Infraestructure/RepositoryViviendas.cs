@@ -10,15 +10,15 @@ namespace ParkFlow.Infraestructure
 {
     internal class RepositoryViviendas : IRepository<Vivienda, int>,IUnitOfWork
     {
-        #region Singletoon
-        private static RepositoryViviendas? _instancie;
-        private static RepositoryViviendas? GetInstacie(IDataStore<Vivienda> store)
+        #region Singleton
+        private static RepositoryViviendas? _instance;
+        public static RepositoryViviendas GetInstance(IDataStore<Vivienda> store)
         {
-            if(_instancie == null)
+            if(_instance == null)
             {
-                _instancie = new RepositoryViviendas(store);
+                _instance = new RepositoryViviendas(store);
             }
-            return _instancie;
+            return _instance;
         }
         #endregion
 

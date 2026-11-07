@@ -18,8 +18,10 @@ namespace ParkFlow.Infraestructure
 
         public void Add(T entity)
         {
+            bool esNuevo = EqualityComparer<E>.Default.Equals(entity.Id, default!);
+
             // Evita duplicados: si el id ya existe, al hacer Commit se sobrescribirian los datos del registro original
-            if (Exist(entity.Id))
+            if (!esNuevo && Exist(entity.Id))
             {
                 throw new InvalidOperationException($"Ya existe un registro con el id {entity.Id}.");
             }
@@ -61,7 +63,16 @@ namespace ParkFlow.Infraestructure
 
         public void Commit()
         {
-            _store.SaveAll(_cache);
+            try
+            {
+                _store.SaveAll(_cache);
+            }
+            catch
+            {
+                _cache = _store.LoadAll().ToList();
+                throw;
+            }
+            
         }
     }
 }

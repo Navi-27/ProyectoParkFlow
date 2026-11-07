@@ -1,7 +1,7 @@
 ﻿using MySqlConnector;
 using ParkFlow.models;
 
-namespace ParkFlow.Persistence // cambiar torres a string , mirar lo de movilidad reducida, eliminar sino no se usa la fecha de cxreacion y actualizacion en la base, quitar fecha de ocupacion por tiempo , mirar coordenadas 
+namespace ParkFlow.Persistence // pendiente: mirar lo de movilidad reducida, mirar coordenadas
 {
     internal class PersonaSqlStore : SqlDataStore<Persona, string>
     {
@@ -39,17 +39,16 @@ namespace ParkFlow.Persistence // cambiar torres a string , mirar lo de movilida
         // Convierte una fila de la base en una Persona
         protected override Persona Map(MySqlDataReader reader)
         {
-            Persona persona;
             string tipo = reader.GetString(reader.GetOrdinal("tipo_persona"));
 
-            if (tipo.ToUpper() == "RESIDENTE")
+            // Crea la subclase según tipo_persona
+            Persona persona = tipo.ToUpper() switch
             {
-                persona = Residente.Create();
-            }
-            else
-            {
-                persona = Visitante.Create();
-            }
+                "RESIDENTE" => Residente.Create(),
+                "VISITANTE" => Visitante.Create(),
+                "EMPLEADO" => Empleado.Create(),
+                _ => throw new InvalidOperationException($"Tipo de persona desconocido: {tipo}")
+            };
 
             persona.Id = reader.GetString(reader.GetOrdinal("documento"));
             persona.TipoDocumento = reader.GetString(reader.GetOrdinal("tipo_documento"));
@@ -75,7 +74,19 @@ namespace ParkFlow.Persistence // cambiar torres a string , mirar lo de movilida
             cmd.Parameters.AddWithValue("@movilidad", p.MovilidadReducida);
             cmd.Parameters.AddWithValue("@telefono", p.Telefono);
             cmd.Parameters.AddWithValue("@correo",string.IsNullOrWhiteSpace(p.Correo) ? DBNull.Value : p.Correo);
-            cmd.Parameters.AddWithValue("@tipoPersona", p is Residente ? "RESIDENTE" : "VISITANTE");
+            cmd.Parameters.AddWithValue("@tipoPersona", TipoPersona(p));
+        }
+
+        // Valor de tipo_persona según la subclase
+        private static string TipoPersona(Persona p)
+        {
+            return p switch
+            {
+                Residente => "RESIDENTE",
+                Visitante => "VISITANTE",
+                Empleado => "EMPLEADO",
+                _ => throw new InvalidOperationException($"Tipo de persona no soportado: {p.GetType().Name}")
+            };
         }
     }
 }

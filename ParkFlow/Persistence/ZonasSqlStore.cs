@@ -12,7 +12,7 @@ namespace ParkFlow.Persistence
         {
             get
             {
-                return "SELECT nombre, ancho, largo FROM zona";
+                return "SELECT id_zona, nombre, ancho, largo FROM zona";
             }
         }
 

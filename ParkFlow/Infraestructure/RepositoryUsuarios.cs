@@ -1,5 +1,4 @@
-﻿using MySqlConnector;
-using ParkFlow.Contracts;
+﻿using ParkFlow.Contracts;
 using ParkFlow.models;
 using ParkFlow.Persistence;
 using System;
@@ -9,21 +8,25 @@ using System.Text;
 
 namespace ParkFlow.Infraestructure
 {
-    internal class RepositoryUsuarios : IRepository<Usuario, int>
+    internal class RepositoryUsuarios : IRepository<Usuario, int>, IUnitOfWork
     {
-        private const string Columnas = "id_usuario, usuario, password, rol";
-
-        // Convierte una fila de la tabla usuario en un Usuario
-        private Usuario Map(MySqlDataReader reader)
+        #region Singleton
+        private static RepositoryUsuarios? _instance;
+        public static RepositoryUsuarios GetInstance(IDataStore<Usuario> store)
         {
-            Usuario usuario = Usuario.Create();
+            if (_instance == null)
+            {
+                _instance = new RepositoryUsuarios(store);
+            }
+            return _instance;
+        }
+        #endregion
 
-            usuario.Id = reader.GetInt32(reader.GetOrdinal("id_usuario"));
-            usuario.NombreUsuario = reader.GetString(reader.GetOrdinal("usuario"));
-            usuario.Password = reader.GetString(reader.GetOrdinal("password"));
-            usuario.Rol = reader.GetString(reader.GetOrdinal("rol"));
+        private Repository<Usuario, int> _repository;
 
-            return usuario;
+        private RepositoryUsuarios(IDataStore<Usuario> store)
+        {
+            _repository = new Repository<Usuario, int>(store);
         }
 
         // Hash SHA-256 en mayusculas: igual al UPPER(SHA2(clave, 256)) de los datos de prueba
@@ -33,161 +36,76 @@ namespace ParkFlow.Infraestructure
             return Convert.ToHexString(bytes);
         }
 
-        // Add y Update guardan entity.Password tal cual: debe llegar ya con el hash
-        public void Add(Usuario entity)
+        // Add guarda entity.Password tal cual: debe llegar ya con el hash (preferir Registrar)
+        public void Add(Usuario u)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = @"INSERT INTO usuario
-                (
-                    usuario,
-                    password,
-                    rol
-                )
-                VALUES
-                (
-                    @usuario,
-                    @password,
-                    @rol
-                );";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@usuario", entity.NombreUsuario);
-                    cmd.Parameters.AddWithValue("@password", entity.Password);
-                    cmd.Parameters.AddWithValue("@rol", entity.Rol);
-
-                    cmd.ExecuteNonQuery();
-
-                    entity.Id = Convert.ToInt32(cmd.LastInsertedId);
-                }
-            }
+            Validar(u);
+            _repository.Add(u);
         }
 
-        public void Update(Usuario entity)
+        public void Update(Usuario u)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = @"UPDATE usuario
-                              SET
-                               usuario = @usuario,
-                               password = @password,
-                               rol = @rol
-                              WHERE id_usuario = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@usuario", entity.NombreUsuario);
-                    cmd.Parameters.AddWithValue("@password", entity.Password);
-                    cmd.Parameters.AddWithValue("@rol", entity.Rol);
-                    cmd.Parameters.AddWithValue("@id", entity.Id);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            Validar(u);
+            _repository.Update(u);
         }
 
         public void Delete(int id)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "DELETE FROM usuario WHERE id_usuario = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            _repository.Delete(id);
         }
 
         public bool Exist(int id)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT COUNT(*) FROM usuario WHERE id_usuario = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
-                }
-            }
+            return _repository.Exist(id);
         }
 
         public IEnumerable<Usuario> GetAll()
         {
-            List<Usuario> usuarios = new List<Usuario>();
-
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT " + Columnas + " FROM usuario";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            usuarios.Add(Map(reader));
-                        }
-                    }
-                }
-            }
-            return usuarios;
+            return _repository.GetAll();
         }
 
         public Usuario? GetById(int id)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT " + Columnas + " FROM usuario WHERE id_usuario = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return Map(reader);
-                        }
-                    }
-                }
-            }
-            return null;
+            return _repository.GetById(id);
         }
 
+        public void Commit()
+        {
+            _repository.Commit();
+        }
+
+        // Extra (no esta en IRepository): crea el usuario de un empleado con la clave ya cifrada.
+        // Recibe un Empleado para que solo el personal del conjunto pueda tener usuario.
+        public Usuario Registrar(Empleado empleado, string nombreUsuario, string clave, RolUsuario rol)
+        {
+            Usuario usuario = Usuario.Create();
+            usuario.PersonaDocumento = empleado.Id;
+            usuario.NombreUsuario = nombreUsuario;
+            usuario.Password = HashPassword(clave);
+            usuario.Rol = rol;
+
+            Add(usuario);
+            return usuario;
+        }
+
+        // Extra: cambia la clave de un usuario guardándola cifrada
+        public void CambiarClave(Usuario usuario, string nuevaClave)
+        {
+            usuario.Password = HashPassword(nuevaClave);
+            Update(usuario);
+        }
+
+        // Extra: busca por nombre de usuario sin distinguir mayúsculas (igual que la base)
         public Usuario? GetByNombreUsuario(string nombreUsuario)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT " + Columnas + " FROM usuario WHERE usuario = @usuario;";
+            return _repository.GetAll().FirstOrDefault(u =>
+                string.Equals(u.NombreUsuario, nombreUsuario, StringComparison.OrdinalIgnoreCase));
+        }
 
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@usuario", nombreUsuario);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return Map(reader);
-                        }
-                    }
-                }
-            }
-            return null;
+        // Extra: usuario asignado a una persona (o null si no tiene)
+        public Usuario? GetByPersona(string documento)
+        {
+            return _repository.GetAll().FirstOrDefault(u => u.PersonaDocumento == documento);
         }
 
         // Login: devuelve el usuario si el nombre y la clave coinciden, o null si no
@@ -200,6 +118,36 @@ namespace ParkFlow.Infraestructure
                 return usuario;
             }
             return null;
+        }
+
+        // Reglas de la tabla: nombre de usuario único y una persona con máximo un usuario.
+        // Se revisan antes de guardar para dar un mensaje claro en vez de un error de la base.
+        private void Validar(Usuario u)
+        {
+            if (string.IsNullOrWhiteSpace(u.PersonaDocumento))
+            {
+                throw new InvalidOperationException("El usuario debe estar asignado a una persona.");
+            }
+
+            if (EsOtro(GetByNombreUsuario(u.NombreUsuario), u))
+            {
+                throw new InvalidOperationException($"Ya existe el usuario '{u.NombreUsuario}'.");
+            }
+
+            if (EsOtro(GetByPersona(u.PersonaDocumento), u))
+            {
+                throw new InvalidOperationException($"La persona {u.PersonaDocumento} ya tiene un usuario.");
+            }
+        }
+
+        // true si "encontrado" es un usuario distinto a "u" (los nuevos tienen Id 0, por eso se compara también la referencia)
+        private static bool EsOtro(Usuario? encontrado, Usuario u)
+        {
+            if (encontrado == null || ReferenceEquals(encontrado, u))
+            {
+                return false;
+            }
+            return u.Id == 0 || encontrado.Id != u.Id;
         }
     }
 }

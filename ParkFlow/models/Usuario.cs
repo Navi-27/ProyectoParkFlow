@@ -8,22 +8,25 @@ namespace ParkFlow.models
     internal class Usuario : IEntity<int>
     {
         public int Id { get; set; }
+        // Persona a la que pertenece el usuario (llave foránea a persona.documento)
+        public string PersonaDocumento { get; set; }
         public string NombreUsuario { get; set; }
         public string Password { get; set; }
-        public string Rol { get; set; }
+        public RolUsuario Rol { get; set; }
         private Usuario()
         {
             Id = 0;
+            PersonaDocumento = string.Empty;
             NombreUsuario = string.Empty;
             Password = string.Empty;
-            Rol = "PORTERO";
+            Rol = RolUsuario.Portero;
         }
 
         public static Usuario Create()
         {
             return new Usuario();
         }
-      
+
 
     }
 }

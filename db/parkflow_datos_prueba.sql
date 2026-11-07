@@ -4,12 +4,7 @@
 -- =====================================================
 USE `proyecto_integrador`;
 
--- 1. Usuarios (UPPER para que el hash coincida con Convert.ToHexString de C#)
-INSERT INTO usuario (usuario, password, rol) VALUES
-('admin',   UPPER(SHA2('admin123', 256)),   'ADMIN'),
-('portero', UPPER(SHA2('portero123', 256)), 'PORTERO');
-
--- 2. Personas (5 residentes, 3 visitantes)
+-- 1. Personas (5 residentes, 3 visitantes, 2 empleados del conjunto)
 INSERT INTO persona (documento, tipo_documento, nombre, apellido, telefono, correo, tipo_persona, movilidad_reducida) VALUES
 ('1001','CC','Ana','Pérez','3001112222','ana@mail.com','RESIDENTE',0),
 ('1002','CC','Luis','Gómez','3003334444','luis@mail.com','RESIDENTE',1),
@@ -18,21 +13,28 @@ INSERT INTO persona (documento, tipo_documento, nombre, apellido, telefono, corr
 ('1005','CC','Sofía','Torres','3039990000','sofia@mail.com','RESIDENTE',0),
 ('2001','CC','Marta','Ruiz','3041112222','marta@mail.com','VISITANTE',0),
 ('2002','TI','Jorge','Castro','3053334444',NULL,'VISITANTE',0),
-('2003','CC','Elena','Díaz','3065556666','elena@mail.com','VISITANTE',0);
+('2003','CC','Elena','Díaz','3065556666','elena@mail.com','VISITANTE',0),
+('3001','CC','Andrés','Morales','3071112222','admin@parkflow.com','EMPLEADO',0),
+('3002','CC','Diana','Rojas','3073334444',NULL,'EMPLEADO',0);
+
+-- 2. Usuarios: cada uno enlazado a un empleado (UPPER para que el hash coincida con Convert.ToHexString de C#)
+INSERT INTO usuario (persona_documento, usuario, password, rol) VALUES
+('3001', 'admin',   UPPER(SHA2('admin123', 256)),   'ADMIN'),
+('3002', 'portero', UPPER(SHA2('portero123', 256)), 'PORTERO');
 
 -- 3. Zonas (medidas en metros)
 INSERT INTO zona (nombre, ancho, largo) VALUES
 ('Zona A', 15, 6),
 ('Zona B', 9, 6);
 
--- 4. Viviendas (Ana tiene dos apartamentos: prueba del 1 a muchos)
+-- 4. Viviendas (Ana tiene dos apartamentos: prueba del 1 a muchos). Torre = texto (A1, A2, B1...)
 INSERT INTO vivienda (persona_documento, torre, piso, apartamento) VALUES
-('1001',1,3,301),   -- id 1
-('1001',1,5,502),   -- id 2
-('1002',2,1,102),   -- id 3
-('1003',2,4,403),   -- id 4
-('1004',3,2,201),   -- id 5
-('1005',3,6,601);   -- id 6
+('1001','A1',3,301),   -- id 1
+('1001','A1',5,502),   -- id 2
+('1002','A2',1,102),   -- id 3
+('1003','A2',4,403),   -- id 4
+('1004','B1',2,201),   -- id 5
+('1005','B1',6,601);   -- id 6
 
 -- 5. Vehículos (Ana tiene un carro y una moto)
 INSERT INTO vehiculo (placa, tipo_vehiculo, persona_documento, modelo, marca) VALUES
@@ -71,24 +73,21 @@ INSERT INTO registro (persona_visitante, persona_visitada, vivienda_id_vivienda,
 ('2003','1002', 3, '2026-10-09 16:00:00', '2026-10-09 18:20:00');
 
 -- 9. Historial de estancias de vehículos
+--    fecha_llegada = ocupa la plaza; el tiempo ocupado se calcula en el código
 -- 9a. Estancias abiertas (coinciden con las plazas ocupadas del paso 7)
-INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_ocupacion, fecha_salida) VALUES
-('ABC123', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-01'), '2026-10-11 07:55:00', '2026-10-11 07:58:00', NULL),
-('XYZ987', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-03'), '2026-10-11 08:40:00', '2026-10-11 08:41:30', NULL),
-('GHI789', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-04'), '2026-10-11 09:10:00', '2026-10-11 09:12:00', NULL),
-('VIS001', (SELECT id_parqueo FROM parqueo WHERE codigo = 'B-01'), '2026-10-11 14:00:00', '2026-10-11 14:03:00', NULL);
+INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida) VALUES
+('ABC123', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-01'), '2026-10-11 07:58:00', NULL),
+('XYZ987', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-03'), '2026-10-11 08:41:30', NULL),
+('GHI789', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-04'), '2026-10-11 09:12:00', NULL),
+('VIS001', (SELECT id_parqueo FROM parqueo WHERE codigo = 'B-01'), '2026-10-11 14:03:00', NULL);
 
--- 9b. Un vehículo esperando en la fila (sin plaza todavía)
-INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_ocupacion, fecha_salida) VALUES
-('VIS002', NULL, '2026-10-11 14:20:00', NULL, NULL);
-
--- 9c. Estancias cerradas (sirven para tiempos de espera, permanencia y flujo)
-INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_ocupacion, fecha_salida) VALUES
-('ABC123', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-01'), '2026-10-10 07:50:00', '2026-10-10 07:52:00', '2026-10-10 19:00:00'),
-('DEF456', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-02'), '2026-10-10 18:00:00', '2026-10-10 18:02:00', '2026-10-11 06:30:00'),
-('JKL321', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-05'), '2026-10-10 19:15:00', '2026-10-10 19:20:00', '2026-10-11 07:10:00'),
-('MNO654', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-06'), '2026-10-10 17:30:00', '2026-10-10 17:31:00', '2026-10-11 06:45:00'),
-('VIS002', (SELECT id_parqueo FROM parqueo WHERE codigo = 'B-02'), '2026-10-10 09:30:00', '2026-10-10 09:36:00', '2026-10-10 11:45:00');
+-- 9b. Estancias cerradas (sirven para tiempo ocupado, rotación y flujo)
+INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida) VALUES
+('ABC123', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-01'), '2026-10-10 07:52:00', '2026-10-10 19:00:00'),
+('DEF456', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-02'), '2026-10-10 18:02:00', '2026-10-11 06:30:00'),
+('JKL321', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-05'), '2026-10-10 19:20:00', '2026-10-11 07:10:00'),
+('MNO654', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-06'), '2026-10-10 17:31:00', '2026-10-11 06:45:00'),
+('VIS002', (SELECT id_parqueo FROM parqueo WHERE codigo = 'B-02'), '2026-10-10 09:36:00', '2026-10-10 11:45:00');
 
 -- 10. Grafo de rutas
 -- 10a. Nodos de infraestructura

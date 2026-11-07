@@ -63,6 +63,11 @@ namespace ParkFlow.Persistence
                             {
                                 SetParameters(cmd, itemNuevo);
                                 cmd.ExecuteNonQuery();
+
+                                if (itemNuevo.Id is int id && id == 0)
+                                {
+                                    itemNuevo.Id = (E)(object)Convert.ToInt32(cmd.LastInsertedId);
+                                }
                             }
                         }
                         tran.Commit();

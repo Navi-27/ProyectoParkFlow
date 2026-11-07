@@ -10,15 +10,15 @@ namespace ParkFlow.Infraestructure
 {
     internal class RepositoryZonas : IRepository<Zona, int>, IUnitOfWork
     {
-        #region Singletoon
-        private static RepositoryZonas? _instancie;
-        private static RepositoryZonas GetInstacie(IDataStore<Zona> store)
+        #region Singleton
+        private static RepositoryZonas? _instance;
+        public static RepositoryZonas GetInstance(IDataStore<Zona> store)
         {
-            if (_instancie == null)
-            { 
-                _instancie = new RepositoryZonas(store);
+            if (_instance == null)
+            {
+                _instance = new RepositoryZonas(store);
             }
-            return _instancie;
+            return _instance;
         }
         #endregion
 

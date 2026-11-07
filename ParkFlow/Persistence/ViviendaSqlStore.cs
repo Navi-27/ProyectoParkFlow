@@ -45,7 +45,7 @@ namespace ParkFlow.Persistence
 
             vivienda.Id = reader.GetInt32(reader.GetOrdinal("id_vivienda"));
             vivienda.PersonaDocumento = reader.GetString(reader.GetOrdinal("persona_documento"));
-            vivienda.Torre = reader.GetInt32(reader.GetOrdinal("torre"));
+            vivienda.Torre = reader.GetString(reader.GetOrdinal("torre"));
             vivienda.Piso = reader.GetInt32(reader.GetOrdinal("piso"));
             vivienda.Apartamento = reader.GetInt32(reader.GetOrdinal("apartamento"));
 

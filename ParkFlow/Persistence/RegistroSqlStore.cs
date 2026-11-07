@@ -57,14 +57,14 @@ namespace ParkFlow.Persistence
             return registro;
         }
 
-        protected override void SetParameters(MySqlCommand cmd, Registro entity)
+        protected override void SetParameters(MySqlCommand cmd, Registro registro)
         {
-            cmd.Parameters.AddWithValue("@id", r.Id);
-            cmd.Parameters.AddWithValue("@visitante", r.PersonaVisitante);
-            cmd.Parameters.AddWithValue("@visitada", r.PersonaVisitada);
-            cmd.Parameters.AddWithValue("@vivienda", r.IdVivienda);
-            cmd.Parameters.AddWithValue("@ingreso", r.FechaIngreso);
-            cmd.Parameters.AddWithValue("@salida", (object?)r.FechaSalida ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@id", registro.Id);
+            cmd.Parameters.AddWithValue("@personaVisitante", registro.PersonaVisitante);
+            cmd.Parameters.AddWithValue("@personaVisitada", registro.PersonaVisitada);
+            cmd.Parameters.AddWithValue("@idVivienda", registro.IdVivienda);
+            cmd.Parameters.AddWithValue("@fechaIngreso", registro.FechaIngreso);
+            cmd.Parameters.AddWithValue("@fechaSalida", (object?)registro.FechaSalida ?? DBNull.Value);
         }
     }
 }

@@ -10,14 +10,14 @@ namespace ParkFlow.Infraestructure
 {
     internal class RepositoryParqueaderos : IRepository<Parqueadero, int>, IUnitOfWork
     {
-        private static RepositoryParqueaderos? _instancie;
-        private static RepositoryParqueaderos GetInstancie(IDataStore<Parqueadero> store)
+        private static RepositoryParqueaderos? _instance;
+        public static RepositoryParqueaderos GetInstance(IDataStore<Parqueadero> store)
         {
-            if (_instancie == null)
+            if (_instance == null)
             {
-                return _instancie = new RepositoryParqueaderos(store);
+                return _instance = new RepositoryParqueaderos(store);
             }
-            return _instancie;
+            return _instance;
         }
 
         private Repository<Parqueadero, int> _repository;

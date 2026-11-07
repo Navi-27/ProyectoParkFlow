@@ -23,26 +23,30 @@ CREATE TABLE `persona` (
   `apellido` VARCHAR(100) NOT NULL,
   `telefono` VARCHAR(15) NOT NULL,
   `correo` VARCHAR(150) NULL DEFAULT NULL,
-  `tipo_persona` ENUM('RESIDENTE', 'VISITANTE') NOT NULL,
+  `tipo_persona` ENUM('RESIDENTE', 'VISITANTE', 'EMPLEADO') NOT NULL,
   `movilidad_reducida` TINYINT(1) NOT NULL DEFAULT 0,
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`documento`)
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- usuario (login de la app) - ahora con llave primaria y rol
+-- usuario (login de la app) - con llave primaria y rol
 -- password guarda el HASH SHA-256 en hexadecimal (64 caracteres)
+-- Cada usuario pertenece a una persona (1 a 1): solo el personal
+-- del conjunto (admin y porteros) tiene acceso al programa
 -- -----------------------------------------------------
 CREATE TABLE `usuario` (
   `id_usuario` INT NOT NULL AUTO_INCREMENT,
+  `persona_documento` VARCHAR(20) NOT NULL,
   `usuario` VARCHAR(100) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `rol` ENUM('ADMIN', 'PORTERO') NOT NULL DEFAULT 'PORTERO',
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_usuario`),
-  UNIQUE INDEX `uq_usuario_usuario` (`usuario`)
+  UNIQUE INDEX `uq_usuario_usuario` (`usuario`),
+  UNIQUE INDEX `uq_usuario_persona` (`persona_documento`),
+  CONSTRAINT `fk_usuario_persona`
+    FOREIGN KEY (`persona_documento`)
+    REFERENCES `persona` (`documento`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -54,8 +58,6 @@ CREATE TABLE `vehiculo` (
   `persona_documento` VARCHAR(20) NOT NULL,
   `modelo` VARCHAR(30) NOT NULL,
   `marca` VARCHAR(30) NOT NULL,
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`placa`),
   INDEX `fk_vehiculo_persona_idx` (`persona_documento`),
   CONSTRAINT `fk_vehiculo_persona`
@@ -72,8 +74,6 @@ CREATE TABLE `zona` (
   `nombre` VARCHAR(45) NOT NULL,
   `ancho` DOUBLE NOT NULL DEFAULT 0,
   `largo` DOUBLE NOT NULL DEFAULT 0,
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_zona`),
   UNIQUE INDEX `uq_zona_nombre` (`nombre`)
 ) ENGINE = InnoDB;
@@ -84,11 +84,9 @@ CREATE TABLE `zona` (
 CREATE TABLE `vivienda` (
   `id_vivienda` INT NOT NULL AUTO_INCREMENT,
   `persona_documento` VARCHAR(20) NOT NULL,
-  `torre` INT NOT NULL,
+  `torre` VARCHAR(10) NOT NULL,
   `piso` INT NOT NULL,
   `apartamento` INT NOT NULL,
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_vivienda`),
   INDEX `fk_vivienda_persona1_idx` (`persona_documento`),
   CONSTRAINT `fk_vivienda_persona1`
@@ -112,8 +110,6 @@ CREATE TABLE `parqueo` (
   `coord_y` DOUBLE NOT NULL DEFAULT 0,
   `coord_z` DOUBLE NOT NULL DEFAULT 0,
   `tipo` ENUM('RESIDENTE', 'VISITANTE', 'MOVILIDAD_REDUCIDA') NOT NULL DEFAULT 'VISITANTE',
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_parqueo`),
   UNIQUE INDEX `codigo_UNIQUE` (`codigo`),
   UNIQUE INDEX `vehiculo_placa_UNIQUE` (`vehiculo_placa`),
@@ -144,8 +140,6 @@ CREATE TABLE `registro` (
   `vivienda_id_vivienda` INT NOT NULL,
   `fecha_ingreso` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_salida` DATETIME NULL DEFAULT NULL,
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_registro`),
   INDEX `fk_registro_persona1_idx` (`persona_visitada`),
   INDEX `fk_registro_persona2_idx` (`persona_visitante`),
@@ -165,19 +159,18 @@ CREATE TABLE `registro` (
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- estancia (NUEVA) - historial de entradas/salidas de vehiculos
---   fecha_llegada   = entra a la fila
---   fecha_ocupacion = ocupa la plaza   (espera = ocupacion - llegada)
---   fecha_salida    = se va            (permanencia = salida - ocupacion)
--- id_parqueo NULL mientras el vehiculo espera en la fila
+-- estancia - historial de uso de las plazas
+--   fecha_llegada = ocupa la plaza
+--   fecha_salida  = se va
+-- El tiempo ocupado (salida - llegada) se calcula en el codigo (Estancia.TiempoOcupado).
+-- La espera en la fila no se guarda: se maneja en memoria con la cola de prioridad.
 -- Estancia abierta = fecha_salida IS NULL
 -- -----------------------------------------------------
 CREATE TABLE `estancia` (
   `id_estancia` INT NOT NULL AUTO_INCREMENT,
   `vehiculo_placa` VARCHAR(6) NOT NULL,
-  `id_parqueo` INT NULL DEFAULT NULL,
+  `id_parqueo` INT NOT NULL,
   `fecha_llegada` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_ocupacion` DATETIME NULL DEFAULT NULL,
   `fecha_salida` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id_estancia`),
   INDEX `idx_estancia_placa` (`vehiculo_placa`),

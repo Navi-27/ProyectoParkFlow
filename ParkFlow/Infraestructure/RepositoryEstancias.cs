@@ -12,7 +12,7 @@ namespace ParkFlow.Infraestructure
     {
         #region Singleton
         private static RepositoryEstancias? _instance;
-        private static RepositoryEstancias GetInstance(IDataStore<Estancia> store)
+        public static RepositoryEstancias GetInstance(IDataStore<Estancia> store)
         {
             if (_instance == null)
             {
