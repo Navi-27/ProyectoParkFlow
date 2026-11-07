@@ -5,171 +5,63 @@ using ParkFlow.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace ParkFlow.Infraestructure
 {
-    internal class RepositoryVehiculos : IRepository<Vehiculo, string>
+    internal class RepositoryVehiculos : IRepository<Vehiculo, string> ,IUnitOfWork
     {
-        private Vehiculo Map(MySqlDataReader reader)
+        #region Singletoon
+        private static RepositoryVehiculos? _instancie;
+        private static RepositoryVehiculos? GetInstancie(IDataStore<Vehiculo> store)
         {
-            Vehiculo vehiculo;
-            string tipo = reader.GetString(reader.GetOrdinal("tipo_vehiculo"));
-
-            if (tipo.ToUpper() == "CARRO")
+            if(_instancie == null)
             {
-                vehiculo = Carro.Create();
+                _instancie = new RepositoryVehiculos(store);
             }
-            else
-            {
-                vehiculo = Moto.Create();
-            }
-            vehiculo.Id = reader.GetString(reader.GetOrdinal("placa"));
-            vehiculo.PersonaDocumento = reader.GetString(reader.GetOrdinal("persona_documento"));
-            vehiculo.Modelo = reader.GetString(reader.GetOrdinal("modelo"));
-            vehiculo.Marca = reader.GetString(reader.GetOrdinal("marca"));
-
-            return vehiculo;
-
+            return _instancie;
         }
-        public void Add(Vehiculo entity)
+        #endregion
+
+        private Repository<Vehiculo, string> _repository;
+        private RepositoryVehiculos(IDataStore<Vehiculo> store)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = @"INSERT INTO vehiculo
-                (
-                    placa,
-                    tipo_vehiculo,
-                    persona_documento,
-                    modelo,
-                    marca
-                )
-                VALUES
-                (
-                    @placa,
-                    @tipo,
-                    @persona,
-                    @modelo,
-                    @marca
-                );";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@placa", entity.Id);
-                    cmd.Parameters.AddWithValue("@tipo", entity.Tipo());
-                    cmd.Parameters.AddWithValue("@persona", entity.PersonaDocumento);
-                    cmd.Parameters.AddWithValue("@modelo", entity.Modelo);
-                    cmd.Parameters.AddWithValue("@marca", entity.Marca);
-
-                    cmd.ExecuteNonQuery();
-
-                }
-            }
+            _repository = new Repository<Vehiculo, string>(store);
         }
 
-        public void Update(Vehiculo entity)
+        public void Add(Vehiculo envtity)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = @"UPDATE vehiculo
-                              SET
-                              tipo_vehiculo = @tipo,
-                              persona_documento = @persona,
-                              modelo = @modelo,
-                              marca = @marca
-                              WHERE placa = @id;";
+            _repository.Add(v);
+        }
 
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@tipo", entity.Tipo());
-                    cmd.Parameters.AddWithValue("@persona", entity.PersonaDocumento);
-                    cmd.Parameters.AddWithValue("@modelo", entity.Modelo);
-                    cmd.Parameters.AddWithValue("@marca", entity.Marca);
-                    cmd.Parameters.AddWithValue("@id", entity.Id);
-
-                    cmd.ExecuteNonQuery();
-                }
-
-            }
+        public void Update(Vehiculo v)
+        {
+           _repository.Update(v);
         }
 
         public void Delete(string id)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "DELETE FROM vehiculo WHERE placa = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
+           _repository.Delete(id);
         }
 
         public bool Exist(string id)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT COUNT(*) FROM vehiculo WHERE placa = @id;";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
-                }
-            }
+           return _repository.Exist(id);
         }
 
         public IEnumerable<Vehiculo> GetAll()
         {
-            List<Vehiculo> vehiculos = new List<Vehiculo>();
-
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT placa, tipo_vehiculo, persona_documento, modelo, marca FROM vehiculo";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            vehiculos.Add(Map(reader));
-                        }
-                    }
-                }
-            }
-            return vehiculos;
+            return _repository.GetAll();
         }
 
         public Vehiculo? GetById(string id)
         {
-            using (MySqlConnection con = Database.CreateConnection())
-            {
-                con.Open();
-                string sql = "SELECT placa, tipo_vehiculo, persona_documento, modelo, marca FROM vehiculo WHERE placa = @id;";
+           return _repository.GetById(id);
+        }
 
-                using (MySqlCommand cmd = new MySqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return Map(reader);
-                        }
-                    }
-                }
-            }
-            return null;
+        public void Commit()
+        {
+            _repository.Commit();
         }
     }
 

@@ -22,9 +22,9 @@ namespace ParkFlow.Persistence
             {
                 con.Open();
                 using (MySqlCommand cmd = new MySqlCommand(SelectSql, con))
-                using(MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         list.Add(Map(reader));
                     }
