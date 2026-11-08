@@ -14,7 +14,6 @@ namespace ParkFlow.models
         public DateTime FechaIngreso {  get; set; }
         public DateTime? FechaSalida {  get; set; }
 
-        // Duración de la visita; si el visitante sigue adentro, se mide hasta ahora
         public TimeSpan TiempoVisita
         {
             get { return (FechaSalida ?? DateTime.Now) - FechaIngreso; }

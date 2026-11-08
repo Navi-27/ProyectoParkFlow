@@ -9,7 +9,6 @@ namespace ParkFlow.models
     {
         public int Id { get; set; }
         public string PersonaDocumento { get; set; }
-        // Torre como texto: A1, A2, B1...
         public string Torre { get; set; }
         public int Piso { get; set; }
         public int Apartamento { get; set; }
@@ -24,6 +23,5 @@ namespace ParkFlow.models
             return new Vivienda();
         }
 
-        
     }
 }

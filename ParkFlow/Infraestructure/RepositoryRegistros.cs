@@ -58,7 +58,6 @@ namespace ParkFlow.Infraestructure
            return _repository.GetAll();
         }
 
-        // Extra (no esta en IRepository): visitas que aun no han salido
         public IEnumerable<Registro> GetActivas()
         {
             return _repository.GetAll().Where(e => e.FechaSalida == null).ToList();

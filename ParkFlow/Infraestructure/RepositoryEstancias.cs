@@ -64,7 +64,6 @@ namespace ParkFlow.Infraestructure
             _repository.Commit();
         }
 
-        // Extra (no esta en IRepository): estancias que aun no han salido
         public IEnumerable<Estancia> GetActivas()
         {
             return _repository.GetAll().Where(e => e.FechaSalida == null).ToList();

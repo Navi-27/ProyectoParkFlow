@@ -32,7 +32,6 @@ namespace ParkFlow.Persistence
             get { return "DELETE FROM estancia WHERE id_estancia = @id"; }
         }
 
-        // Convierte una fila de la base en un Estancia
         protected override Estancia Map(MySqlDataReader reader)
         {
             Estancia estancia = Estancia.Create();
@@ -41,14 +40,12 @@ namespace ParkFlow.Persistence
             estancia.IdParqueadero = reader.GetInt32(reader.GetOrdinal("id_parqueo"));
             estancia.FechaLlegada = reader.GetDateTime(reader.GetOrdinal("fecha_llegada"));
 
-            // NULL mientras el vehículo sigue en la plaza
             int posSalida = reader.GetOrdinal("fecha_salida");
             estancia.FechaSalida = reader.IsDBNull(posSalida) ? null : reader.GetDateTime(posSalida);
 
             return estancia;
         }
 
-        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Estancia e)
         {
             cmd.Parameters.AddWithValue("@id", e.Id);

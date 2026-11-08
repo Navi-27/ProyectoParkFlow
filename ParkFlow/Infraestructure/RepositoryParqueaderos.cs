@@ -57,7 +57,6 @@ namespace ParkFlow.Infraestructure
             return _repository.GetById(id);
         }
 
-        //Plazas sin vehiculo(vehiculo_placa NULL = libre)
         public IEnumerable<Parqueadero> GetLibres()
         {
             return _repository.GetAll().Where(p => p.Libre).ToList();

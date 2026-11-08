@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ParkFlow.Persistence
 {
-    internal class RegistroSqlStore : SqlDataStore<Registro, int> //Load reibe datareader carag toda la tabla de una vez 
+    internal class RegistroSqlStore : SqlDataStore<Registro, int>
     {
         protected override string SelectSql
         {
@@ -38,7 +38,6 @@ namespace ParkFlow.Persistence
             }
         }
 
-        // Convierte una fila de la base en un Registro
         protected override Registro Map(MySqlDataReader reader)
         {
             Registro registro = Registro.Create();
@@ -48,11 +47,8 @@ namespace ParkFlow.Persistence
             registro.IdVivienda = reader.GetInt32(reader.GetOrdinal("vivienda_id_vivienda"));
             registro.FechaIngreso = reader.GetDateTime(reader.GetOrdinal("fecha_ingreso"));
 
-            // Esta columna puede ser NULL en la base
-
             int posSalida = reader.GetOrdinal("fecha_salida");
             registro.FechaSalida = reader.IsDBNull(posSalida) ? null : reader.GetDateTime(posSalida);
-
 
             return registro;
         }

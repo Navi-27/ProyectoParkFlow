@@ -58,14 +58,11 @@ namespace ParkFlow.Infraestructure
            return _repository.GetById(id);
         }
 
-        // Ejecuta un SELECT y devuelve todas las viviendas que encuentre
         private List<Vivienda> Consultar(string documento)
         {
             return _repository.GetAll().Where(v => v.PersonaDocumento == documento).ToList();
         }
 
-        // Extra (no esta en IRepository): viviendas de un residente.
-        // Sirve para elegir la vivienda al registrar una visita.
         public IEnumerable<Vivienda> GetByPersona(string documento)
         {
             return _repository.GetAll().Where(v => v.PersonaDocumento == documento).ToList();

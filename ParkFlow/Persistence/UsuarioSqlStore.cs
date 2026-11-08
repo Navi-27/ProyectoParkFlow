@@ -38,7 +38,6 @@ namespace ParkFlow.Persistence
             }
         }
 
-        // Convierte una fila de la base en un Usuario
         protected override Usuario Map(MySqlDataReader reader)
         {
             Usuario usuario = Usuario.Create();
@@ -47,13 +46,11 @@ namespace ParkFlow.Persistence
             usuario.PersonaDocumento = reader.GetString(reader.GetOrdinal("persona_documento"));
             usuario.NombreUsuario = reader.GetString(reader.GetOrdinal("usuario"));
             usuario.Password = reader.GetString(reader.GetOrdinal("password"));
-            // En la base el rol es 'ADMIN' o 'PORTERO'
             usuario.Rol = Enum.Parse<RolUsuario>(reader.GetString(reader.GetOrdinal("rol")), ignoreCase: true);
 
             return usuario;
         }
 
-        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Usuario u)
         {
             cmd.Parameters.AddWithValue("@id", u.Id);

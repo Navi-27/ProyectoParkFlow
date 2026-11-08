@@ -1,7 +1,7 @@
 ﻿using MySqlConnector;
 using ParkFlow.models;
 
-namespace ParkFlow.Persistence // pendiente: mirar lo de movilidad reducida, mirar coordenadas
+namespace ParkFlow.Persistence
 {
     internal class PersonaSqlStore : SqlDataStore<Persona, string>
     {
@@ -36,12 +36,10 @@ namespace ParkFlow.Persistence // pendiente: mirar lo de movilidad reducida, mir
             }
         }
 
-        // Convierte una fila de la base en una Persona
         protected override Persona Map(MySqlDataReader reader)
         {
             string tipo = reader.GetString(reader.GetOrdinal("tipo_persona"));
 
-            // Crea la subclase según tipo_persona
             Persona persona = tipo.ToUpper() switch
             {
                 "RESIDENTE" => Residente.Create(),
@@ -57,14 +55,12 @@ namespace ParkFlow.Persistence // pendiente: mirar lo de movilidad reducida, mir
             persona.MovilidadReducida = reader.GetBoolean(reader.GetOrdinal("movilidad_reducida"));
             persona.Telefono = reader.GetString(reader.GetOrdinal("telefono"));
 
-            // Esta columna puede ser NULL en la base
             int posCorreo = reader.GetOrdinal("correo");
             persona.Correo = reader.IsDBNull(posCorreo) ? string.Empty : reader.GetString(posCorreo);
 
             return persona;
         }
 
-        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Persona p)
         {
             cmd.Parameters.AddWithValue("@documento", p.Id);
@@ -77,7 +73,6 @@ namespace ParkFlow.Persistence // pendiente: mirar lo de movilidad reducida, mir
             cmd.Parameters.AddWithValue("@tipoPersona", TipoPersona(p));
         }
 
-        // Valor de tipo_persona según la subclase
         private static string TipoPersona(Persona p)
         {
             return p switch

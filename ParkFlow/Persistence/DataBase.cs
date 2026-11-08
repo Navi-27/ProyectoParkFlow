@@ -1,5 +1,4 @@
-﻿// Persistence/Database.cs
-using MySqlConnector;
+﻿using MySqlConnector;
 using ParkFlow.Tools;
 
 namespace ParkFlow.Persistence

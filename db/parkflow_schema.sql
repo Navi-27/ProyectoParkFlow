@@ -1,9 +1,4 @@
--- =====================================================
--- ParkFlow - Esquema actualizado (proyecto_integrador)
--- =====================================================
--- ATENCION: este script BORRA el esquema completo y lo crea de nuevo.
--- Usalo solo con datos de prueba (despues corre parkflow_datos_prueba.sql).
--- =====================================================
+-- ParkFlow: esquema proyecto_integrador (borra y recrea todo; luego correr parkflow_datos_prueba.sql)
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -13,9 +8,7 @@ DROP SCHEMA IF EXISTS `proyecto_integrador`;
 CREATE SCHEMA `proyecto_integrador` DEFAULT CHARACTER SET utf8mb4;
 USE `proyecto_integrador`;
 
--- -----------------------------------------------------
 -- persona
--- -----------------------------------------------------
 CREATE TABLE `persona` (
   `documento` VARCHAR(20) NOT NULL,
   `tipo_documento` ENUM('CC', 'TI', 'CE', 'PA', 'DNI') NOT NULL,
@@ -28,12 +21,7 @@ CREATE TABLE `persona` (
   PRIMARY KEY (`documento`)
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- usuario (login de la app) - con llave primaria y rol
--- password guarda el HASH SHA-256 en hexadecimal (64 caracteres)
--- Cada usuario pertenece a una persona (1 a 1): solo el personal
--- del conjunto (admin y porteros) tiene acceso al programa
--- -----------------------------------------------------
+-- usuario
 CREATE TABLE `usuario` (
   `id_usuario` INT NOT NULL AUTO_INCREMENT,
   `persona_documento` VARCHAR(20) NOT NULL,
@@ -49,9 +37,7 @@ CREATE TABLE `usuario` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- vehiculo - ahora con tipo_vehiculo (para crear Carro o Moto en C#)
--- -----------------------------------------------------
+-- vehiculo
 CREATE TABLE `vehiculo` (
   `placa` VARCHAR(6) NOT NULL,
   `tipo_vehiculo` ENUM('CARRO', 'MOTO') NOT NULL DEFAULT 'CARRO',
@@ -66,9 +52,7 @@ CREATE TABLE `vehiculo` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- zona (NUEVA) - nombre y dimensiones en metros (para areas y capacidad)
--- -----------------------------------------------------
+-- zona
 CREATE TABLE `zona` (
   `id_zona` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
@@ -78,9 +62,7 @@ CREATE TABLE `zona` (
   UNIQUE INDEX `uq_zona_nombre` (`nombre`)
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- vivienda (una persona puede tener varias)
--- -----------------------------------------------------
+-- vivienda
 CREATE TABLE `vivienda` (
   `id_vivienda` INT NOT NULL AUTO_INCREMENT,
   `persona_documento` VARCHAR(20) NOT NULL,
@@ -95,10 +77,7 @@ CREATE TABLE `vivienda` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- parqueo (plaza) - ahora apunta a zona y persona_documento es opcional
--- vehiculo_placa NULL = plaza libre
--- -----------------------------------------------------
+-- parqueo
 CREATE TABLE `parqueo` (
   `id_parqueo` INT NOT NULL AUTO_INCREMENT,
   `id_zona` INT NOT NULL,
@@ -129,10 +108,7 @@ CREATE TABLE `parqueo` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- registro (visitas entre personas) - sin la columna vieja de vivienda
--- persona_visitante = quien visita, persona_visitada = a quien visitan
--- -----------------------------------------------------
+-- registro
 CREATE TABLE `registro` (
   `id_registro` INT NOT NULL AUTO_INCREMENT,
   `persona_visitante` VARCHAR(20) NOT NULL,
@@ -158,14 +134,7 @@ CREATE TABLE `registro` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- estancia - historial de uso de las plazas
---   fecha_llegada = ocupa la plaza
---   fecha_salida  = se va
--- El tiempo ocupado (salida - llegada) se calcula en el codigo (Estancia.TiempoOcupado).
--- La espera en la fila no se guarda: se maneja en memoria con la cola de prioridad.
--- Estancia abierta = fecha_salida IS NULL
--- -----------------------------------------------------
+-- estancia
 CREATE TABLE `estancia` (
   `id_estancia` INT NOT NULL AUTO_INCREMENT,
   `vehiculo_placa` VARCHAR(6) NOT NULL,
@@ -186,15 +155,7 @@ CREATE TABLE `estancia` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- =====================================================
--- SECCION GRAFO (NUEVA)
--- Si el equipo decide armar el grafo en codigo, se pueden borrar
--- estas dos tablas sin afectar al resto del esquema.
--- =====================================================
-
--- -----------------------------------------------------
--- nodo_ruta - puntos del mapa (entradas, salidas, cruces, rampas, plazas)
--- -----------------------------------------------------
+-- nodo_ruta
 CREATE TABLE `nodo_ruta` (
   `id_nodo` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
@@ -213,9 +174,7 @@ CREATE TABLE `nodo_ruta` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- arista_ruta - conexiones entre nodos con su distancia (peso para Dijkstra)
--- -----------------------------------------------------
+-- arista_ruta
 CREATE TABLE `arista_ruta` (
   `id_arista` INT NOT NULL AUTO_INCREMENT,
   `nodo_origen` INT NOT NULL,

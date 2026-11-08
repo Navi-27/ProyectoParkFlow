@@ -37,7 +37,6 @@ namespace ParkFlow.Persistence
             }
         }
 
-        // Convierte una fila de la base en una Zona
         protected override Zona Map(MySqlDataReader reader)
         {
             Zona zona = Zona.Create();
@@ -50,7 +49,6 @@ namespace ParkFlow.Persistence
             return zona;
         }
 
-        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Zona z)
         {
             cmd.Parameters.AddWithValue("@id", z.Id);

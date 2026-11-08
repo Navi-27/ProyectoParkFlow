@@ -38,7 +38,6 @@ namespace ParkFlow.Persistence
             }
         }
 
-        // Convierte una fila de la base en una Vivienda
         protected override Vivienda Map(MySqlDataReader reader)
         {
             Vivienda vivienda = Vivienda.Create();
@@ -52,7 +51,6 @@ namespace ParkFlow.Persistence
             return vivienda; 
         }
 
-        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Vivienda v)
         {
             cmd.Parameters.AddWithValue("@id", v.Id);

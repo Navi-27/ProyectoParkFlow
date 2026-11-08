@@ -1,10 +1,7 @@
--- =====================================================
--- ParkFlow - Datos de prueba (para parkflow_schema.sql)
--- Ejecutar DESPUES del esquema y UNA sola vez (si repites, da llave duplicada).
--- =====================================================
+-- ParkFlow: datos de prueba (correr una sola vez, después del esquema)
 USE `proyecto_integrador`;
 
--- 1. Personas (5 residentes, 3 visitantes, 2 empleados del conjunto)
+-- 1. Personas
 INSERT INTO persona (documento, tipo_documento, nombre, apellido, telefono, correo, tipo_persona, movilidad_reducida) VALUES
 ('1001','CC','Ana','Pérez','3001112222','ana@mail.com','RESIDENTE',0),
 ('1002','CC','Luis','Gómez','3003334444','luis@mail.com','RESIDENTE',1),
@@ -17,26 +14,26 @@ INSERT INTO persona (documento, tipo_documento, nombre, apellido, telefono, corr
 ('3001','CC','Andrés','Morales','3071112222','admin@parkflow.com','EMPLEADO',0),
 ('3002','CC','Diana','Rojas','3073334444',NULL,'EMPLEADO',0);
 
--- 2. Usuarios: cada uno enlazado a un empleado (UPPER para que el hash coincida con Convert.ToHexString de C#)
+-- 2. Usuarios
 INSERT INTO usuario (persona_documento, usuario, password, rol) VALUES
 ('3001', 'admin',   UPPER(SHA2('admin123', 256)),   'ADMIN'),
 ('3002', 'portero', UPPER(SHA2('portero123', 256)), 'PORTERO');
 
--- 3. Zonas (medidas en metros)
+-- 3. Zonas
 INSERT INTO zona (nombre, ancho, largo) VALUES
 ('Zona A', 15, 6),
 ('Zona B', 9, 6);
 
--- 4. Viviendas (Ana tiene dos apartamentos: prueba del 1 a muchos). Torre = texto (A1, A2, B1...)
+-- 4. Viviendas
 INSERT INTO vivienda (persona_documento, torre, piso, apartamento) VALUES
-('1001','A1',3,301),   -- id 1
-('1001','A1',5,502),   -- id 2
-('1002','A2',1,102),   -- id 3
-('1003','A2',4,403),   -- id 4
-('1004','B1',2,201),   -- id 5
-('1005','B1',6,601);   -- id 6
+('1001','A1',3,301),
+('1001','A1',5,502),
+('1002','A2',1,102),
+('1003','A2',4,403),
+('1004','B1',2,201),
+('1005','B1',6,601);
 
--- 5. Vehículos (Ana tiene un carro y una moto)
+-- 5. Vehículos
 INSERT INTO vehiculo (placa, tipo_vehiculo, persona_documento, modelo, marca) VALUES
 ('ABC123','CARRO','1001','2020','Mazda'),
 ('DEF456','MOTO', '1001','2019','Yamaha'),
@@ -47,7 +44,7 @@ INSERT INTO vehiculo (placa, tipo_vehiculo, persona_documento, modelo, marca) VA
 ('VIS001','CARRO','2001','2016','Nissan'),
 ('VIS002','MOTO', '2002','2015','Honda');
 
--- 6. Plazas (10). persona_documento solo en plazas fijas; vehiculo_placa NULL = libre
+-- 6. Plazas
 INSERT INTO parqueo (id_zona, codigo, nivel, coord_x, coord_y, coord_z, tipo, persona_documento) VALUES
 ((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-01', 1,  0,  0, 0, 'RESIDENTE',          '1001'),
 ((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-02', 1,  3,  0, 0, 'RESIDENTE',          NULL),
@@ -60,28 +57,27 @@ INSERT INTO parqueo (id_zona, codigo, nivel, coord_x, coord_y, coord_z, tipo, pe
 ((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-06', 2,  0,  0, 3, 'RESIDENTE',          '1005'),
 ((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-07', 2,  3,  0, 3, 'RESIDENTE',          NULL);
 
--- 7. Ocupar algunas plazas (estado actual)
+-- 7. Ocupar algunas plazas
 UPDATE parqueo SET vehiculo_placa = 'ABC123' WHERE codigo = 'A-01';
-UPDATE parqueo SET vehiculo_placa = 'XYZ987' WHERE codigo = 'A-03';  -- Luis, movilidad reducida
+UPDATE parqueo SET vehiculo_placa = 'XYZ987' WHERE codigo = 'A-03';
 UPDATE parqueo SET vehiculo_placa = 'GHI789' WHERE codigo = 'A-04';
 UPDATE parqueo SET vehiculo_placa = 'VIS001' WHERE codigo = 'B-01';
 
--- 8. Visitas entre personas (la primera sigue adentro: fecha_salida NULL)
+-- 8. Visitas entre personas
 INSERT INTO registro (persona_visitante, persona_visitada, vivienda_id_vivienda, fecha_ingreso, fecha_salida) VALUES
 ('2001','1001', 1, '2026-10-11 14:00:00', NULL),
 ('2002','1003', 4, '2026-10-10 09:30:00', '2026-10-10 11:45:00'),
 ('2003','1002', 3, '2026-10-09 16:00:00', '2026-10-09 18:20:00');
 
 -- 9. Historial de estancias de vehículos
---    fecha_llegada = ocupa la plaza; el tiempo ocupado se calcula en el código
--- 9a. Estancias abiertas (coinciden con las plazas ocupadas del paso 7)
+-- 9a. Estancias abiertas
 INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida) VALUES
 ('ABC123', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-01'), '2026-10-11 07:58:00', NULL),
 ('XYZ987', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-03'), '2026-10-11 08:41:30', NULL),
 ('GHI789', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-04'), '2026-10-11 09:12:00', NULL),
 ('VIS001', (SELECT id_parqueo FROM parqueo WHERE codigo = 'B-01'), '2026-10-11 14:03:00', NULL);
 
--- 9b. Estancias cerradas (sirven para tiempo ocupado, rotación y flujo)
+-- 9b. Estancias cerradas
 INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida) VALUES
 ('ABC123', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-01'), '2026-10-10 07:52:00', '2026-10-10 19:00:00'),
 ('DEF456', (SELECT id_parqueo FROM parqueo WHERE codigo = 'A-02'), '2026-10-10 18:02:00', '2026-10-11 06:30:00'),
@@ -100,11 +96,11 @@ INSERT INTO nodo_ruta (nombre, tipo, nivel, coord_x, coord_y, coord_z) VALUES
 ('RAMPA_N2',   'RAMPA',   2, 14, 2, 3),
 ('PASILLO_A2', 'CRUCE',   2, 1.5, 2, 3);
 
--- 10b. Un nodo por cada plaza (con las mismas coordenadas)
+-- 10b. Un nodo por cada plaza
 INSERT INTO nodo_ruta (nombre, tipo, nivel, coord_x, coord_y, coord_z, id_parqueo)
 SELECT codigo, 'PLAZA', nivel, coord_x, coord_y, coord_z, id_parqueo FROM parqueo;
 
--- 10c. Aristas de infraestructura (distancia se calcula abajo)
+-- 10c. Aristas de infraestructura
 INSERT INTO arista_ruta (nodo_origen, nodo_destino, distancia) VALUES
 ((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'ENTRADA'),    (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_A1'), 0),
 ((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'ENTRADA'),    (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_B1'), 0),
@@ -130,7 +126,7 @@ SELECT c.id_nodo, p.id_nodo, 0
 FROM nodo_ruta p JOIN nodo_ruta c ON c.nombre = 'PASILLO_A2'
 WHERE p.tipo = 'PLAZA' AND p.nombre IN ('A-06','A-07');
 
--- 10e. Distancia euclidiana entre cada par de nodos (incluye la diferencia de nivel en Z)
+-- 10e. Distancia euclidiana entre cada par de nodos
 UPDATE arista_ruta r
 JOIN nodo_ruta a ON a.id_nodo = r.nodo_origen
 JOIN nodo_ruta b ON b.id_nodo = r.nodo_destino

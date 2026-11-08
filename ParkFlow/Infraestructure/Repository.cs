@@ -20,7 +20,6 @@ namespace ParkFlow.Infraestructure
         {
             bool esNuevo = EqualityComparer<E>.Default.Equals(entity.Id, default!);
 
-            // Evita duplicados: si el id ya existe, al hacer Commit se sobrescribirian los datos del registro original
             if (!esNuevo && Exist(entity.Id))
             {
                 throw new InvalidOperationException($"Ya existe un registro con el id {entity.Id}.");

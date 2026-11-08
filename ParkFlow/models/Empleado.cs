@@ -4,7 +4,6 @@ using System.Text;
 
 namespace ParkFlow.models
 {
-    // Personal del conjunto (administrador, porteros): son las personas que pueden tener usuario
     internal class Empleado : Persona
     {
         private Empleado() { }

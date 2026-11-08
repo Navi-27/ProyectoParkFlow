@@ -38,7 +38,6 @@ namespace ParkFlow.Persistence
             }
         }
 
-        // Convierte una fila de la base en un Vehiculo
         protected override Vehiculo Map(MySqlDataReader reader)
         {
             Vehiculo vehiculo;
@@ -60,7 +59,6 @@ namespace ParkFlow.Persistence
             return vehiculo;
         }
 
-        // Llena los parámetros del SQL con los datos de la entidad
         protected override void SetParameters(MySqlCommand cmd, Vehiculo v)
         {
             cmd.Parameters.AddWithValue("@placa", v.Id);

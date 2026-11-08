@@ -2,7 +2,6 @@
 using ParkFlow.Contracts;
 using System;
 using System.Collections.Generic;
-//using System.Security.Cryptography; no se sabe porque anda aqui, no se usa
 using System.Text;
 
 namespace ParkFlow.Persistence

@@ -11,6 +11,13 @@ namespace ParkFlow
         static void Main()
         {
             ApplicationConfiguration.Initialize();
+            using (var login = new Presentacion.FrLogin())
+            {
+                if (login.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+            }
             Application.Run(new Form1());
         }
     }
