@@ -29,22 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrResidente));
-            toolStrip1 = new ToolStrip();
-            toolStripLabel1 = new ToolStripLabel();
-            toolStripSeparator1 = new ToolStripSeparator();
-            toolStripButton1 = new ToolStripButton();
-            toolStripButton2 = new ToolStripButton();
-            toolStripButton3 = new ToolStripButton();
-            toolStripButton4 = new ToolStripButton();
-            toolStripButton5 = new ToolStripButton();
-            toolStripSeparator2 = new ToolStripSeparator();
-            toolStripLabel2 = new ToolStripLabel();
-            toolStripTextBox1 = new ToolStripTextBox();
-            toolStripButton6 = new ToolStripButton();
             splitContainer1 = new SplitContainer();
             groupBox1 = new GroupBox();
             tlpCentro = new TableLayoutPanel();
             tlpCampos = new TableLayoutPanel();
+            tlpBuscar = new TableLayoutPanel();
+            txtBuscar = new TextBox();
+            btnBuscar = new Button();
+            tlpBotones = new TableLayoutPanel();
+            btnAgregar = new Button();
+            btnActualizar = new Button();
+            btnEliminar = new Button();
+            btnLimpiar = new Button();
             checkBox1 = new CheckBox();
             textBox5 = new TextBox();
             textBox4 = new TextBox();
@@ -67,7 +63,6 @@
             colCorreo = new DataGridViewTextBoxColumn();
             colMovilidad = new DataGridViewCheckBoxColumn();
             colVehiculos = new DataGridViewButtonColumn();
-            toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -75,109 +70,18 @@
             groupBox1.SuspendLayout();
             tlpCentro.SuspendLayout();
             tlpCampos.SuspendLayout();
+            tlpBuscar.SuspendLayout();
+            tlpBotones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitResidentes).BeginInit();
             splitResidentes.Panel1.SuspendLayout();
             splitResidentes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvResidentes).BeginInit();
             SuspendLayout();
             // 
-            // toolStrip1
-            // 
-            toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripSeparator1, toolStripButton1, toolStripButton2, toolStripButton3, toolStripButton4, toolStripButton5, toolStripSeparator2, toolStripLabel2, toolStripTextBox1, toolStripButton6 });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(1709, 27);
-            toolStrip1.TabIndex = 0;
-            toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripLabel1
-            // 
-            toolStripLabel1.AutoSize = false;
-            toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new Size(140, 22);
-            toolStripLabel1.Text = "Lista De Residente";
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 27);
-            // 
-            // toolStripButton1
-            // 
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
-            toolStripButton1.ImageTransparentColor = Color.Magenta;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(29, 24);
-            toolStripButton1.Text = "toolStripButton1";
-            // 
-            // toolStripButton2
-            // 
-            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
-            toolStripButton2.ImageTransparentColor = Color.Magenta;
-            toolStripButton2.Name = "toolStripButton2";
-            toolStripButton2.Size = new Size(29, 24);
-            toolStripButton2.Text = "toolStripButton2";
-            // 
-            // toolStripButton3
-            // 
-            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
-            toolStripButton3.ImageTransparentColor = Color.Magenta;
-            toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(29, 24);
-            toolStripButton3.Text = "toolStripButton3";
-            // 
-            // toolStripButton4
-            // 
-            toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
-            toolStripButton4.ImageTransparentColor = Color.Magenta;
-            toolStripButton4.Name = "toolStripButton4";
-            toolStripButton4.Size = new Size(29, 24);
-            toolStripButton4.Text = "toolStripButton4";
-            // 
-            // toolStripButton5
-            // 
-            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
-            toolStripButton5.ImageTransparentColor = Color.Magenta;
-            toolStripButton5.Name = "toolStripButton5";
-            toolStripButton5.Size = new Size(29, 24);
-            toolStripButton5.Text = "toolStripButton5";
-            // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(6, 27);
-            // 
-            // toolStripLabel2
-            // 
-            toolStripLabel2.Name = "toolStripLabel2";
-            toolStripLabel2.Size = new Size(121, 24);
-            toolStripLabel2.Text = "Buscar Residente";
-            // 
-            // toolStripTextBox1
-            // 
-            toolStripTextBox1.AutoSize = false;
-            toolStripTextBox1.Name = "toolStripTextBox1";
-            toolStripTextBox1.Size = new Size(171, 27);
-            // 
-            // toolStripButton6
-            // 
-            toolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton6.Image = (Image)resources.GetObject("toolStripButton6.Image");
-            toolStripButton6.ImageTransparentColor = Color.Magenta;
-            toolStripButton6.Name = "toolStripButton6";
-            toolStripButton6.Size = new Size(29, 24);
-            toolStripButton6.Text = "toolStripButton6";
-            // 
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 27);
+            splitContainer1.Location = new Point(0, 0);
             splitContainer1.Margin = new Padding(3, 4, 3, 4);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -188,7 +92,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitResidentes);
-            splitContainer1.Size = new Size(1709, 857);
+            splitContainer1.Size = new Size(1709, 884);
+            splitContainer1.Panel1MinSize = 620;
             splitContainer1.SplitterDistance = 851;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 1;
@@ -204,14 +109,14 @@
             groupBox1.Size = new Size(851, 857);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Agregar Residente";
+            groupBox1.Text = "Gestión de Residentes";
             // 
             // tlpCentro
             // 
             tlpCentro.ColumnCount = 3;
-            tlpCentro.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
-            tlpCentro.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tlpCentro.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+            tlpCentro.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
+            tlpCentro.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 84F));
+            tlpCentro.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
             tlpCentro.Controls.Add(tlpCampos, 1, 1);
             tlpCentro.Dock = DockStyle.Fill;
             tlpCentro.Location = new Point(3, 24);
@@ -231,22 +136,24 @@
             tlpCampos.ColumnCount = 2;
             tlpCampos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
             tlpCampos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
-            tlpCampos.Controls.Add(label1, 0, 0);
-            tlpCampos.Controls.Add(comboBox1, 1, 0);
-            tlpCampos.Controls.Add(label2, 0, 1);
-            tlpCampos.Controls.Add(textBox1, 1, 1);
-            tlpCampos.Controls.Add(label3, 0, 2);
-            tlpCampos.Controls.Add(textBox2, 1, 2);
-            tlpCampos.Controls.Add(label4, 0, 3);
-            tlpCampos.Controls.Add(textBox3, 1, 3);
-            tlpCampos.Controls.Add(label5, 0, 4);
-            tlpCampos.Controls.Add(textBox4, 1, 4);
-            tlpCampos.Controls.Add(label6, 0, 5);
-            tlpCampos.Controls.Add(textBox5, 1, 5);
-            tlpCampos.Controls.Add(checkBox1, 1, 6);
-            tlpCampos.Location = new Point(129, 248);
+            tlpCampos.Controls.Add(tlpBuscar, 0, 0);
+            tlpCampos.Controls.Add(label1, 0, 1);
+            tlpCampos.Controls.Add(comboBox1, 1, 1);
+            tlpCampos.Controls.Add(label2, 0, 2);
+            tlpCampos.Controls.Add(textBox1, 1, 2);
+            tlpCampos.Controls.Add(label3, 0, 3);
+            tlpCampos.Controls.Add(textBox2, 1, 3);
+            tlpCampos.Controls.Add(label4, 0, 4);
+            tlpCampos.Controls.Add(textBox3, 1, 4);
+            tlpCampos.Controls.Add(label5, 0, 5);
+            tlpCampos.Controls.Add(textBox4, 1, 5);
+            tlpCampos.Controls.Add(label6, 0, 6);
+            tlpCampos.Controls.Add(textBox5, 1, 6);
+            tlpCampos.Controls.Add(checkBox1, 1, 7);
+            tlpCampos.Controls.Add(tlpBotones, 0, 8);
+            tlpCampos.Location = new Point(129, 200);
             tlpCampos.Name = "tlpCampos";
-            tlpCampos.RowCount = 7;
+            tlpCampos.RowCount = 9;
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
@@ -254,8 +161,119 @@
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
-            tlpCampos.Size = new Size(586, 333);
+            tlpCampos.RowStyles.Add(new RowStyle());
+            tlpCampos.RowStyles.Add(new RowStyle());
+            tlpCampos.SetColumnSpan(tlpBuscar, 2);
+            tlpCampos.SetColumnSpan(tlpBotones, 2);
+            tlpCampos.Size = new Size(586, 430);
             tlpCampos.TabIndex = 0;
+            // 
+            // tlpBuscar
+            // 
+            tlpBuscar.AutoSize = true;
+            tlpBuscar.ColumnCount = 2;
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle());
+            tlpBuscar.Controls.Add(txtBuscar, 0, 0);
+            tlpBuscar.Controls.Add(btnBuscar, 1, 0);
+            tlpBuscar.Dock = DockStyle.Fill;
+            tlpBuscar.Margin = new Padding(0, 0, 0, 24);
+            tlpBuscar.Name = "tlpBuscar";
+            tlpBuscar.RowCount = 1;
+            tlpBuscar.RowStyles.Add(new RowStyle());
+            tlpBuscar.Size = new Size(586, 46);
+            tlpBuscar.TabIndex = 0;
+            // 
+            // txtBuscar
+            // 
+            txtBuscar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtBuscar.Margin = new Padding(3, 6, 3, 6);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.PlaceholderText = "Buscar residente por documento o nombre";
+            txtBuscar.Size = new Size(470, 27);
+            txtBuscar.TabIndex = 0;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.AutoSize = true;
+            btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
+            btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnBuscar.Margin = new Padding(6, 3, 3, 3);
+            btnBuscar.MinimumSize = new Size(100, 40);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(100, 40);
+            btnBuscar.TabIndex = 1;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnBuscar.UseVisualStyleBackColor = true;
+            // 
+            // tlpBotones
+            // 
+            tlpBotones.AutoSize = true;
+            tlpBotones.ColumnCount = 4;
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpBotones.Controls.Add(btnAgregar, 0, 0);
+            tlpBotones.Controls.Add(btnActualizar, 1, 0);
+            tlpBotones.Controls.Add(btnEliminar, 2, 0);
+            tlpBotones.Controls.Add(btnLimpiar, 3, 0);
+            tlpBotones.Dock = DockStyle.Fill;
+            tlpBotones.Margin = new Padding(0, 24, 0, 0);
+            tlpBotones.Name = "tlpBotones";
+            tlpBotones.RowCount = 1;
+            tlpBotones.RowStyles.Add(new RowStyle());
+            tlpBotones.Size = new Size(586, 46);
+            tlpBotones.TabIndex = 14;
+            // 
+            // btnAgregar
+            // 
+            btnAgregar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnAgregar.Image = (Image)resources.GetObject("btnAgregar.Image");
+            btnAgregar.Margin = new Padding(3);
+            btnAgregar.Name = "btnAgregar";
+            btnAgregar.Size = new Size(140, 40);
+            btnAgregar.TabIndex = 0;
+            btnAgregar.Text = "Agregar";
+            btnAgregar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnAgregar.UseVisualStyleBackColor = true;
+            // 
+            // btnActualizar
+            // 
+            btnActualizar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
+            btnActualizar.Margin = new Padding(3);
+            btnActualizar.Name = "btnActualizar";
+            btnActualizar.Size = new Size(140, 40);
+            btnActualizar.TabIndex = 1;
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnActualizar.UseVisualStyleBackColor = true;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
+            btnEliminar.Margin = new Padding(3);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(140, 40);
+            btnEliminar.TabIndex = 2;
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnEliminar.UseVisualStyleBackColor = true;
+            // 
+            // btnLimpiar
+            // 
+            btnLimpiar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnLimpiar.Image = (Image)resources.GetObject("btnLimpiar.Image");
+            btnLimpiar.Margin = new Padding(3);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(140, 40);
+            btnLimpiar.TabIndex = 3;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnLimpiar.UseVisualStyleBackColor = true;
             // 
             // checkBox1
             // 
@@ -470,14 +488,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1709, 884);
             Controls.Add(splitContainer1);
-            Controls.Add(toolStrip1);
             Margin = new Padding(3, 4, 3, 4);
             Name = "FrResidente";
             Text = "FrResidente";
             WindowState = FormWindowState.Maximized;
             Load += FrResidente_Load;
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -488,6 +503,9 @@
             tlpCentro.PerformLayout();
             tlpCampos.ResumeLayout(false);
             tlpCampos.PerformLayout();
+            tlpBuscar.ResumeLayout(false);
+            tlpBuscar.PerformLayout();
+            tlpBotones.ResumeLayout(false);
             splitResidentes.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitResidentes).EndInit();
             splitResidentes.ResumeLayout(false);
@@ -498,17 +516,18 @@
 
         #endregion
 
-        private ToolStrip toolStrip1;
-        private ToolStripLabel toolStripLabel1;
-        private ToolStripSeparator toolStripSeparator1;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
-        private ToolStripButton toolStripButton3;
-        private ToolStripButton toolStripButton4;
         private SplitContainer splitContainer1;
         private GroupBox groupBox1;
         private TableLayoutPanel tlpCentro;
         private TableLayoutPanel tlpCampos;
+        private TableLayoutPanel tlpBuscar;
+        private TextBox txtBuscar;
+        private Button btnBuscar;
+        private TableLayoutPanel tlpBotones;
+        private Button btnAgregar;
+        private Button btnActualizar;
+        private Button btnEliminar;
+        private Button btnLimpiar;
         private Label label1;
         private Label label4;
         private Label label3;
@@ -522,11 +541,6 @@
         private TextBox textBox1;
         private ComboBox comboBox1;
         private CheckBox checkBox1;
-        private ToolStripButton toolStripButton5;
-        private ToolStripSeparator toolStripSeparator2;
-        private ToolStripLabel toolStripLabel2;
-        private ToolStripTextBox toolStripTextBox1;
-        private ToolStripButton toolStripButton6;
         private SplitContainer splitResidentes;
         private DataGridView dgvResidentes;
         private DataGridViewTextBoxColumn colDocumento;
