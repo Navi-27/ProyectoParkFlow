@@ -100,7 +100,6 @@ namespace ParkFlow.Presentacion
                     nuevo.Marca = txtMarca.Text.Trim();
                     nuevo.Modelo = txtModelo.Text.Trim();
                     _vehiculos.Add(nuevo);
-                    _vehiculos.Update(nuevo);
                 }
                 else
                 {

@@ -36,24 +36,24 @@
             tlpBuscar = new TableLayoutPanel();
             txtBuscar = new TextBox();
             btnBuscar = new Button();
+            label1 = new Label();
+            cmbTipoDocumento = new ComboBox();
+            label2 = new Label();
+            txtDocumento = new TextBox();
+            label3 = new Label();
+            txtNombre = new TextBox();
+            label4 = new Label();
+            txtApellido = new TextBox();
+            label5 = new Label();
+            txtTelefono = new TextBox();
+            label6 = new Label();
+            txtCorreo = new TextBox();
+            chkMovilidad = new CheckBox();
             tlpBotones = new TableLayoutPanel();
             btnAgregar = new Button();
             btnActualizar = new Button();
             btnEliminar = new Button();
             btnLimpiar = new Button();
-            checkBox1 = new CheckBox();
-            textBox5 = new TextBox();
-            textBox4 = new TextBox();
-            textBox3 = new TextBox();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
-            comboBox1 = new ComboBox();
-            label6 = new Label();
-            label5 = new Label();
-            label4 = new Label();
-            label3 = new Label();
-            label2 = new Label();
-            label1 = new Label();
             splitResidentes = new SplitContainer();
             dgvResidentes = new DataGridView();
             colDocumento = new DataGridViewTextBoxColumn();
@@ -88,12 +88,12 @@
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(groupBox1);
+            splitContainer1.Panel1MinSize = 620;
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitResidentes);
             splitContainer1.Size = new Size(1709, 884);
-            splitContainer1.Panel1MinSize = 620;
             splitContainer1.SplitterDistance = 851;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 1;
@@ -106,7 +106,7 @@
             groupBox1.Margin = new Padding(3, 4, 3, 4);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(3, 4, 3, 4);
-            groupBox1.Size = new Size(851, 857);
+            groupBox1.Size = new Size(851, 884);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Gestión de Residentes";
@@ -125,7 +125,7 @@
             tlpCentro.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tlpCentro.RowStyles.Add(new RowStyle());
             tlpCentro.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlpCentro.Size = new Size(845, 829);
+            tlpCentro.Size = new Size(845, 856);
             tlpCentro.TabIndex = 0;
             // 
             // tlpCampos
@@ -138,20 +138,20 @@
             tlpCampos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
             tlpCampos.Controls.Add(tlpBuscar, 0, 0);
             tlpCampos.Controls.Add(label1, 0, 1);
-            tlpCampos.Controls.Add(comboBox1, 1, 1);
+            tlpCampos.Controls.Add(cmbTipoDocumento, 1, 1);
             tlpCampos.Controls.Add(label2, 0, 2);
-            tlpCampos.Controls.Add(textBox1, 1, 2);
+            tlpCampos.Controls.Add(txtDocumento, 1, 2);
             tlpCampos.Controls.Add(label3, 0, 3);
-            tlpCampos.Controls.Add(textBox2, 1, 3);
+            tlpCampos.Controls.Add(txtNombre, 1, 3);
             tlpCampos.Controls.Add(label4, 0, 4);
-            tlpCampos.Controls.Add(textBox3, 1, 4);
+            tlpCampos.Controls.Add(txtApellido, 1, 4);
             tlpCampos.Controls.Add(label5, 0, 5);
-            tlpCampos.Controls.Add(textBox4, 1, 5);
+            tlpCampos.Controls.Add(txtTelefono, 1, 5);
             tlpCampos.Controls.Add(label6, 0, 6);
-            tlpCampos.Controls.Add(textBox5, 1, 6);
-            tlpCampos.Controls.Add(checkBox1, 1, 7);
+            tlpCampos.Controls.Add(txtCorreo, 1, 6);
+            tlpCampos.Controls.Add(chkMovilidad, 1, 7);
             tlpCampos.Controls.Add(tlpBotones, 0, 8);
-            tlpCampos.Location = new Point(129, 200);
+            tlpCampos.Location = new Point(70, 216);
             tlpCampos.Name = "tlpCampos";
             tlpCampos.RowCount = 9;
             tlpCampos.RowStyles.Add(new RowStyle());
@@ -163,41 +163,44 @@
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
-            tlpCampos.SetColumnSpan(tlpBuscar, 2);
-            tlpCampos.SetColumnSpan(tlpBotones, 2);
-            tlpCampos.Size = new Size(586, 430);
+            tlpCampos.Size = new Size(703, 423);
             tlpCampos.TabIndex = 0;
             // 
             // tlpBuscar
             // 
             tlpBuscar.AutoSize = true;
             tlpBuscar.ColumnCount = 2;
+            tlpCampos.SetColumnSpan(tlpBuscar, 2);
             tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tlpBuscar.ColumnStyles.Add(new ColumnStyle());
             tlpBuscar.Controls.Add(txtBuscar, 0, 0);
             tlpBuscar.Controls.Add(btnBuscar, 1, 0);
             tlpBuscar.Dock = DockStyle.Fill;
+            tlpBuscar.Location = new Point(0, 0);
             tlpBuscar.Margin = new Padding(0, 0, 0, 24);
             tlpBuscar.Name = "tlpBuscar";
             tlpBuscar.RowCount = 1;
             tlpBuscar.RowStyles.Add(new RowStyle());
-            tlpBuscar.Size = new Size(586, 46);
+            tlpBuscar.Size = new Size(703, 46);
             tlpBuscar.TabIndex = 0;
             // 
             // txtBuscar
             // 
             txtBuscar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtBuscar.Location = new Point(3, 9);
             txtBuscar.Margin = new Padding(3, 6, 3, 6);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Buscar residente por documento o nombre";
-            txtBuscar.Size = new Size(470, 27);
+            txtBuscar.Size = new Size(588, 27);
             txtBuscar.TabIndex = 0;
+            txtBuscar.TextChanged += txtBuscar_TextChanged;
             // 
             // btnBuscar
             // 
             btnBuscar.AutoSize = true;
             btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
             btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnBuscar.Location = new Point(600, 3);
             btnBuscar.Margin = new Padding(6, 3, 3, 3);
             btnBuscar.MinimumSize = new Size(100, 40);
             btnBuscar.Name = "btnBuscar";
@@ -206,11 +209,154 @@
             btnBuscar.Text = "Buscar";
             btnBuscar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Left;
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 80);
+            label1.Margin = new Padding(3, 6, 3, 6);
+            label1.Name = "label1";
+            label1.Size = new Size(144, 20);
+            label1.TabIndex = 0;
+            label1.Text = "Tipo De Documento";
+            // 
+            // cmbTipoDocumento
+            // 
+            cmbTipoDocumento.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            cmbTipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbTipoDocumento.FormattingEnabled = true;
+            cmbTipoDocumento.Items.AddRange(new object[] { "CC - Cedula De Ciudadania", "CE - Cédula de Extranjería", "TI - Tarjeta de Identidad", "PA - Pasaporte", "DNI - Documento Nacional de Identidad" });
+            cmbTipoDocumento.Location = new Point(249, 76);
+            cmbTipoDocumento.Margin = new Padding(3, 6, 3, 6);
+            cmbTipoDocumento.Name = "cmbTipoDocumento";
+            cmbTipoDocumento.Size = new Size(451, 28);
+            cmbTipoDocumento.TabIndex = 7;
+            // 
+            // label2
+            // 
+            label2.Anchor = AnchorStyles.Left;
+            label2.AutoSize = true;
+            label2.Location = new Point(3, 119);
+            label2.Margin = new Padding(3, 6, 3, 6);
+            label2.Name = "label2";
+            label2.Size = new Size(87, 20);
+            label2.TabIndex = 1;
+            label2.Text = "Documento";
+            // 
+            // txtDocumento
+            // 
+            txtDocumento.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtDocumento.Location = new Point(249, 116);
+            txtDocumento.Margin = new Padding(3, 6, 3, 6);
+            txtDocumento.MaxLength = 20;
+            txtDocumento.Name = "txtDocumento";
+            txtDocumento.Size = new Size(451, 27);
+            txtDocumento.TabIndex = 8;
+            // 
+            // label3
+            // 
+            label3.Anchor = AnchorStyles.Left;
+            label3.AutoSize = true;
+            label3.Location = new Point(3, 158);
+            label3.Margin = new Padding(3, 6, 3, 6);
+            label3.Name = "label3";
+            label3.Size = new Size(64, 20);
+            label3.TabIndex = 2;
+            label3.Text = "Nombre";
+            // 
+            // txtNombre
+            // 
+            txtNombre.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtNombre.Location = new Point(249, 155);
+            txtNombre.Margin = new Padding(3, 6, 3, 6);
+            txtNombre.MaxLength = 45;
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(451, 27);
+            txtNombre.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 197);
+            label4.Margin = new Padding(3, 6, 3, 6);
+            label4.Name = "label4";
+            label4.Size = new Size(72, 20);
+            label4.TabIndex = 3;
+            label4.Text = "Apellidos";
+            // 
+            // txtApellido
+            // 
+            txtApellido.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtApellido.Location = new Point(249, 194);
+            txtApellido.Margin = new Padding(3, 6, 3, 6);
+            txtApellido.MaxLength = 100;
+            txtApellido.Name = "txtApellido";
+            txtApellido.Size = new Size(451, 27);
+            txtApellido.TabIndex = 10;
+            // 
+            // label5
+            // 
+            label5.Anchor = AnchorStyles.Left;
+            label5.AutoSize = true;
+            label5.Location = new Point(3, 236);
+            label5.Margin = new Padding(3, 6, 3, 6);
+            label5.Name = "label5";
+            label5.Size = new Size(67, 20);
+            label5.TabIndex = 4;
+            label5.Text = "Telefono";
+            // 
+            // txtTelefono
+            // 
+            txtTelefono.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtTelefono.Location = new Point(249, 233);
+            txtTelefono.Margin = new Padding(3, 6, 3, 6);
+            txtTelefono.MaxLength = 15;
+            txtTelefono.Name = "txtTelefono";
+            txtTelefono.Size = new Size(451, 27);
+            txtTelefono.TabIndex = 11;
+            // 
+            // label6
+            // 
+            label6.Anchor = AnchorStyles.Left;
+            label6.AutoSize = true;
+            label6.Location = new Point(3, 275);
+            label6.Margin = new Padding(3, 6, 3, 6);
+            label6.Name = "label6";
+            label6.Size = new Size(54, 20);
+            label6.TabIndex = 5;
+            label6.Text = "Correo";
+            // 
+            // txtCorreo
+            // 
+            txtCorreo.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtCorreo.Location = new Point(249, 272);
+            txtCorreo.Margin = new Padding(3, 6, 3, 6);
+            txtCorreo.MaxLength = 150;
+            txtCorreo.Name = "txtCorreo";
+            txtCorreo.Size = new Size(451, 27);
+            txtCorreo.TabIndex = 12;
+            // 
+            // chkMovilidad
+            // 
+            chkMovilidad.Anchor = AnchorStyles.Left;
+            chkMovilidad.AutoSize = true;
+            chkMovilidad.CheckAlign = ContentAlignment.MiddleRight;
+            chkMovilidad.Location = new Point(249, 311);
+            chkMovilidad.Margin = new Padding(3, 6, 3, 6);
+            chkMovilidad.Name = "chkMovilidad";
+            chkMovilidad.Size = new Size(164, 24);
+            chkMovilidad.TabIndex = 13;
+            chkMovilidad.Text = "Movilidad Reducida";
+            chkMovilidad.UseVisualStyleBackColor = true;
             // 
             // tlpBotones
             // 
             tlpBotones.AutoSize = true;
             tlpBotones.ColumnCount = 4;
+            tlpCampos.SetColumnSpan(tlpBotones, 2);
             tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
@@ -220,176 +366,65 @@
             tlpBotones.Controls.Add(btnEliminar, 2, 0);
             tlpBotones.Controls.Add(btnLimpiar, 3, 0);
             tlpBotones.Dock = DockStyle.Fill;
+            tlpBotones.Location = new Point(0, 365);
             tlpBotones.Margin = new Padding(0, 24, 0, 0);
             tlpBotones.Name = "tlpBotones";
             tlpBotones.RowCount = 1;
             tlpBotones.RowStyles.Add(new RowStyle());
-            tlpBotones.Size = new Size(586, 46);
+            tlpBotones.Size = new Size(703, 58);
             tlpBotones.TabIndex = 14;
             // 
             // btnAgregar
             // 
             btnAgregar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnAgregar.Image = (Image)resources.GetObject("btnAgregar.Image");
-            btnAgregar.Margin = new Padding(3);
+            btnAgregar.Location = new Point(3, 9);
             btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(140, 40);
+            btnAgregar.Size = new Size(169, 40);
             btnAgregar.TabIndex = 0;
             btnAgregar.Text = "Agregar";
             btnAgregar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAgregar.UseVisualStyleBackColor = true;
+            btnAgregar.Click += btnAgregar_Click;
             // 
             // btnActualizar
             // 
             btnActualizar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnActualizar.Image = (Image)resources.GetObject("btnActualizar.Image");
-            btnActualizar.Margin = new Padding(3);
+            btnActualizar.Location = new Point(178, 9);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(140, 40);
+            btnActualizar.Size = new Size(169, 40);
             btnActualizar.TabIndex = 1;
             btnActualizar.Text = "Actualizar";
             btnActualizar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnActualizar.UseVisualStyleBackColor = true;
+            btnActualizar.Click += btnActualizar_Click;
             // 
             // btnEliminar
             // 
             btnEliminar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnEliminar.Image = (Image)resources.GetObject("btnEliminar.Image");
-            btnEliminar.Margin = new Padding(3);
+            btnEliminar.Location = new Point(353, 9);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(140, 40);
+            btnEliminar.Size = new Size(169, 40);
             btnEliminar.TabIndex = 2;
             btnEliminar.Text = "Eliminar";
             btnEliminar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnLimpiar
             // 
             btnLimpiar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnLimpiar.Image = (Image)resources.GetObject("btnLimpiar.Image");
-            btnLimpiar.Margin = new Padding(3);
+            btnLimpiar.Location = new Point(528, 9);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(140, 40);
+            btnLimpiar.Size = new Size(172, 40);
             btnLimpiar.TabIndex = 3;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnLimpiar.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            checkBox1.Anchor = AnchorStyles.Left;
-            checkBox1.AutoSize = true;
-            checkBox1.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox1.Margin = new Padding(3, 6, 3, 6);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(164, 24);
-            checkBox1.TabIndex = 13;
-            checkBox1.Text = "Movilidad Reducida";
-            checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            comboBox1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "CC - Cedula De Ciudadania", "CE - Cédula de Extranjería", "TI - Tarjeta de Identidad", "PA - Pasaporte", "DNI - Documento Nacional de Identidad" });
-            comboBox1.Margin = new Padding(3, 6, 3, 6);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(374, 28);
-            comboBox1.TabIndex = 7;
-            // 
-            // textBox1
-            // 
-            textBox1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Margin = new Padding(3, 6, 3, 6);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(374, 27);
-            textBox1.TabIndex = 8;
-            // 
-            // textBox2
-            // 
-            textBox2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox2.Margin = new Padding(3, 6, 3, 6);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(374, 27);
-            textBox2.TabIndex = 9;
-            // 
-            // textBox3
-            // 
-            textBox3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox3.Margin = new Padding(3, 6, 3, 6);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(374, 27);
-            textBox3.TabIndex = 10;
-            // 
-            // textBox4
-            // 
-            textBox4.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox4.Margin = new Padding(3, 6, 3, 6);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(374, 27);
-            textBox4.TabIndex = 11;
-            // 
-            // textBox5
-            // 
-            textBox5.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox5.Margin = new Padding(3, 6, 3, 6);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(374, 27);
-            textBox5.TabIndex = 12;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Left;
-            label1.AutoSize = true;
-            label1.Margin = new Padding(3, 6, 3, 6);
-            label1.Name = "label1";
-            label1.TabIndex = 0;
-            label1.Text = "Tipo De Documento";
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Margin = new Padding(3, 6, 3, 6);
-            label2.Name = "label2";
-            label2.TabIndex = 1;
-            label2.Text = "Documento";
-            // 
-            // label3
-            // 
-            label3.Anchor = AnchorStyles.Left;
-            label3.AutoSize = true;
-            label3.Margin = new Padding(3, 6, 3, 6);
-            label3.Name = "label3";
-            label3.TabIndex = 2;
-            label3.Text = "Nombre";
-            // 
-            // label4
-            // 
-            label4.Anchor = AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Margin = new Padding(3, 6, 3, 6);
-            label4.Name = "label4";
-            label4.TabIndex = 3;
-            label4.Text = "Apellidos";
-            // 
-            // label5
-            // 
-            label5.Anchor = AnchorStyles.Left;
-            label5.AutoSize = true;
-            label5.Margin = new Padding(3, 6, 3, 6);
-            label5.Name = "label5";
-            label5.TabIndex = 4;
-            label5.Text = "Telefono";
-            // 
-            // label6
-            // 
-            label6.Anchor = AnchorStyles.Left;
-            label6.AutoSize = true;
-            label6.Margin = new Padding(3, 6, 3, 6);
-            label6.Name = "label6";
-            label6.TabIndex = 5;
-            label6.Text = "Correo";
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // splitResidentes
             // 
@@ -402,7 +437,7 @@
             // 
             splitResidentes.Panel1.Controls.Add(dgvResidentes);
             splitResidentes.Panel2Collapsed = true;
-            splitResidentes.Size = new Size(853, 857);
+            splitResidentes.Size = new Size(853, 884);
             splitResidentes.SplitterDistance = 544;
             splitResidentes.TabIndex = 0;
             // 
@@ -421,8 +456,9 @@
             dgvResidentes.RowHeadersVisible = false;
             dgvResidentes.RowHeadersWidth = 51;
             dgvResidentes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvResidentes.Size = new Size(853, 857);
+            dgvResidentes.Size = new Size(853, 884);
             dgvResidentes.TabIndex = 0;
+            dgvResidentes.CellClick += dgvResidentes_CellClick;
             dgvResidentes.CellContentClick += dgvResidentes_CellContentClick;
             // 
             // colDocumento
@@ -494,7 +530,6 @@
             WindowState = FormWindowState.Maximized;
             Load += FrResidente_Load;
             splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
@@ -511,7 +546,6 @@
             splitResidentes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvResidentes).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -534,13 +568,13 @@
         private Label label2;
         private Label label5;
         private Label label6;
-        private TextBox textBox5;
-        private TextBox textBox4;
-        private TextBox textBox3;
-        private TextBox textBox2;
-        private TextBox textBox1;
-        private ComboBox comboBox1;
-        private CheckBox checkBox1;
+        private TextBox txtCorreo;
+        private TextBox txtTelefono;
+        private TextBox txtApellido;
+        private TextBox txtNombre;
+        private TextBox txtDocumento;
+        private ComboBox cmbTipoDocumento;
+        private CheckBox chkMovilidad;
         private SplitContainer splitResidentes;
         private DataGridView dgvResidentes;
         private DataGridViewTextBoxColumn colDocumento;
