@@ -32,53 +32,48 @@ namespace ParkFlow.Persistence
             return list;
         }
 
-        public void SaveAll(IEnumerable<T> list)
+        public void SaveAll(IEnumerable<T> list, IEnumerable<T> removed)
         {
-            List<T> nuevosElementos = list.ToList();
-            List<T> elementosBase = LoadAll().ToList();
-
-            using MySqlConnection con = Database.CreateConnection();
+            using (MySqlConnection con = Database.CreateConnection())
             {
                 con.Open();
                 using (MySqlTransaction tran = con.BeginTransaction())
                 {
                     try
                     {
-                        foreach(T itemViejo in elementosBase)
+                        foreach (T item in removed)
                         {
-                            if (!nuevosElementos.Exists(n => Equals(n.Id, itemViejo.Id)))
+                            using (MySqlCommand cmd = new MySqlCommand(DeleteSql, con, tran))
                             {
-                                using (MySqlCommand cmd = new MySqlCommand(DeleteSql, con, tran))
-                                {
-                                    cmd.Parameters.AddWithValue("@id", itemViejo.Id);
-                                    cmd.ExecuteNonQuery();
-                                }
+                                cmd.Parameters.AddWithValue("@id", item.Id);
+                                cmd.ExecuteNonQuery();
                             }
                         }
 
-                        foreach (T itemNuevo in nuevosElementos)
+                        foreach (T item in list)
                         {
                             using (MySqlCommand cmd = new MySqlCommand(UpsertSql, con, tran))
                             {
-                                SetParameters(cmd, itemNuevo);
+                                SetParameters(cmd, item);
                                 cmd.ExecuteNonQuery();
 
-                                if (itemNuevo.Id is int id && id == 0)
+                                if (item.Id is int id && id == 0)
                                 {
-                                    itemNuevo.Id = (E)(object)Convert.ToInt32(cmd.LastInsertedId);
+                                    item.Id = (E)(object)Convert.ToInt32(cmd.LastInsertedId);
                                 }
                             }
                         }
+
                         tran.Commit();
                     }
-                    catch (Exception)
+                    catch
                     {
                         tran.Rollback();
                         throw;
                     }
                 }
             }
-
         }
+
     }
 }

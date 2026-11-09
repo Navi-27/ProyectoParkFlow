@@ -9,6 +9,7 @@ namespace ParkFlow.Infraestructure
     {
         private List<T> _cache;
         private IDataStore<T> _store;
+        private List<T> _removed = new List<T>();
 
         public Repository(IDataStore<T> store)
         {
@@ -42,6 +43,7 @@ namespace ParkFlow.Infraestructure
             if (item != null)
             {
                 _cache.Remove(item);
+                _removed.Add(item);
             }
         }
 
@@ -64,11 +66,13 @@ namespace ParkFlow.Infraestructure
         {
             try
             {
-                _store.SaveAll(_cache);
+                _store.SaveAll(_cache, _removed);
+                _removed.Clear();
             }
             catch
             {
                 _cache = _store.LoadAll().ToList();
+                _removed.Clear();
                 throw;
             }
             
