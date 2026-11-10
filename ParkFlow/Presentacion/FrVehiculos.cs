@@ -2,6 +2,7 @@ using MySqlConnector;
 using ParkFlow.Infraestructure;
 using ParkFlow.models;
 using ParkFlow.Persistence;
+using ParkFlow.Tools;
 
 namespace ParkFlow.Presentacion
 {
@@ -29,8 +30,7 @@ namespace ParkFlow.Presentacion
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudieron cargar los vehículos:\n" + ex.Message, "Vehículos",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudieron cargar los vehículos:", ex, "Vehículos");
                 Close();
             }
         }
@@ -50,9 +50,7 @@ namespace ParkFlow.Presentacion
         private void Limpiar()
         {
             _placaSeleccionada = null;
-            txtPlaca.Clear();
-            txtMarca.Clear();
-            txtModelo.Clear();
+            FormHelper.LimpiarCampos(txtPlaca, txtMarca, txtModelo);
             cmbTipo.SelectedIndex = -1;
             txtPlaca.Enabled = true;
             cmbTipo.Enabled = true;
@@ -83,18 +81,33 @@ namespace ParkFlow.Presentacion
         {
             if (_vehiculos == null) return;
 
-            string placa = txtPlaca.Text.Trim();
-            if (placa == "" || cmbTipo.SelectedItem == null || txtMarca.Text.Trim() == "" || txtModelo.Text.Trim() == "")
+            string placa = txtPlaca.Text.Trim().ToUpper();
+            if (cmbTipo.SelectedItem == null || !Validador.Requeridos(txtPlaca, txtMarca, txtModelo))
             {
-                MessageBox.Show("Complete todos los campos.", "Vehículos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Mensajes.Aviso("Complete todos los campos.", "Vehículos");
                 return;
+            }
+
+            bool esCarro = cmbTipo.SelectedItem.ToString() == "CARRO";
+            if (_placaSeleccionada == null)
+            {
+                if (esCarro && !Validador.EsPlacaCarro(placa))
+                {
+                    Mensajes.Aviso("La placa de carro debe ser 3 letras y 3 números (ej: ABC123).", "Vehículos");
+                    return;
+                }
+                if (!esCarro && !Validador.EsPlacaMoto(placa))
+                {
+                    Mensajes.Aviso("La placa de moto debe ser 3 letras, 2 números y 1 letra (ej: ABC12D).", "Vehículos");
+                    return;
+                }
             }
 
             try
             {
                 if (_placaSeleccionada == null)
                 {
-                    Vehiculo nuevo = cmbTipo.SelectedItem.ToString() == "CARRO" ? Carro.Create() : Moto.Create();
+                    Vehiculo nuevo = esCarro ? Carro.Create() : Moto.Create();
                     nuevo.Id = placa;
                     nuevo.PersonaDocumento = _residente.Id;
                     nuevo.Marca = txtMarca.Text.Trim();
@@ -116,11 +129,11 @@ namespace ParkFlow.Presentacion
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message, "Vehículos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Mensajes.Aviso(ex.Message, "Vehículos");
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo guardar:\n" + ex.Message, "Vehículos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo guardar:", ex, "Vehículos");
                 CargarVehiculos();
             }
         }
@@ -129,8 +142,7 @@ namespace ParkFlow.Presentacion
         {
             if (_vehiculos == null || _placaSeleccionada == null) return;
 
-            if (MessageBox.Show($"¿Eliminar el vehículo {_placaSeleccionada}?", "Vehículos",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            if (!Mensajes.Confirmar($"¿Eliminar el vehículo {_placaSeleccionada}?", "Vehículos")) return;
 
             try
             {
@@ -139,7 +151,7 @@ namespace ParkFlow.Presentacion
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo eliminar:\n" + ex.Message, "Vehículos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo eliminar:", ex, "Vehículos");
             }
             CargarVehiculos();
             Limpiar();

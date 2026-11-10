@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParkFlow.Tools
+﻿namespace ParkFlow.Tools
 {
-    internal class Tool
+    internal static class FormHelper
     {
-        public static void openForm<TForm>(Form parent) where TForm : Form, new()
+        public static void OpenForm<TForm>(Form parent) where TForm : Form, new()
         {
             TForm? form = Application.OpenForms.OfType<TForm>().FirstOrDefault();
 
@@ -19,6 +15,14 @@ namespace ParkFlow.Tools
             else
             {
                 form.BringToFront();
+            }
+        }
+
+        public static void LimpiarCampos(params TextBox[] campos)
+        {
+            foreach (TextBox campo in campos)
+            {
+                campo.Clear();
             }
         }
     }

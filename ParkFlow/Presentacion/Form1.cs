@@ -12,7 +12,7 @@ namespace ParkFlow
 
         private void listaResidentesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Tool.openForm<FrResidente>(this);
+            FormHelper.OpenForm<FrResidente>(this);
         }
     }
 }

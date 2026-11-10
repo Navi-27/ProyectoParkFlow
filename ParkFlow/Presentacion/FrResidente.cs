@@ -2,6 +2,7 @@
 using ParkFlow.Infraestructure;
 using ParkFlow.models;
 using ParkFlow.Persistence;
+using ParkFlow.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,8 +34,7 @@ namespace ParkFlow.Presentacion
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo cargar la lista de residentes:\n" + ex.Message, "Residentes",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo cargar la lista de residentes:", ex, "Residentes");
             }
         }
 
@@ -60,11 +60,7 @@ namespace ParkFlow.Presentacion
         {
             cmbTipoDocumento.SelectedIndex = -1;
             _documentoSeleccionado = null;
-            txtDocumento.Clear();
-            txtNombre.Clear();
-            txtApellido.Clear();
-            txtTelefono.Clear();
-            txtCorreo.Clear();
+            FormHelper.LimpiarCampos(txtDocumento, txtNombre, txtApellido, txtTelefono, txtCorreo);
             chkMovilidad.Checked = false;
             txtDocumento.Enabled = true;
             btnAgregar.Enabled = true;
@@ -120,11 +116,7 @@ namespace ParkFlow.Presentacion
         {
             if (_personas == null) return;
 
-            if (cmbTipoDocumento.SelectedItem == null || txtDocumento.Text.Trim() == "" || txtNombre.Text.Trim() == "" || txtApellido.Text.Trim() == "" || txtTelefono.Text.Trim() == "")
-            {
-                MessageBox.Show("Complete tipo de documento, documento, nombre, apellidos y teléfono.", "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!DatosValidos()) return;
 
             try
             {
@@ -145,11 +137,11 @@ namespace ParkFlow.Presentacion
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message, "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Mensajes.Aviso(ex.Message, "Residentes");
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo guardar:\n" + ex.Message, "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo guardar:", ex, "Residentes");
                 CargarResidentes();
             }
         }
@@ -157,8 +149,7 @@ namespace ParkFlow.Presentacion
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (_personas == null || _documentoSeleccionado == null) return;
-            if (MessageBox.Show($"¿Eliminar al Residente {_documentoSeleccionado}?", "Residentes",
-               MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            if (!Mensajes.Confirmar($"¿Eliminar al Residente {_documentoSeleccionado}?", "Residentes")) return;
 
             try
             {
@@ -167,7 +158,7 @@ namespace ParkFlow.Presentacion
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo eliminar:\n" + ex.Message, "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo eliminar:", ex, "Residentes");
             }
             CargarResidentes();
             Limpiar();
@@ -178,11 +169,7 @@ namespace ParkFlow.Presentacion
         {
             if (_personas == null || _documentoSeleccionado == null) return;
 
-            if (cmbTipoDocumento.SelectedItem == null || txtDocumento.Text.Trim() == "" || txtNombre.Text.Trim() == "" || txtApellido.Text.Trim() == "" || txtTelefono.Text.Trim() == "")
-            {
-                MessageBox.Show("Complete tipo de documento, documento, nombre, apellidos y teléfono.", "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!DatosValidos()) return;
 
             try
             {
@@ -203,13 +190,40 @@ namespace ParkFlow.Presentacion
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message, "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Mensajes.Aviso(ex.Message, "Residentes");
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo guardar:\n" + ex.Message, "Residentes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo guardar:", ex, "Residentes");
                 CargarResidentes();
             }
+        }
+
+        private bool DatosValidos()
+        {
+            if (cmbTipoDocumento.SelectedItem == null || !Validador.Requeridos(txtDocumento, txtNombre, txtApellido, txtTelefono))
+            {
+                Mensajes.Aviso("Complete tipo de documento, documento, nombre, apellidos y teléfono.", "Residentes");
+                return false;
+            }
+            string tipo = cmbTipoDocumento.SelectedItem.ToString()!.Split('-')[0].Trim();
+            if (tipo != "PA" && !Validador.EsSoloNumeros(txtDocumento.Text.Trim()))
+            {
+                Mensajes.Aviso("El documento solo debe tener números (excepto pasaporte).", "Residentes");
+                return false;
+            }
+            if (!Validador.EsTelefono(txtTelefono.Text.Trim()))
+            {
+                Mensajes.Aviso("El teléfono debe tener entre 7 y 10 números.", "Residentes");
+                return false;
+            }
+            string correo = txtCorreo.Text.Trim();
+            if (correo != "" && !Validador.EsCorreo(correo))
+            {
+                Mensajes.Aviso("El correo no tiene un formato válido.", "Residentes");
+                return false;
+            }
+            return true;
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)

@@ -1,9 +1,9 @@
 ﻿using ParkFlow.Contracts;
 using ParkFlow.models;
 using ParkFlow.Persistence;
+using ParkFlow.Tools;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace ParkFlow.Infraestructure
@@ -27,12 +27,6 @@ namespace ParkFlow.Infraestructure
         private RepositoryUsuarios(IDataStore<Usuario> store)
         {
             _repository = new Repository<Usuario, int>(store);
-        }
-
-        public static string HashPassword(string clave)
-        {
-            byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(clave));
-            return Convert.ToHexString(bytes);
         }
 
         public void Add(Usuario u)
@@ -77,7 +71,7 @@ namespace ParkFlow.Infraestructure
             Usuario usuario = Usuario.Create();
             usuario.PersonaDocumento = empleado.Id;
             usuario.NombreUsuario = nombreUsuario;
-            usuario.Password = HashPassword(clave);
+            usuario.Password = Seguridad.HashPassword(clave);
             usuario.Rol = rol;
 
             Add(usuario);
@@ -86,7 +80,7 @@ namespace ParkFlow.Infraestructure
 
         public void CambiarClave(Usuario usuario, string nuevaClave)
         {
-            usuario.Password = HashPassword(nuevaClave);
+            usuario.Password = Seguridad.HashPassword(nuevaClave);
             Update(usuario);
         }
 
@@ -105,7 +99,7 @@ namespace ParkFlow.Infraestructure
         {
             Usuario? usuario = GetByNombreUsuario(nombreUsuario);
 
-            if (usuario != null && usuario.Password == HashPassword(clave))
+            if (usuario != null && usuario.Password == Seguridad.HashPassword(clave))
             {
                 return usuario;
             }

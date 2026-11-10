@@ -17,9 +17,9 @@ namespace ParkFlow.Presentacion
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtClave.Text))
+            if (!Validador.Requeridos(txtUsuario, txtClave))
             {
-                MessageBox.Show("Escribe el usuario y la clave.", "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Mensajes.Aviso("Escribe el usuario y la clave.", "Login");
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace ParkFlow.Presentacion
 
                 if (usuario == null)
                 {
-                    MessageBox.Show("Usuario o clave incorrectos.", "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Mensajes.Aviso("Usuario o clave incorrectos.", "Login");
                     txtClave.Clear();
                     txtClave.Focus();
                     return;
@@ -41,8 +41,7 @@ namespace ParkFlow.Presentacion
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("No se pudo conectar a la base de datos:\n" + ex.Message, "Login",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensajes.Error("No se pudo conectar a la base de datos:", ex, "Login");
             }
         }
 
