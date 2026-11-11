@@ -30,12 +30,13 @@
         {
             menuStrip1 = new MenuStrip();
             listaResidentesToolStripMenuItem = new ToolStripMenuItem();
+            visitasToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, visitasToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -48,6 +49,13 @@
             listaResidentesToolStripMenuItem.Size = new Size(102, 20);
             listaResidentesToolStripMenuItem.Text = "Lista Residentes";
             listaResidentesToolStripMenuItem.Click += listaResidentesToolStripMenuItem_Click;
+            // 
+            // visitasToolStripMenuItem
+            // 
+            visitasToolStripMenuItem.Name = "visitasToolStripMenuItem";
+            visitasToolStripMenuItem.Size = new Size(53, 20);
+            visitasToolStripMenuItem.Text = "Visitas";
+            visitasToolStripMenuItem.Click += visitasToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -69,5 +77,6 @@
 
         private MenuStrip menuStrip1;
         private ToolStripMenuItem listaResidentesToolStripMenuItem;
+        private ToolStripMenuItem visitasToolStripMenuItem;
     }
 }

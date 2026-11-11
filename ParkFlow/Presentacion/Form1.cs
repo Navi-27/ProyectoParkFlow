@@ -14,5 +14,10 @@ namespace ParkFlow
         {
             FormHelper.OpenForm<FrResidente>(this);
         }
+
+        private void visitasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormHelper.OpenForm<FrVisitas>(this);
+        }
     }
 }
