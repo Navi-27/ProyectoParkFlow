@@ -117,4 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ojo" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABYklEQVR4nNWVMUsDQRCFv8sZO42dYFo7
+        LVXQRkslnfkbwcLfYXr7FMEiP0ILEQlKwDJYSooUahviyYS3sFkuAY89IQPD3u6892YzmZuDVbfkj7hE
+        axashRKkipvItCgmWUAywo93VgVqwJb2n8AXMPEwFelNlyVIPcARcAqcAAfAjkRQ8g+gDzwC98BzjsZc
+        IpfsGOjpV2Ryu/EAeJAPdOZjeuKGenObtkd4Alq6vZUntJpiLWEdrx3qpvKOAO9AM6d8DeBW3sipQFPc
+        TFpOd2bXClhNtz3SutaboByZznwM4vYVN82Z1dURL8Cu1zVrej4XYQS8yUc6sxjCGgdpvALfpm1dcQZs
+        Al1gKKDffpfqmjGwJx/rzGLOJuIOVaIN03ZtV6rVyywR//EnpwvalFhtuuxFu4rxooUbmz13sUZFEtzK
+        H1T7wIVIh0WHXd64zhu71VjjOkxUKeODE/WTycrbL0vtkd7AiAPjAAAAAElFTkSuQmCC
+</value>
+  </data>
 </root>

@@ -269,6 +269,7 @@
             // txtNombre
             // 
             txtNombre.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtNombre.CharacterCasing = CharacterCasing.Upper;
             txtNombre.Location = new Point(249, 155);
             txtNombre.Margin = new Padding(3, 6, 3, 6);
             txtNombre.MaxLength = 45;
@@ -290,6 +291,7 @@
             // txtApellido
             // 
             txtApellido.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtApellido.CharacterCasing = CharacterCasing.Upper;
             txtApellido.Location = new Point(249, 194);
             txtApellido.Margin = new Padding(3, 6, 3, 6);
             txtApellido.MaxLength = 100;
@@ -460,6 +462,8 @@
             dgvResidentes.TabIndex = 0;
             dgvResidentes.CellClick += dgvResidentes_CellClick;
             dgvResidentes.CellContentClick += dgvResidentes_CellContentClick;
+            dgvResidentes.CellFormatting += dgvResidentes_CellFormatting;
+            dgvResidentes.CellPainting += dgvResidentes_CellPainting;
             // 
             // colDocumento
             // 
@@ -511,12 +515,10 @@
             // 
             // colVehiculos
             // 
-            colVehiculos.HeaderText = "Vehiculos";
+            colVehiculos.HeaderText = "Vehículos";
             colVehiculos.MinimumWidth = 6;
             colVehiculos.Name = "colVehiculos";
             colVehiculos.ReadOnly = true;
-            colVehiculos.Text = "Ver Vehiculos";
-            colVehiculos.UseColumnTextForButtonValue = true;
             // 
             // FrResidente
             // 

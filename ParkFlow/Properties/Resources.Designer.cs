@@ -59,5 +59,12 @@ namespace ParkFlow.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static global::System.Drawing.Bitmap ojo {
+            get {
+                object obj = ResourceManager.GetObject("ojo", resourceCulture);
+                return ((global::System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

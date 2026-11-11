@@ -21,6 +21,7 @@ namespace ParkFlow.Presentacion
             InitializeComponent();
         }
 
+        private readonly Image _iconoOjo = Properties.Resources.ojo;
         private RepositoryPersonas? _personas;
         private string? _documentoSeleccionado;
 
@@ -80,6 +81,27 @@ namespace ParkFlow.Presentacion
             }
         }
 
+
+        private void dgvResidentes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == colVehiculos.Index)
+            {
+                dgvResidentes.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "Ver vehículos";
+            }
+        }
+
+        private void dgvResidentes_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex != colVehiculos.Index || e.Graphics == null) return;
+
+            e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+            int x = e.CellBounds.Left + (e.CellBounds.Width - _iconoOjo.Width) / 2;
+            int y = e.CellBounds.Top + (e.CellBounds.Height - _iconoOjo.Height) / 2;
+            e.Graphics.DrawImage(_iconoOjo, x, y, _iconoOjo.Width, _iconoOjo.Height);
+
+            e.Handled = true;
+        }
 
         private void dgvResidentes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
