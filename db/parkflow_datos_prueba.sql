@@ -3,16 +3,16 @@ USE `proyecto_integrador`;
 
 -- 1. Personas
 INSERT INTO persona (documento, tipo_documento, nombre, apellido, telefono, correo, tipo_persona, movilidad_reducida) VALUES
-('1001','CC','Ana','Pérez','3001112222','ana@mail.com','RESIDENTE',0),
-('1002','CC','Luis','Gómez','3003334444','luis@mail.com','RESIDENTE',1),
-('1003','CC','Carla','Mendoza','3015556666','carla@mail.com','RESIDENTE',0),
-('1004','CE','Pedro','Ramírez','3027778888',NULL,'RESIDENTE',0),
-('1005','CC','Sofía','Torres','3039990000','sofia@mail.com','RESIDENTE',0),
-('2001','CC','Marta','Ruiz','3041112222','marta@mail.com','VISITANTE',0),
-('2002','TI','Jorge','Castro','3053334444',NULL,'VISITANTE',0),
-('2003','CC','Elena','Díaz','3065556666','elena@mail.com','VISITANTE',0),
-('3001','CC','Andrés','Morales','3071112222','admin@parkflow.com','EMPLEADO',0),
-('3002','CC','Diana','Rojas','3073334444',NULL,'EMPLEADO',0);
+('1001','CC','ANA','PÉREZ','3001112222','ana@mail.com','RESIDENTE',0),
+('1002','CC','LUIS','GÓMEZ','3003334444','luis@mail.com','RESIDENTE',1),
+('1003','CC','CARLA','MENDOZA','3015556666','carla@mail.com','RESIDENTE',0),
+('1004','CE','PEDRO','RAMÍREZ','3027778888',NULL,'RESIDENTE',0),
+('1005','CC','SOFÍA','TORRES','3039990000','sofia@mail.com','RESIDENTE',0),
+('2001','CC','MARTA','RUIZ','3041112222','marta@mail.com','VISITANTE',0),
+('2002','TI','JORGE','CASTRO','3053334444',NULL,'VISITANTE',0),
+('2003','CC','ELENA','DÍAZ','3065556666','elena@mail.com','VISITANTE',0),
+('3001','CC','ANDRÉS','MORALES','3071112222','admin@parkflow.com','EMPLEADO',0),
+('3002','CC','DIANA','ROJAS','3073334444',NULL,'EMPLEADO',0);
 
 -- 2. Usuarios
 INSERT INTO usuario (persona_documento, usuario, password, rol) VALUES
@@ -21,7 +21,7 @@ INSERT INTO usuario (persona_documento, usuario, password, rol) VALUES
 
 -- 3. Zonas
 INSERT INTO zona (nombre, ancho, largo) VALUES
-('Zona A', 15, 6),
+('Zona A', 21, 6),
 ('Zona B', 9, 6);
 
 -- 4. Viviendas
@@ -45,17 +45,17 @@ INSERT INTO vehiculo (placa, tipo_vehiculo, persona_documento, modelo, marca) VA
 ('VIS002','MOTO', '2002','2015','Honda');
 
 -- 6. Plazas
-INSERT INTO parqueo (id_zona, codigo, nivel, coord_x, coord_y, coord_z, tipo, persona_documento) VALUES
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-01', 1,  0,  0, 0, 'RESIDENTE',          '1001'),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-02', 1,  3,  0, 0, 'RESIDENTE',          NULL),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-03', 1,  6,  0, 0, 'MOVILIDAD_REDUCIDA', NULL),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-04', 1,  9,  0, 0, 'RESIDENTE',          '1003'),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-05', 1, 12,  0, 0, 'RESIDENTE',          NULL),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 'B-01', 1,  0, 10, 0, 'VISITANTE',          NULL),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 'B-02', 1,  3, 10, 0, 'VISITANTE',          NULL),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 'B-03', 1,  6, 10, 0, 'VISITANTE',          NULL),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-06', 2,  0,  0, 3, 'RESIDENTE',          '1005'),
-((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-07', 2,  3,  0, 3, 'RESIDENTE',          NULL);
+INSERT INTO parqueo (id_zona, codigo, nivel, coord_x, coord_y, tipo, persona_documento) VALUES
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-01', 1,  0,  0, 'RESIDENTE',          '1001'),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-02', 1,  3,  0, 'RESIDENTE',          NULL),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-03', 1,  6,  0, 'MOVILIDAD_REDUCIDA', NULL),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-04', 1,  9,  0, 'RESIDENTE',          '1003'),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-05', 1, 12,  0, 'RESIDENTE',          NULL),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 'B-01', 1,  0, 10, 'VISITANTE',          NULL),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 'B-02', 1,  3, 10, 'VISITANTE',          NULL),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 'B-03', 1,  6, 10, 'VISITANTE',          NULL),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-06', 1, 15,  0, 'RESIDENTE',          '1005'),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona A'), 'A-07', 1, 18,  0, 'RESIDENTE',          NULL);
 
 -- 7. Ocupar algunas plazas
 UPDATE parqueo SET vehiculo_placa = 'ABC123' WHERE codigo = 'A-01';
@@ -87,26 +87,20 @@ INSERT INTO estancia (vehiculo_placa, id_parqueo, fecha_llegada, fecha_salida) V
 
 -- 10. Grafo de rutas
 -- 10a. Nodos de infraestructura
-INSERT INTO nodo_ruta (nombre, tipo, nivel, coord_x, coord_y, coord_z) VALUES
-('ENTRADA',    'ENTRADA', 1, -6, 5, 0),
-('SALIDA',     'SALIDA',  1, -6, 8, 0),
-('PASILLO_A1', 'CRUCE',   1,  6, 2, 0),
-('PASILLO_B1', 'CRUCE',   1,  3, 8, 0),
-('RAMPA_N1',   'RAMPA',   1, 14, 2, 0),
-('RAMPA_N2',   'RAMPA',   2, 14, 2, 3),
-('PASILLO_A2', 'CRUCE',   2, 1.5, 2, 3);
+INSERT INTO nodo_ruta (nombre, tipo, nivel, coord_x, coord_y) VALUES
+('ENTRADA',    'ENTRADA', 1, -6, 5),
+('SALIDA',     'SALIDA',  1, -6, 8),
+('PASILLO_A1', 'CRUCE',   1,  6, 2),
+('PASILLO_B1', 'CRUCE',   1,  3, 8);
 
 -- 10b. Un nodo por cada plaza
-INSERT INTO nodo_ruta (nombre, tipo, nivel, coord_x, coord_y, coord_z, id_parqueo)
-SELECT codigo, 'PLAZA', nivel, coord_x, coord_y, coord_z, id_parqueo FROM parqueo;
+INSERT INTO nodo_ruta (nombre, tipo, nivel, coord_x, coord_y, id_parqueo)
+SELECT codigo, 'PLAZA', nivel, coord_x, coord_y, id_parqueo FROM parqueo;
 
 -- 10c. Aristas de infraestructura
 INSERT INTO arista_ruta (nodo_origen, nodo_destino, distancia) VALUES
 ((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'ENTRADA'),    (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_A1'), 0),
 ((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'ENTRADA'),    (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_B1'), 0),
-((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_A1'), (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'RAMPA_N1'),   0),
-((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'RAMPA_N1'),   (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'RAMPA_N2'),   0),
-((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'RAMPA_N2'),   (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_A2'), 0),
 ((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_B1'), (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'SALIDA'),     0),
 ((SELECT id_nodo FROM nodo_ruta WHERE nombre = 'PASILLO_A1'), (SELECT id_nodo FROM nodo_ruta WHERE nombre = 'SALIDA'),     0);
 
@@ -114,23 +108,17 @@ INSERT INTO arista_ruta (nodo_origen, nodo_destino, distancia) VALUES
 INSERT INTO arista_ruta (nodo_origen, nodo_destino, distancia)
 SELECT c.id_nodo, p.id_nodo, 0
 FROM nodo_ruta p JOIN nodo_ruta c ON c.nombre = 'PASILLO_A1'
-WHERE p.tipo = 'PLAZA' AND p.nombre IN ('A-01','A-02','A-03','A-04','A-05');
+WHERE p.tipo = 'PLAZA' AND p.nombre IN ('A-01','A-02','A-03','A-04','A-05','A-06','A-07');
 
 INSERT INTO arista_ruta (nodo_origen, nodo_destino, distancia)
 SELECT c.id_nodo, p.id_nodo, 0
 FROM nodo_ruta p JOIN nodo_ruta c ON c.nombre = 'PASILLO_B1'
 WHERE p.tipo = 'PLAZA' AND p.nombre IN ('B-01','B-02','B-03');
 
-INSERT INTO arista_ruta (nodo_origen, nodo_destino, distancia)
-SELECT c.id_nodo, p.id_nodo, 0
-FROM nodo_ruta p JOIN nodo_ruta c ON c.nombre = 'PASILLO_A2'
-WHERE p.tipo = 'PLAZA' AND p.nombre IN ('A-06','A-07');
-
 -- 10e. Distancia euclidiana entre cada par de nodos
 UPDATE arista_ruta r
 JOIN nodo_ruta a ON a.id_nodo = r.nodo_origen
 JOIN nodo_ruta b ON b.id_nodo = r.nodo_destino
 SET r.distancia = ROUND(SQRT(POW(a.coord_x - b.coord_x, 2)
-                           + POW(a.coord_y - b.coord_y, 2)
-                           + POW(a.coord_z - b.coord_z, 2)), 2)
+                           + POW(a.coord_y - b.coord_y, 2)), 2)
 WHERE r.id_arista > 0;

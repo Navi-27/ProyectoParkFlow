@@ -14,7 +14,6 @@ namespace ParkFlow.models
         public int Nivel { get; set; }
         public double CoordX { get; set; }
         public double CoordY { get; set; }
-        public double CoordZ { get; set; }
         public string Tipo { get; set; }
         public string PersonaDocumento { get; set; }
         public string VehiculoPlaca { get; set; }
@@ -27,7 +26,6 @@ namespace ParkFlow.models
             Nivel = 1;
             CoordX = 0;
             CoordY = 0;
-            CoordZ = 0;
             Tipo = "VISITANTE";
             PersonaDocumento = string.Empty;
             VehiculoPlaca = string.Empty; ;

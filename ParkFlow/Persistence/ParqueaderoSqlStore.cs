@@ -12,7 +12,7 @@ namespace ParkFlow.Persistence
         {
             get
             {
-                return "SELECT id_parqueo, id_zona, persona_documento, vehiculo_placa, codigo, nivel, coord_x, coord_y, coord_z, tipo FROM parqueo";
+                return "SELECT id_parqueo, id_zona, persona_documento, vehiculo_placa, codigo, nivel, coord_x, coord_y, tipo FROM parqueo";
             }
         }
 
@@ -21,13 +21,13 @@ namespace ParkFlow.Persistence
             get
             {
                 return @"INSERT INTO parqueo
-                    (id_parqueo, id_zona, persona_documento, vehiculo_placa, codigo, nivel, coord_x, coord_y, coord_z, tipo)
+                    (id_parqueo, id_zona, persona_documento, vehiculo_placa, codigo, nivel, coord_x, coord_y, tipo)
                     VALUES
-                    (@id, @zona, @persona, @placa, @codigo, @nivel, @x, @y, @z, @tipo)
+                    (@id, @zona, @persona, @placa, @codigo, @nivel, @x, @y, @tipo)
                     ON DUPLICATE KEY UPDATE
                     id_zona = @zona, persona_documento = @persona, vehiculo_placa = @placa,
                     codigo = @codigo, nivel = @nivel, coord_x = @x,
-                    coord_y = @y, coord_z = @z, tipo = @tipo;";
+                    coord_y = @y, tipo = @tipo;";
             }
         }
 
@@ -49,7 +49,6 @@ namespace ParkFlow.Persistence
             parqueadero.Nivel = reader.GetInt32(reader.GetOrdinal("nivel"));
             parqueadero.CoordX = reader.GetDouble(reader.GetOrdinal("coord_x"));
             parqueadero.CoordY = reader.GetDouble(reader.GetOrdinal("coord_y"));
-            parqueadero.CoordZ = reader.GetDouble(reader.GetOrdinal("coord_z"));
             parqueadero.Tipo = reader.GetString(reader.GetOrdinal("tipo"));
 
             int posPersona = reader.GetOrdinal("persona_documento");
@@ -69,7 +68,6 @@ namespace ParkFlow.Persistence
             cmd.Parameters.AddWithValue("@nivel", p.Nivel);
             cmd.Parameters.AddWithValue("@x", p.CoordX);
             cmd.Parameters.AddWithValue("@y", p.CoordY);
-            cmd.Parameters.AddWithValue("@z", p.CoordZ);
             cmd.Parameters.AddWithValue("@tipo", p.Tipo);
             cmd.Parameters.AddWithValue("@persona",
                 string.IsNullOrEmpty(p.PersonaDocumento) ? DBNull.Value : p.PersonaDocumento);
