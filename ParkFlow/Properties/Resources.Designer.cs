@@ -60,9 +60,37 @@ namespace ParkFlow.Properties {
             }
         }
         
-        internal static global::System.Drawing.Bitmap ojo {
+        internal static global::System.Drawing.Bitmap apagar {
             get {
-                object obj = ResourceManager.GetObject("ojo", resourceCulture);
+                object obj = ResourceManager.GetObject("apagar", resourceCulture);
+                return ((global::System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static global::System.Drawing.Bitmap ingreso {
+            get {
+                object obj = ResourceManager.GetObject("ingreso", resourceCulture);
+                return ((global::System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static global::System.Drawing.Bitmap salida {
+            get {
+                object obj = ResourceManager.GetObject("salida", resourceCulture);
+                return ((global::System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static global::System.Drawing.Bitmap limpiar {
+            get {
+                object obj = ResourceManager.GetObject("limpiar", resourceCulture);
+                return ((global::System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static global::System.Drawing.Bitmap carro {
+            get {
+                object obj = ResourceManager.GetObject("carro", resourceCulture);
                 return ((global::System.Drawing.Bitmap)(obj));
             }
         }

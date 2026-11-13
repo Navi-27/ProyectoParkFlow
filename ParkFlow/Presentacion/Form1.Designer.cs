@@ -30,13 +30,16 @@
         {
             menuStrip1 = new MenuStrip();
             listaResidentesToolStripMenuItem = new ToolStripMenuItem();
+            porteriaToolStripMenuItem = new ToolStripMenuItem();
             visitasToolStripMenuItem = new ToolStripMenuItem();
+            cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, visitasToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, porteriaToolStripMenuItem, visitasToolStripMenuItem, cerrarSesionToolStripMenuItem });
+            menuStrip1.ImageScalingSize = new Size(24, 24);
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -50,12 +53,30 @@
             listaResidentesToolStripMenuItem.Text = "Lista Residentes";
             listaResidentesToolStripMenuItem.Click += listaResidentesToolStripMenuItem_Click;
             // 
+            // porteriaToolStripMenuItem
+            // 
+            porteriaToolStripMenuItem.Name = "porteriaToolStripMenuItem";
+            porteriaToolStripMenuItem.Size = new Size(64, 28);
+            porteriaToolStripMenuItem.Text = "Portería";
+            porteriaToolStripMenuItem.Click += porteriaToolStripMenuItem_Click;
+            // 
             // visitasToolStripMenuItem
             // 
             visitasToolStripMenuItem.Name = "visitasToolStripMenuItem";
             visitasToolStripMenuItem.Size = new Size(53, 20);
             visitasToolStripMenuItem.Text = "Visitas";
             visitasToolStripMenuItem.Click += visitasToolStripMenuItem_Click;
+            // 
+            // cerrarSesionToolStripMenuItem
+            // 
+            cerrarSesionToolStripMenuItem.Alignment = ToolStripItemAlignment.Right;
+            cerrarSesionToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            cerrarSesionToolStripMenuItem.Image = Properties.Resources.apagar;
+            cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
+            cerrarSesionToolStripMenuItem.Size = new Size(36, 28);
+            cerrarSesionToolStripMenuItem.Text = "Cerrar sesión";
+            cerrarSesionToolStripMenuItem.ToolTipText = "Cerrar sesión";
+            cerrarSesionToolStripMenuItem.Click += cerrarSesionToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -77,6 +98,8 @@
 
         private MenuStrip menuStrip1;
         private ToolStripMenuItem listaResidentesToolStripMenuItem;
+        private ToolStripMenuItem porteriaToolStripMenuItem;
         private ToolStripMenuItem visitasToolStripMenuItem;
+        private ToolStripMenuItem cerrarSesionToolStripMenuItem;
     }
 }

@@ -131,6 +131,7 @@ namespace ParkFlow.Presentacion
             // 
             // txtNombre
             // 
+            txtNombre.CharacterCasing = CharacterCasing.Upper;
             txtNombre.Location = new Point(15, 165);
             txtNombre.MaxLength = 45;
             txtNombre.Name = "txtNombre";
@@ -148,6 +149,7 @@ namespace ParkFlow.Presentacion
             // 
             // txtApellido
             // 
+            txtApellido.CharacterCasing = CharacterCasing.Upper;
             txtApellido.Location = new Point(15, 221);
             txtApellido.MaxLength = 100;
             txtApellido.Name = "txtApellido";
