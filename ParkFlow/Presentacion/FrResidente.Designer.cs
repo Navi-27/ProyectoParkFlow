@@ -35,7 +35,6 @@
             tlpCampos = new TableLayoutPanel();
             tlpBuscar = new TableLayoutPanel();
             txtBuscar = new TextBox();
-            btnBuscar = new Button();
             label1 = new Label();
             cmbTipoDocumento = new ComboBox();
             label2 = new Label();
@@ -151,7 +150,7 @@
             tlpCampos.Controls.Add(txtCorreo, 1, 6);
             tlpCampos.Controls.Add(chkMovilidad, 1, 7);
             tlpCampos.Controls.Add(tlpBotones, 0, 8);
-            tlpCampos.Location = new Point(70, 216);
+            tlpCampos.Location = new Point(70, 220);
             tlpCampos.Name = "tlpCampos";
             tlpCampos.RowCount = 9;
             tlpCampos.RowStyles.Add(new RowStyle());
@@ -163,7 +162,7 @@
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
             tlpCampos.RowStyles.Add(new RowStyle());
-            tlpCampos.Size = new Size(703, 423);
+            tlpCampos.Size = new Size(703, 416);
             tlpCampos.TabIndex = 0;
             // 
             // tlpBuscar
@@ -174,48 +173,31 @@
             tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tlpBuscar.ColumnStyles.Add(new ColumnStyle());
             tlpBuscar.Controls.Add(txtBuscar, 0, 0);
-            tlpBuscar.Controls.Add(btnBuscar, 1, 0);
             tlpBuscar.Dock = DockStyle.Fill;
             tlpBuscar.Location = new Point(0, 0);
             tlpBuscar.Margin = new Padding(0, 0, 0, 24);
             tlpBuscar.Name = "tlpBuscar";
             tlpBuscar.RowCount = 1;
             tlpBuscar.RowStyles.Add(new RowStyle());
-            tlpBuscar.Size = new Size(703, 46);
+            tlpBuscar.Size = new Size(703, 39);
             tlpBuscar.TabIndex = 0;
             // 
             // txtBuscar
             // 
             txtBuscar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtBuscar.Location = new Point(3, 9);
+            txtBuscar.Location = new Point(3, 6);
             txtBuscar.Margin = new Padding(3, 6, 3, 6);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Buscar residente por documento o nombre";
-            txtBuscar.Size = new Size(588, 27);
+            txtBuscar.Size = new Size(697, 27);
             txtBuscar.TabIndex = 0;
             txtBuscar.TextChanged += txtBuscar_TextChanged;
-            // 
-            // btnBuscar
-            // 
-            btnBuscar.AutoSize = true;
-            btnBuscar.Image = (Image)resources.GetObject("btnBuscar.Image");
-            btnBuscar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnBuscar.Location = new Point(600, 3);
-            btnBuscar.Margin = new Padding(6, 3, 3, 3);
-            btnBuscar.MinimumSize = new Size(100, 40);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(100, 40);
-            btnBuscar.TabIndex = 1;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new Point(3, 80);
+            label1.Location = new Point(3, 73);
             label1.Margin = new Padding(3, 6, 3, 6);
             label1.Name = "label1";
             label1.Size = new Size(144, 20);
@@ -228,7 +210,7 @@
             cmbTipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoDocumento.FormattingEnabled = true;
             cmbTipoDocumento.Items.AddRange(new object[] { "CC - Cedula De Ciudadania", "CE - Cédula de Extranjería", "TI - Tarjeta de Identidad", "PA - Pasaporte", "DNI - Documento Nacional de Identidad" });
-            cmbTipoDocumento.Location = new Point(249, 76);
+            cmbTipoDocumento.Location = new Point(249, 69);
             cmbTipoDocumento.Margin = new Padding(3, 6, 3, 6);
             cmbTipoDocumento.Name = "cmbTipoDocumento";
             cmbTipoDocumento.Size = new Size(451, 28);
@@ -238,7 +220,7 @@
             // 
             label2.Anchor = AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(3, 119);
+            label2.Location = new Point(3, 112);
             label2.Margin = new Padding(3, 6, 3, 6);
             label2.Name = "label2";
             label2.Size = new Size(87, 20);
@@ -248,7 +230,7 @@
             // txtDocumento
             // 
             txtDocumento.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtDocumento.Location = new Point(249, 116);
+            txtDocumento.Location = new Point(249, 109);
             txtDocumento.Margin = new Padding(3, 6, 3, 6);
             txtDocumento.MaxLength = 20;
             txtDocumento.Name = "txtDocumento";
@@ -259,7 +241,7 @@
             // 
             label3.Anchor = AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Location = new Point(3, 158);
+            label3.Location = new Point(3, 151);
             label3.Margin = new Padding(3, 6, 3, 6);
             label3.Name = "label3";
             label3.Size = new Size(64, 20);
@@ -270,7 +252,7 @@
             // 
             txtNombre.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtNombre.CharacterCasing = CharacterCasing.Upper;
-            txtNombre.Location = new Point(249, 155);
+            txtNombre.Location = new Point(249, 148);
             txtNombre.Margin = new Padding(3, 6, 3, 6);
             txtNombre.MaxLength = 45;
             txtNombre.Name = "txtNombre";
@@ -281,7 +263,7 @@
             // 
             label4.Anchor = AnchorStyles.Left;
             label4.AutoSize = true;
-            label4.Location = new Point(3, 197);
+            label4.Location = new Point(3, 190);
             label4.Margin = new Padding(3, 6, 3, 6);
             label4.Name = "label4";
             label4.Size = new Size(72, 20);
@@ -292,7 +274,7 @@
             // 
             txtApellido.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtApellido.CharacterCasing = CharacterCasing.Upper;
-            txtApellido.Location = new Point(249, 194);
+            txtApellido.Location = new Point(249, 187);
             txtApellido.Margin = new Padding(3, 6, 3, 6);
             txtApellido.MaxLength = 100;
             txtApellido.Name = "txtApellido";
@@ -303,7 +285,7 @@
             // 
             label5.Anchor = AnchorStyles.Left;
             label5.AutoSize = true;
-            label5.Location = new Point(3, 236);
+            label5.Location = new Point(3, 229);
             label5.Margin = new Padding(3, 6, 3, 6);
             label5.Name = "label5";
             label5.Size = new Size(67, 20);
@@ -313,7 +295,7 @@
             // txtTelefono
             // 
             txtTelefono.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtTelefono.Location = new Point(249, 233);
+            txtTelefono.Location = new Point(249, 226);
             txtTelefono.Margin = new Padding(3, 6, 3, 6);
             txtTelefono.MaxLength = 15;
             txtTelefono.Name = "txtTelefono";
@@ -324,7 +306,7 @@
             // 
             label6.Anchor = AnchorStyles.Left;
             label6.AutoSize = true;
-            label6.Location = new Point(3, 275);
+            label6.Location = new Point(3, 268);
             label6.Margin = new Padding(3, 6, 3, 6);
             label6.Name = "label6";
             label6.Size = new Size(54, 20);
@@ -334,7 +316,7 @@
             // txtCorreo
             // 
             txtCorreo.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtCorreo.Location = new Point(249, 272);
+            txtCorreo.Location = new Point(249, 265);
             txtCorreo.Margin = new Padding(3, 6, 3, 6);
             txtCorreo.MaxLength = 150;
             txtCorreo.Name = "txtCorreo";
@@ -346,7 +328,7 @@
             chkMovilidad.Anchor = AnchorStyles.Left;
             chkMovilidad.AutoSize = true;
             chkMovilidad.CheckAlign = ContentAlignment.MiddleRight;
-            chkMovilidad.Location = new Point(249, 311);
+            chkMovilidad.Location = new Point(249, 304);
             chkMovilidad.Margin = new Padding(3, 6, 3, 6);
             chkMovilidad.Name = "chkMovilidad";
             chkMovilidad.Size = new Size(164, 24);
@@ -368,7 +350,7 @@
             tlpBotones.Controls.Add(btnEliminar, 2, 0);
             tlpBotones.Controls.Add(btnLimpiar, 3, 0);
             tlpBotones.Dock = DockStyle.Fill;
-            tlpBotones.Location = new Point(0, 365);
+            tlpBotones.Location = new Point(0, 358);
             tlpBotones.Margin = new Padding(0, 24, 0, 0);
             tlpBotones.Name = "tlpBotones";
             tlpBotones.RowCount = 1;
@@ -558,7 +540,6 @@
         private TableLayoutPanel tlpCampos;
         private TableLayoutPanel tlpBuscar;
         private TextBox txtBuscar;
-        private Button btnBuscar;
         private TableLayoutPanel tlpBotones;
         private Button btnAgregar;
         private Button btnActualizar;

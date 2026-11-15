@@ -10,10 +10,12 @@
             {
                 form = new TForm();
                 form.MdiParent = parent;
+                form.WindowState = FormWindowState.Maximized;
                 form.Show();
             }
             else
             {
+                form.WindowState = FormWindowState.Maximized;
                 form.BringToFront();
             }
         }

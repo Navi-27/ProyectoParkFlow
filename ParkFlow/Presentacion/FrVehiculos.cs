@@ -8,19 +8,19 @@ namespace ParkFlow.Presentacion
 {
     internal partial class FrVehiculos : Form
     {
-        private readonly Residente _residente;
+        private readonly Persona _persona;
         private RepositoryVehiculos? _vehiculos;
         private string? _placaSeleccionada;
 
-        public FrVehiculos(Residente residente)
+        public FrVehiculos(Persona persona)
         {
             InitializeComponent();
-            _residente = residente;
+            _persona = persona;
         }
 
         private void FrVehiculos_Load(object sender, EventArgs e)
         {
-            Text = $"Vehículos de {_residente.Nombre} {_residente.Apellido} ({_residente.Id})";
+            Text = $"Vehículos de {_persona.Nombre} {_persona.Apellido} ({_persona.Id})";
             cmbTipo.Items.AddRange(new object[] { "CARRO", "MOTO" });
             try
             {
@@ -41,7 +41,7 @@ namespace ParkFlow.Presentacion
             dgvVehiculos.AutoGenerateColumns = false;
             dgvVehiculos.DataSource = null;
             dgvVehiculos.DataSource = _vehiculos.GetAll()
-                .Where(v => v.PersonaDocumento == _residente.Id)
+                .Where(v => v.PersonaDocumento == _persona.Id)
                 .Select(v => new { v.Id, Tipo = v.Tipo(), v.Marca, v.Modelo })
                 .ToList();
             dgvVehiculos.ClearSelection();
@@ -72,7 +72,6 @@ namespace ParkFlow.Presentacion
             cmbTipo.SelectedItem = v.Tipo();
             txtMarca.Text = v.Marca;
             txtModelo.Text = v.Modelo;
-            txtPlaca.Enabled = false;
             cmbTipo.Enabled = false;
             btnEliminar.Enabled = true;
         }
@@ -109,7 +108,7 @@ namespace ParkFlow.Presentacion
                 {
                     Vehiculo nuevo = esCarro ? Carro.Create() : Moto.Create();
                     nuevo.Id = placa;
-                    nuevo.PersonaDocumento = _residente.Id;
+                    nuevo.PersonaDocumento = _persona.Id;
                     nuevo.Marca = txtMarca.Text.Trim();
                     nuevo.Modelo = txtModelo.Text.Trim();
                     _vehiculos.Add(nuevo);

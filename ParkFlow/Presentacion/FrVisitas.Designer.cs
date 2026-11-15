@@ -28,6 +28,8 @@ namespace ParkFlow.Presentacion
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             gbVisitante = new GroupBox();
             lblTipoDocumento = new Label();
             cmbTipoDocumento = new ComboBox();
@@ -45,6 +47,9 @@ namespace ParkFlow.Presentacion
             cmbResidente = new ComboBox();
             lblVivienda = new Label();
             cmbVivienda = new ComboBox();
+            lblComoLlega = new Label();
+            rbAPie = new RadioButton();
+            rbVehiculo = new RadioButton();
             btnRegistrarIngreso = new Button();
             btnRegistrarSalida = new Button();
             btnLimpiar = new Button();
@@ -77,9 +82,9 @@ namespace ParkFlow.Presentacion
             gbVisitante.Controls.Add(lblTelefono);
             gbVisitante.Controls.Add(txtTelefono);
             gbVisitante.Controls.Add(chkMovilidad);
-            gbVisitante.Location = new Point(12, 12);
+            gbVisitante.Location = new Point(20, 60);
             gbVisitante.Name = "gbVisitante";
-            gbVisitante.Size = new Size(300, 345);
+            gbVisitante.Size = new Size(450, 235);
             gbVisitante.TabIndex = 0;
             gbVisitante.TabStop = false;
             gbVisitante.Text = "Visitante";
@@ -87,7 +92,7 @@ namespace ParkFlow.Presentacion
             // lblTipoDocumento
             // 
             lblTipoDocumento.AutoSize = true;
-            lblTipoDocumento.Location = new Point(15, 28);
+            lblTipoDocumento.Location = new Point(12, 32);
             lblTipoDocumento.Name = "lblTipoDocumento";
             lblTipoDocumento.Size = new Size(140, 20);
             lblTipoDocumento.TabIndex = 0;
@@ -98,15 +103,15 @@ namespace ParkFlow.Presentacion
             cmbTipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoDocumento.FormattingEnabled = true;
             cmbTipoDocumento.Items.AddRange(new object[] { "CC - Cedula De Ciudadania", "CE - Cédula de Extranjería", "TI - Tarjeta de Identidad", "PA - Pasaporte", "DNI - Documento Nacional de Identidad" });
-            cmbTipoDocumento.Location = new Point(15, 51);
+            cmbTipoDocumento.Location = new Point(165, 28);
             cmbTipoDocumento.Name = "cmbTipoDocumento";
-            cmbTipoDocumento.Size = new Size(270, 28);
+            cmbTipoDocumento.Size = new Size(272, 28);
             cmbTipoDocumento.TabIndex = 1;
             // 
             // lblDocumento
             // 
             lblDocumento.AutoSize = true;
-            lblDocumento.Location = new Point(15, 86);
+            lblDocumento.Location = new Point(12, 65);
             lblDocumento.Name = "lblDocumento";
             lblDocumento.Size = new Size(87, 20);
             lblDocumento.TabIndex = 2;
@@ -114,16 +119,17 @@ namespace ParkFlow.Presentacion
             // 
             // txtDocumento
             // 
-            txtDocumento.Location = new Point(15, 109);
+            txtDocumento.Location = new Point(165, 61);
             txtDocumento.MaxLength = 20;
             txtDocumento.Name = "txtDocumento";
-            txtDocumento.Size = new Size(180, 27);
+            txtDocumento.Size = new Size(272, 27);
             txtDocumento.TabIndex = 3;
+            txtDocumento.Leave += txtDocumento_Leave;
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Location = new Point(15, 142);
+            lblNombre.Location = new Point(12, 98);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(64, 20);
             lblNombre.TabIndex = 5;
@@ -132,16 +138,16 @@ namespace ParkFlow.Presentacion
             // txtNombre
             // 
             txtNombre.CharacterCasing = CharacterCasing.Upper;
-            txtNombre.Location = new Point(15, 165);
+            txtNombre.Location = new Point(165, 94);
             txtNombre.MaxLength = 45;
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(270, 27);
+            txtNombre.Size = new Size(272, 27);
             txtNombre.TabIndex = 6;
             // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
-            lblApellido.Location = new Point(15, 198);
+            lblApellido.Location = new Point(12, 131);
             lblApellido.Name = "lblApellido";
             lblApellido.Size = new Size(72, 20);
             lblApellido.TabIndex = 7;
@@ -150,16 +156,16 @@ namespace ParkFlow.Presentacion
             // txtApellido
             // 
             txtApellido.CharacterCasing = CharacterCasing.Upper;
-            txtApellido.Location = new Point(15, 221);
+            txtApellido.Location = new Point(165, 127);
             txtApellido.MaxLength = 100;
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(270, 27);
+            txtApellido.Size = new Size(272, 27);
             txtApellido.TabIndex = 8;
             // 
             // lblTelefono
             // 
             lblTelefono.AutoSize = true;
-            lblTelefono.Location = new Point(15, 254);
+            lblTelefono.Location = new Point(12, 164);
             lblTelefono.Name = "lblTelefono";
             lblTelefono.Size = new Size(67, 20);
             lblTelefono.TabIndex = 9;
@@ -167,16 +173,16 @@ namespace ParkFlow.Presentacion
             // 
             // txtTelefono
             // 
-            txtTelefono.Location = new Point(15, 277);
+            txtTelefono.Location = new Point(165, 160);
             txtTelefono.MaxLength = 15;
             txtTelefono.Name = "txtTelefono";
-            txtTelefono.Size = new Size(270, 27);
+            txtTelefono.Size = new Size(272, 27);
             txtTelefono.TabIndex = 10;
             // 
             // chkMovilidad
             // 
             chkMovilidad.AutoSize = true;
-            chkMovilidad.Location = new Point(15, 312);
+            chkMovilidad.Location = new Point(165, 196);
             chkMovilidad.Name = "chkMovilidad";
             chkMovilidad.Size = new Size(160, 24);
             chkMovilidad.TabIndex = 11;
@@ -189,9 +195,12 @@ namespace ParkFlow.Presentacion
             gbVisita.Controls.Add(cmbResidente);
             gbVisita.Controls.Add(lblVivienda);
             gbVisita.Controls.Add(cmbVivienda);
-            gbVisita.Location = new Point(12, 365);
+            gbVisita.Controls.Add(lblComoLlega);
+            gbVisita.Controls.Add(rbAPie);
+            gbVisita.Controls.Add(rbVehiculo);
+            gbVisita.Location = new Point(20, 305);
             gbVisita.Name = "gbVisita";
-            gbVisita.Size = new Size(300, 150);
+            gbVisita.Size = new Size(450, 135);
             gbVisita.TabIndex = 1;
             gbVisita.TabStop = false;
             gbVisita.Text = "Visita a";
@@ -199,7 +208,7 @@ namespace ParkFlow.Presentacion
             // lblResidente
             // 
             lblResidente.AutoSize = true;
-            lblResidente.Location = new Point(15, 28);
+            lblResidente.Location = new Point(12, 32);
             lblResidente.Name = "lblResidente";
             lblResidente.Size = new Size(74, 20);
             lblResidente.TabIndex = 0;
@@ -209,16 +218,16 @@ namespace ParkFlow.Presentacion
             // 
             cmbResidente.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbResidente.FormattingEnabled = true;
-            cmbResidente.Location = new Point(15, 51);
+            cmbResidente.Location = new Point(165, 28);
             cmbResidente.Name = "cmbResidente";
-            cmbResidente.Size = new Size(270, 28);
+            cmbResidente.Size = new Size(272, 28);
             cmbResidente.TabIndex = 1;
             cmbResidente.SelectedIndexChanged += cmbResidente_SelectedIndexChanged;
             // 
             // lblVivienda
             // 
             lblVivienda.AutoSize = true;
-            lblVivienda.Location = new Point(15, 86);
+            lblVivienda.Location = new Point(12, 66);
             lblVivienda.Name = "lblVivienda";
             lblVivienda.Size = new Size(66, 20);
             lblVivienda.TabIndex = 2;
@@ -228,49 +237,87 @@ namespace ParkFlow.Presentacion
             // 
             cmbVivienda.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbVivienda.FormattingEnabled = true;
-            cmbVivienda.Location = new Point(15, 109);
+            cmbVivienda.Location = new Point(165, 62);
             cmbVivienda.Name = "cmbVivienda";
-            cmbVivienda.Size = new Size(270, 28);
+            cmbVivienda.Size = new Size(272, 28);
             cmbVivienda.TabIndex = 3;
+            // 
+            // lblComoLlega
+            // 
+            lblComoLlega.AutoSize = true;
+            lblComoLlega.Location = new Point(12, 102);
+            lblComoLlega.Name = "lblComoLlega";
+            lblComoLlega.Size = new Size(100, 20);
+            lblComoLlega.TabIndex = 4;
+            lblComoLlega.Text = "¿Cómo llega?";
+            // 
+            // rbAPie
+            // 
+            rbAPie.AutoSize = true;
+            rbAPie.Checked = true;
+            rbAPie.Location = new Point(165, 100);
+            rbAPie.Name = "rbAPie";
+            rbAPie.Size = new Size(65, 24);
+            rbAPie.TabIndex = 5;
+            rbAPie.TabStop = true;
+            rbAPie.Text = "A pie";
+            rbAPie.UseVisualStyleBackColor = true;
+
+            // 
+            // rbVehiculo
+            // 
+            rbVehiculo.AutoSize = true;
+            rbVehiculo.Location = new Point(255, 100);
+            rbVehiculo.Name = "rbVehiculo";
+            rbVehiculo.Size = new Size(105, 24);
+            rbVehiculo.TabIndex = 6;
+            rbVehiculo.Text = "En vehículo";
+            rbVehiculo.UseVisualStyleBackColor = true;
             // 
             // btnRegistrarIngreso
             // 
-            btnRegistrarIngreso.Location = new Point(12, 525);
+            btnRegistrarIngreso.Image = Properties.Resources.ingreso;
+            btnRegistrarIngreso.Location = new Point(20, 455);
             btnRegistrarIngreso.Name = "btnRegistrarIngreso";
-            btnRegistrarIngreso.Size = new Size(300, 32);
+            btnRegistrarIngreso.Size = new Size(220, 38);
             btnRegistrarIngreso.TabIndex = 2;
             btnRegistrarIngreso.Text = "Registrar ingreso";
+            btnRegistrarIngreso.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnRegistrarIngreso.UseVisualStyleBackColor = true;
             btnRegistrarIngreso.Click += btnRegistrarIngreso_Click;
             // 
             // btnRegistrarSalida
             // 
             btnRegistrarSalida.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnRegistrarSalida.Location = new Point(843, 14);
+            btnRegistrarSalida.Image = Properties.Resources.salida;
+            btnRegistrarSalida.Location = new Point(1100, 14);
             btnRegistrarSalida.Name = "btnRegistrarSalida";
-            btnRegistrarSalida.Size = new Size(145, 32);
+            btnRegistrarSalida.Size = new Size(170, 34);
             btnRegistrarSalida.TabIndex = 7;
             btnRegistrarSalida.Text = "Registrar salida";
+            btnRegistrarSalida.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnRegistrarSalida.UseVisualStyleBackColor = true;
             btnRegistrarSalida.Click += btnRegistrarSalida_Click;
             // 
             // btnLimpiar
             // 
-            btnLimpiar.Location = new Point(12, 565);
+            btnLimpiar.Image = Properties.Resources.limpiar;
+            btnLimpiar.Location = new Point(250, 455);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(300, 32);
+            btnLimpiar.Size = new Size(220, 38);
             btnLimpiar.TabIndex = 4;
             btnLimpiar.Text = "Limpiar";
+            btnLimpiar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
             // 
             // txtBuscar
             // 
             txtBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtBuscar.Location = new Point(330, 17);
+            txtBuscar.Location = new Point(490, 18);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Buscar por documento o nombre";
-            txtBuscar.Size = new Size(500, 27);
+            txtBuscar.Size = new Size(600, 27);
             txtBuscar.TabIndex = 5;
             txtBuscar.TextChanged += txtBuscar_TextChanged;
             // 
@@ -282,14 +329,14 @@ namespace ParkFlow.Presentacion
             dgvVisitas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvVisitas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVisitas.Columns.AddRange(new DataGridViewColumn[] { colId, colDocVisitante, colVisitante, colDocVisitado, colVisitado, colVivienda, colIngreso, colSalida, colTiempo });
-            dgvVisitas.Location = new Point(330, 55);
+            dgvVisitas.Location = new Point(490, 58);
             dgvVisitas.MultiSelect = false;
             dgvVisitas.Name = "dgvVisitas";
             dgvVisitas.ReadOnly = true;
             dgvVisitas.RowHeadersVisible = false;
             dgvVisitas.RowHeadersWidth = 51;
             dgvVisitas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvVisitas.Size = new Size(658, 542);
+            dgvVisitas.Size = new Size(780, 542);
             dgvVisitas.TabIndex = 8;
             dgvVisitas.CellClick += dgvVisitas_CellClick;
             // 
@@ -345,7 +392,9 @@ namespace ParkFlow.Presentacion
             // colIngreso
             // 
             colIngreso.DataPropertyName = "FechaIngreso";
-            colIngreso.HeaderText = "Ingreso";
+            dataGridViewCellStyle1.Format = "dd/MM/yyyy hh:mm tt";
+            colIngreso.DefaultCellStyle = dataGridViewCellStyle1;
+            colIngreso.HeaderText = "Fecha ingreso";
             colIngreso.MinimumWidth = 6;
             colIngreso.Name = "colIngreso";
             colIngreso.ReadOnly = true;
@@ -353,7 +402,9 @@ namespace ParkFlow.Presentacion
             // colSalida
             // 
             colSalida.DataPropertyName = "FechaSalida";
-            colSalida.HeaderText = "Salida";
+            dataGridViewCellStyle2.Format = "dd/MM/yyyy hh:mm tt";
+            colSalida.DefaultCellStyle = dataGridViewCellStyle2;
+            colSalida.HeaderText = "Fecha salida";
             colSalida.MinimumWidth = 6;
             colSalida.Name = "colSalida";
             colSalida.ReadOnly = true;
@@ -370,7 +421,7 @@ namespace ParkFlow.Presentacion
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1000, 610);
+            ClientSize = new Size(1290, 615);
             Controls.Add(gbVisitante);
             Controls.Add(gbVisita);
             Controls.Add(btnRegistrarIngreso);
@@ -378,7 +429,7 @@ namespace ParkFlow.Presentacion
             Controls.Add(btnLimpiar);
             Controls.Add(txtBuscar);
             Controls.Add(dgvVisitas);
-            MinimumSize = new Size(1018, 657);
+            MinimumSize = new Size(1308, 662);
             Name = "FrVisitas";
             Text = "Visitas";
             Load += FrVisitas_Load;
@@ -410,6 +461,9 @@ namespace ParkFlow.Presentacion
         private ComboBox cmbResidente;
         private Label lblVivienda;
         private ComboBox cmbVivienda;
+        private Label lblComoLlega;
+        private RadioButton rbAPie;
+        private RadioButton rbVehiculo;
         private Button btnRegistrarIngreso;
         private Button btnRegistrarSalida;
         private Button btnLimpiar;

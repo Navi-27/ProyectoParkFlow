@@ -14,6 +14,9 @@ namespace ParkFlow.Presentacion
         }
 
         private RepositoryPersonas? _personas;
+        private RepositoryVehiculos? _vehiculos;
+        private RepositoryParqueaderos? _parqueaderos;
+        private RepositoryEstancias? _estancias;
         private RepositoryViviendas? _viviendas;
         private RepositoryRegistros? _registros;
         private int? _idVisitaSeleccionada;
@@ -23,6 +26,9 @@ namespace ParkFlow.Presentacion
             try
             {
                 _personas = RepositoryPersonas.GetInstance(new PersonaSqlStore());
+                _vehiculos = RepositoryVehiculos.GetInstance(new VehiculosSqlStore());
+                _parqueaderos = RepositoryParqueaderos.GetInstance(new ParqueaderoSqlStore());
+                _estancias = RepositoryEstancias.GetInstance(new EstanciaSqlStore());
                 _viviendas = RepositoryViviendas.GetInstance(new ViviendaSqlStore());
                 _registros = RepositoryRegistros.GetInstance(new RegistroSqlStore());
 
@@ -51,9 +57,9 @@ namespace ParkFlow.Presentacion
                 {
                     r.Id,
                     r.PersonaVisitante,
-                    NombreVisitante = _personas.GetById(r.PersonaVisitante)?.Nombre,
+                    NombreVisitante = _personas.GetById(r.PersonaVisitante)?.Nombre + " " + _personas.GetById(r.PersonaVisitante)?.Apellido,
                     r.PersonaVisitada,
-                    NombreVisitado = _personas.GetById(r.PersonaVisitada)?.Nombre,
+                    NombreVisitado = _personas.GetById(r.PersonaVisitada)?.Nombre + " " + _personas.GetById(r.PersonaVisitada)?.Apellido,
                     r.IdVivienda,
                     r.FechaIngreso,
                     r.FechaSalida,
@@ -145,7 +151,7 @@ namespace ParkFlow.Presentacion
 
         private void btnRegistrarIngreso_Click(object sender, EventArgs e)
         {
-            if (_personas == null || _registros == null) return;
+            if (_personas == null || _registros == null || _vehiculos == null || _parqueaderos == null || _estancias == null) return;
 
             if (cmbTipoDocumento.SelectedItem == null
                 || !Validador.Requeridos(txtDocumento, txtNombre, txtApellido, txtTelefono))
@@ -161,6 +167,26 @@ namespace ParkFlow.Presentacion
             }
 
             string documento = txtDocumento.Text.Trim();
+            string tipoDocumento = cmbTipoDocumento.SelectedItem!.ToString()!.Split('-')[0].Trim();
+
+            if (tipoDocumento != "PA" && !Validador.EsSoloNumeros(documento))
+            {
+                Mensajes.Aviso("El documento solo debe tener números (excepto pasaporte).", "Visitas");
+                return;
+            }
+
+            if (!Validador.EsTelefono(txtTelefono.Text.Trim()))
+            {
+                Mensajes.Aviso("El teléfono debe tener entre 7 y 10 números.", "Visitas");
+                return;
+            }
+
+            Persona? existente = _personas.GetById(documento);
+            if (existente != null && existente is not Visitante)
+            {
+                Mensajes.Aviso("Ese documento pertenece a un residente. No se puede registrar como visitante.", "Visitas");
+                return;
+            }
 
             if (_registros.GetActivas().Any(r => r.PersonaVisitante == documento))
             {
@@ -170,11 +196,11 @@ namespace ParkFlow.Presentacion
 
             try
             {
-                if (_personas.GetById(documento) == null)
+                if (existente == null)
                 {
-                    Visitante? nuevo = Visitante.Create();
-                    nuevo.TipoDocumento = cmbTipoDocumento.SelectedItem!.ToString()!.Split('-')[0].Trim();
-                    nuevo.Id = txtDocumento.Text.Trim();
+                    Visitante nuevo = Visitante.Create();
+                    nuevo.TipoDocumento = tipoDocumento;
+                    nuevo.Id = documento;
                     nuevo.Nombre = txtNombre.Text.Trim();
                     nuevo.Apellido = txtApellido.Text.Trim();
                     nuevo.Telefono = txtTelefono.Text.Trim();
@@ -191,6 +217,57 @@ namespace ParkFlow.Presentacion
                 _registros.Commit();
 
                 CargarVisitas();
+
+                if (rbVehiculo.Checked)
+                {
+                    Persona? visitante = _personas.GetById(documento);
+
+                    if (visitante != null && !_vehiculos.GetAll().Any(v => v.PersonaDocumento == documento))
+                    {
+                        Mensajes.Aviso("El visitante no tiene vehículos registrados. Registre su vehículo.", "Visitas");
+                        using var fr = new FrVehiculos(visitante);
+                        fr.ShowDialog(this);
+                    }
+
+                    Vehiculo? carro = _vehiculos.GetAll()
+                        .Where(v => v.PersonaDocumento == documento)
+                        .FirstOrDefault(v => !_estancias.GetActivas().Any(es => es.VehiculoPlaca == v.Id));
+
+                    Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(visitante);
+
+                    if (carro == null)
+                    {
+                        Mensajes.Aviso("La visita se registró, pero el vehículo no ingresó: no tiene vehículo registrado o ya está dentro.", "Visitas");
+                    }
+                    else if (plaza == null)
+                    {
+                        Mensajes.Aviso("La visita se registró, pero no hay plazas de visitante disponibles para el vehículo.", "Visitas");
+                    }
+                    else
+                    {
+                        Estancia estancia = Estancia.Create();
+                        estancia.VehiculoPlaca = carro.Id;
+                        estancia.IdParqueadero = plaza.Id;
+                        _estancias.Add(estancia);
+                        _estancias.Commit();
+
+                        try
+                        {
+                            plaza.VehiculoPlaca = carro.Id;
+                            _parqueaderos.Update(plaza);
+                            _parqueaderos.Commit();
+                        }
+                        catch (MySqlException)
+                        {
+                            _estancias.Delete(estancia.Id);
+                            _estancias.Commit();
+                            throw;
+                        }
+
+                        Mensajes.Aviso($"El vehículo {carro.Id} ingresó a la plaza {plaza.Codigo}.", "Visitas");
+                    }
+                }
+
                 Limpiar();
             }
             catch (InvalidOperationException ex)
@@ -228,6 +305,41 @@ namespace ParkFlow.Presentacion
                 visita.FechaSalida = DateTime.Now;
                 _registros.Update(visita);
                 _registros.Commit();
+
+                if (_vehiculos != null && _estancias != null && _parqueaderos != null)
+                {
+                    List<string> placas = _vehiculos.GetAll()
+                        .Where(v => v.PersonaDocumento == visita.PersonaVisitante)
+                        .Select(v => v.Id)
+                        .ToList();
+
+                    Estancia? estancia = _estancias.GetActivas().FirstOrDefault(es => placas.Contains(es.VehiculoPlaca));
+                    if (estancia != null)
+                    {
+                        estancia.FechaSalida = DateTime.Now;
+                        _estancias.Update(estancia);
+                        _estancias.Commit();
+
+                        Parqueadero? plaza = _parqueaderos.GetById(estancia.IdParqueadero);
+                        if (plaza != null)
+                        {
+                            try
+                            {
+                                plaza.VehiculoPlaca = "";
+                                _parqueaderos.Update(plaza);
+                                _parqueaderos.Commit();
+                            }
+                            catch (MySqlException)
+                            {
+                                estancia.FechaSalida = null;
+                                _estancias.Update(estancia);
+                                _estancias.Commit();
+                                throw;
+                            }
+                        }
+                    }
+                }
+
                 CargarVisitas();
                 Limpiar();
             }
@@ -235,6 +347,31 @@ namespace ParkFlow.Presentacion
             {
                 Mensajes.Error("No se pudo registrar la salida:", ex, "Visitas");
                 CargarVisitas();
+            }
+        }
+
+        private void txtDocumento_Leave(object sender, EventArgs e)
+        {
+            if (_personas == null) return;
+
+            string documento = txtDocumento.Text.Trim();
+            if (documento == "") return;
+
+            if (_personas.GetById(documento) is not Visitante visitante) return;
+
+            txtNombre.Text = visitante.Nombre;
+            txtApellido.Text = visitante.Apellido;
+            txtTelefono.Text = visitante.Telefono;
+            chkMovilidad.Checked = visitante.MovilidadReducida;
+
+            cmbTipoDocumento.SelectedIndex = -1;
+            foreach (object item in cmbTipoDocumento.Items)
+            {
+                if (item.ToString()!.StartsWith(visitante.TipoDocumento + " "))
+                {
+                    cmbTipoDocumento.SelectedItem = item;
+                    break;
+                }
             }
         }
 
@@ -250,9 +387,11 @@ namespace ParkFlow.Presentacion
             FormHelper.LimpiarCampos(txtDocumento, txtNombre, txtApellido, txtTelefono);
             chkMovilidad.Checked = false;
             cmbResidente.SelectedIndex = -1;
-            btnRegistrarSalida.Enabled = false;
+            rbAPie.Checked = true;
             dgvVisitas.ClearSelection();
             txtDocumento.Focus();
         }
+
+       
     }
 }

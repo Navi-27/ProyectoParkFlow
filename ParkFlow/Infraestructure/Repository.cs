@@ -1,4 +1,5 @@
 ﻿using ParkFlow.Contracts;
+using ParkFlow.DynamicStructure;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,14 +8,14 @@ namespace ParkFlow.Infraestructure
 {
     internal class Repository<T, E> : IRepository<T, E>, IUnitOfWork where T : class, IEntity<E>
     {
-        private List<T> _cache;
+        private Lista<T> _cache;
         private IDataStore<T> _store;
-        private List<T> _removed = new List<T>();
+        private Lista<T> _removed = new Lista<T>();
 
         public Repository(IDataStore<T> store)
         {
             _store = store;
-            _cache = _store.LoadAll().ToList();
+            _cache = new Lista<T>(_store.LoadAll());
         }
 
         public void Add(T entity)
@@ -33,7 +34,7 @@ namespace ParkFlow.Infraestructure
             int index = _cache.FindIndex(d => Equals(d.Id, entity.Id));
             if (index != -1)
             {
-                _cache[index] = entity;
+                _cache.Set(index, entity);
             }
         }
 
@@ -42,7 +43,7 @@ namespace ParkFlow.Infraestructure
             T? item = GetById(id);
             if (item != null)
             {
-                _cache.Remove(item);
+                _cache.Delete(item);
                 _removed.Add(item);
             }
         }
@@ -71,7 +72,7 @@ namespace ParkFlow.Infraestructure
             }
             catch
             {
-                _cache = _store.LoadAll().ToList();
+                _cache = new Lista<T>(_store.LoadAll());
                 _removed.Clear();
                 throw;
             }

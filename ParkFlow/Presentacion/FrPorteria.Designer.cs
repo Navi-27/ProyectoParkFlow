@@ -412,7 +412,7 @@ namespace ParkFlow.Presentacion
             Controls.Add(dgvDentro);
             MinimumSize = new Size(1018, 647);
             Name = "FrPorteria";
-            Text = "Portería";
+            Text = "a";
             Load += FrPorteria_Load;
             tlpContadores.ResumeLayout(false);
             pnlLibres.ResumeLayout(false);

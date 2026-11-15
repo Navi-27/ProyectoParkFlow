@@ -118,15 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btnBuscar.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAS
-        cQAAEnEB89x6jgAAAJ5JREFUSEvtlNENgDAIRBnBERzNUdzIERzBERxFcx805KLSq8avvoQP5SgUQbPO
-        CwYz283sCIbnkYUtrHQw28IBCgj2g2byTcGHImRwfT8ALboC7zPNLd5zVPoEbgYd9BJeWQ2KtqAEKdqC
-        EqRoC/4NeHoYn6aNHRk1ExI1TcQl42ny6XmVAMRly6wZLB3/i9Bzb90nSTJ6EonfknQ0TjdlVzvfzwQI
-        AAAAAElFTkSuQmCC
-</value>
-  </data>
   <data name="btnAgregar.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAS

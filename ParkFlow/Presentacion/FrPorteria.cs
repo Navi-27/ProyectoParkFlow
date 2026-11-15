@@ -82,7 +82,7 @@ namespace ParkFlow.Presentacion
 
         private void btnRegistrarIngreso_Click(object sender, EventArgs e)
         {
-            if (_personas == null || _vehiculos == null || _estancias == null) return;
+            if (_personas == null || _vehiculos == null || _estancias == null || _parqueaderos == null) return;
 
             string placa = txtPlaca.Text.Trim();
             if (placa == "")
@@ -104,8 +104,7 @@ namespace ParkFlow.Presentacion
                 return;
             }
 
-            Parqueadero? plaza = _parqueaderos.GetLibres().FirstOrDefault(p => p.PersonaDocumento == vehiculo.PersonaDocumento)
-                    ?? _parqueaderos.GetLibres().FirstOrDefault(p => p.Tipo == "VISITANTE");
+            Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(_personas.GetById(vehiculo.PersonaDocumento));
             if (plaza == null)
             {
                 Mensajes.Aviso("No hay plazas disponibles.", "Portería");
@@ -150,7 +149,7 @@ namespace ParkFlow.Presentacion
             if (_personas == null || _vehiculos == null || _parqueaderos == null) return;
 
             string placa = txtPlaca.Text.Trim();
-            if (placa == null) return;
+            if (placa == "") return;
 
             Vehiculo? vehiculo = _vehiculos.GetById(placa);
             if (vehiculo == null)
@@ -161,8 +160,7 @@ namespace ParkFlow.Presentacion
             }
 
             txtPropietario.Text = _personas.GetById(vehiculo.PersonaDocumento)?.Nombre;
-            Parqueadero? plaza = _parqueaderos.GetLibres().FirstOrDefault(p => p.PersonaDocumento == vehiculo.PersonaDocumento)
-                    ?? _parqueaderos.GetLibres().FirstOrDefault(p => p.Tipo == "VISITANTE");
+            Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(_personas.GetById(vehiculo.PersonaDocumento));
 
             txtPlaza.Text = plaza?.Codigo;
         }

@@ -1,5 +1,6 @@
 ﻿using MySqlConnector;
 using ParkFlow.Contracts;
+using ParkFlow.DynamicStructure;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,7 @@ namespace ParkFlow.Persistence
 
         public IEnumerable<T> LoadAll()
         {
-            List<T> list = new List<T>();
+            Lista<T> list = new Lista<T>();
             using MySqlConnection con = Database.CreateConnection();
             {
                 con.Open();
