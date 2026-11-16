@@ -1,5 +1,6 @@
 using MySqlConnector;
 using ParkFlow.Infraestructure;
+using ParkFlow.Logica;
 using ParkFlow.Persistence;
 using ParkFlow.Tools;
 using ParkFlow.models;
@@ -18,6 +19,7 @@ namespace ParkFlow.Presentacion
         private RepositoryParqueaderos? _parqueaderos;
         private RepositoryEstancias? _estancias;
         private int? _idEstanciaSeleccionada;
+        private AsignadorPlazas? _asignador;
 
         private void FrPorteria_Load(object sender, EventArgs e)
         {
@@ -36,6 +38,46 @@ namespace ParkFlow.Presentacion
 
                 Mensajes.Error("No se pudieron cargar los datos de portería:", ex, "Portería");
             }
+
+            CargarRutas();
+        }
+
+        // Grafo de rutas: si no se puede cargar, la portería sigue funcionando sin rutas
+        private void CargarRutas()
+        {
+            try
+            {
+                RepositoryNodos nodos = RepositoryNodos.GetInstance(new NodoRutaSqlStore());
+                RepositoryAristas aristas = RepositoryAristas.GetInstance(new AristaRutaSqlStore());
+                _asignador = new AsignadorPlazas(nodos.GetAll(), aristas.GetAll());
+            }
+            catch (MySqlException ex)
+            {
+                _asignador = null;
+                Mensajes.Error("No se pudo cargar el grafo de rutas; las plazas se asignarán sin ruta:", ex, "Portería");
+            }
+        }
+
+        // Con grafo: la plaza libre más cercana a la entrada (Dijkstra). Sin grafo: la primera libre.
+        private Asignacion? BuscarPlaza(Persona? dueno)
+        {
+            if (_parqueaderos == null) return null;
+
+            if (_asignador != null && _asignador.TieneGrafo)
+            {
+                return _asignador.Asignar(dueno, _parqueaderos.GetAll());
+            }
+
+            Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(dueno);
+            return plaza == null ? null : Asignacion.SinRuta(plaza);
+        }
+
+        private string RutaDe(string? codigoPlaza)
+        {
+            if (_asignador == null || _parqueaderos == null || string.IsNullOrEmpty(codigoPlaza)) return "";
+
+            Parqueadero? plaza = _parqueaderos.GetAll().FirstOrDefault(p => p.Codigo == codigoPlaza);
+            return plaza == null ? "" : _asignador.RutaHasta(plaza).RutaTexto;
         }
 
         private void CargarVehiculos()
@@ -104,12 +146,13 @@ namespace ParkFlow.Presentacion
                 return;
             }
 
-            Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(_personas.GetById(vehiculo.PersonaDocumento));
-            if (plaza == null)
+            Asignacion? asignacion = BuscarPlaza(_personas.GetById(vehiculo.PersonaDocumento));
+            if (asignacion == null)
             {
                 Mensajes.Aviso("No hay plazas disponibles.", "Portería");
                 return;
             }
+            Parqueadero plaza = asignacion.Plaza;
 
             try
             {
@@ -125,6 +168,10 @@ namespace ParkFlow.Presentacion
 
                 CargarVehiculos();
                 CargarContadores();
+
+                txtPlaza.Text = asignacion.PlazaTexto;
+                txtRuta.Text = asignacion.RutaTexto;
+                Mensajes.Info($"Ingreso registrado.\nPlaza: {asignacion.PlazaTexto}\nRuta: {asignacion.RutaTexto}", "Portería");
             }
             catch (InvalidOperationException ex)
             {
@@ -154,15 +201,15 @@ namespace ParkFlow.Presentacion
             Vehiculo? vehiculo = _vehiculos.GetById(placa);
             if (vehiculo == null)
             {
-                txtPropietario.Clear();
-                txtPlaza.Clear();
+                FormHelper.LimpiarCampos(txtPropietario, txtPlaza, txtRuta);
                 return;
             }
 
             txtPropietario.Text = _personas.GetById(vehiculo.PersonaDocumento)?.Nombre;
-            Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(_personas.GetById(vehiculo.PersonaDocumento));
+            Asignacion? asignacion = BuscarPlaza(_personas.GetById(vehiculo.PersonaDocumento));
 
-            txtPlaza.Text = plaza?.Codigo;
+            txtPlaza.Text = asignacion?.PlazaTexto;
+            txtRuta.Text = asignacion?.RutaTexto;
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -173,7 +220,7 @@ namespace ParkFlow.Presentacion
         private void Limpiar()
         {
             _idEstanciaSeleccionada = null;
-            FormHelper.LimpiarCampos(txtPlaca, txtPropietario, txtPlaza);
+            FormHelper.LimpiarCampos(txtPlaca, txtPropietario, txtPlaza, txtRuta);
             dgvDentro.ClearSelection();
             txtPlaca.Focus();
         }
@@ -186,6 +233,7 @@ namespace ParkFlow.Presentacion
             txtPlaca.Text = dgvDentro.Rows[e.RowIndex].Cells[colPlaca.Index].Value?.ToString();
             txtPropietario.Text = dgvDentro.Rows[e.RowIndex].Cells[colNombrePropietario.Index].Value?.ToString();
             txtPlaza.Text = dgvDentro.Rows[e.RowIndex].Cells[colPlaza.Index].Value?.ToString();
+            txtRuta.Text = RutaDe(txtPlaza.Text);
         }
 
         private void btnRegistrarSalida_Click(object sender, EventArgs e)

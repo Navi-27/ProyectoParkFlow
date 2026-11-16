@@ -7,6 +7,11 @@
             MessageBox.Show(texto, titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        public static void Info(string texto, string titulo)
+        {
+            MessageBox.Show(texto, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         public static void Error(string texto, Exception ex, string titulo)
         {
             MessageBox.Show($"{texto}\n{ex.Message}", titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);

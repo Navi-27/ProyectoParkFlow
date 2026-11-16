@@ -15,7 +15,7 @@ namespace ParkFlow.Persistence
         protected abstract T Map(MySqlDataReader reader);
         protected abstract void SetParameters(MySqlCommand cmd, T entity);
 
-        public IEnumerable<T> LoadAll()
+        public virtual IEnumerable<T> LoadAll()
         {
             Lista<T> list = new Lista<T>();
             using MySqlConnection con = Database.CreateConnection();

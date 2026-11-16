@@ -32,13 +32,14 @@
             listaResidentesToolStripMenuItem = new ToolStripMenuItem();
             porteriaToolStripMenuItem = new ToolStripMenuItem();
             visitasToolStripMenuItem = new ToolStripMenuItem();
+            mapaToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, porteriaToolStripMenuItem, visitasToolStripMenuItem, cerrarSesionToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, porteriaToolStripMenuItem, visitasToolStripMenuItem, mapaToolStripMenuItem, cerrarSesionToolStripMenuItem });
             menuStrip1.ImageScalingSize = new Size(24, 24);
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
@@ -66,6 +67,13 @@
             visitasToolStripMenuItem.Size = new Size(53, 20);
             visitasToolStripMenuItem.Text = "Visitas";
             visitasToolStripMenuItem.Click += visitasToolStripMenuItem_Click;
+            // 
+            // mapaToolStripMenuItem
+            // 
+            mapaToolStripMenuItem.Name = "mapaToolStripMenuItem";
+            mapaToolStripMenuItem.Size = new Size(104, 20);
+            mapaToolStripMenuItem.Text = "Mapa de plazas";
+            mapaToolStripMenuItem.Click += mapaToolStripMenuItem_Click;
             // 
             // cerrarSesionToolStripMenuItem
             // 
@@ -100,6 +108,7 @@
         private ToolStripMenuItem listaResidentesToolStripMenuItem;
         private ToolStripMenuItem porteriaToolStripMenuItem;
         private ToolStripMenuItem visitasToolStripMenuItem;
+        private ToolStripMenuItem mapaToolStripMenuItem;
         private ToolStripMenuItem cerrarSesionToolStripMenuItem;
     }
 }

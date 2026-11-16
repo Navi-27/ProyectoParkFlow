@@ -122,3 +122,12 @@ JOIN nodo_ruta b ON b.id_nodo = r.nodo_destino
 SET r.distancia = ROUND(SQRT(POW(a.coord_x - b.coord_x, 2)
                            + POW(a.coord_y - b.coord_y, 2)), 2)
 WHERE r.id_arista > 0;
+
+-- 11. Vértices de las zonas (teorema de Green)
+-- Zona B con la esquina de la jardinera cortada: 54 m² menos un triángulo de 2 m² = 52 m²
+INSERT INTO zona_vertice (id_zona, orden, x, y) VALUES
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 1, 0,  8),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 2, 9,  8),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 3, 9, 14),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 4, 2, 14),
+((SELECT id_zona FROM zona WHERE nombre = 'Zona B'), 5, 0, 12);

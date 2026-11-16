@@ -47,6 +47,8 @@ namespace ParkFlow.Presentacion
             txtPropietario = new TextBox();
             lblPlaza = new Label();
             txtPlaza = new TextBox();
+            lblRuta = new Label();
+            txtRuta = new TextBox();
             btnRegistrarIngreso = new Button();
             btnLimpiar = new Button();
             txtBuscar = new TextBox();
@@ -190,9 +192,11 @@ namespace ParkFlow.Presentacion
             gbVehiculo.Controls.Add(txtPropietario);
             gbVehiculo.Controls.Add(lblPlaza);
             gbVehiculo.Controls.Add(txtPlaza);
+            gbVehiculo.Controls.Add(lblRuta);
+            gbVehiculo.Controls.Add(txtRuta);
             gbVehiculo.Location = new Point(12, 96);
             gbVehiculo.Name = "gbVehiculo";
-            gbVehiculo.Size = new Size(280, 212);
+            gbVehiculo.Size = new Size(280, 304);
             gbVehiculo.TabIndex = 1;
             gbVehiculo.TabStop = false;
             gbVehiculo.Text = "Vehículo";
@@ -252,11 +256,31 @@ namespace ParkFlow.Presentacion
             txtPlaza.TabIndex = 5;
             txtPlaza.TabStop = false;
             // 
+            // lblRuta
+            // 
+            lblRuta.AutoSize = true;
+            lblRuta.Location = new Point(12, 206);
+            lblRuta.Name = "lblRuta";
+            lblRuta.Size = new Size(141, 20);
+            lblRuta.TabIndex = 6;
+            lblRuta.Text = "Ruta desde la entrada";
+            // 
+            // txtRuta
+            // 
+            txtRuta.Location = new Point(12, 229);
+            txtRuta.Multiline = true;
+            txtRuta.Name = "txtRuta";
+            txtRuta.ReadOnly = true;
+            txtRuta.ScrollBars = ScrollBars.Vertical;
+            txtRuta.Size = new Size(254, 62);
+            txtRuta.TabIndex = 7;
+            txtRuta.TabStop = false;
+            // 
             // btnRegistrarIngreso
             // 
             btnRegistrarIngreso.Image = Properties.Resources.ingreso;
             btnRegistrarIngreso.ImageAlign = ContentAlignment.MiddleLeft;
-            btnRegistrarIngreso.Location = new Point(12, 318);
+            btnRegistrarIngreso.Location = new Point(12, 410);
             btnRegistrarIngreso.Name = "btnRegistrarIngreso";
             btnRegistrarIngreso.Size = new Size(280, 36);
             btnRegistrarIngreso.TabIndex = 2;
@@ -268,7 +292,7 @@ namespace ParkFlow.Presentacion
             // 
             btnLimpiar.Image = Properties.Resources.limpiar;
             btnLimpiar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnLimpiar.Location = new Point(12, 360);
+            btnLimpiar.Location = new Point(12, 452);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(280, 36);
             btnLimpiar.TabIndex = 3;
@@ -412,7 +436,7 @@ namespace ParkFlow.Presentacion
             Controls.Add(dgvDentro);
             MinimumSize = new Size(1018, 647);
             Name = "FrPorteria";
-            Text = "a";
+            Text = "Portería";
             Load += FrPorteria_Load;
             tlpContadores.ResumeLayout(false);
             pnlLibres.ResumeLayout(false);
@@ -447,6 +471,8 @@ namespace ParkFlow.Presentacion
         private TextBox txtPropietario;
         private Label lblPlaza;
         private TextBox txtPlaza;
+        private Label lblRuta;
+        private TextBox txtRuta;
         private Button btnRegistrarIngreso;
         private Button btnLimpiar;
         private TextBox txtBuscar;

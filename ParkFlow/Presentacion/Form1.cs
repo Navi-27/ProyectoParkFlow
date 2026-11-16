@@ -30,6 +30,11 @@ namespace ParkFlow
             FormHelper.OpenForm<FrVisitas>(this);
         }
 
+        private void mapaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormHelper.OpenForm<FrMapa>(this);
+        }
+
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Mensajes.Confirmar("¿Desea cerrar sesión?", "ParkFlow")) return;

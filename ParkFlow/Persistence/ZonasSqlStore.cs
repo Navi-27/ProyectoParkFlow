@@ -1,4 +1,6 @@
 ﻿using MySqlConnector;
+using ParkFlow.DynamicStructure;
+using ParkFlow.Logica;
 using ParkFlow.models;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,45 @@ namespace ParkFlow.Persistence
             get
             {
                 return "DELETE FROM zona WHERE id_zona = @id; ";
+            }
+        }
+
+        // Además de las zonas, lee sus vértices (segunda consulta a zona_vertice)
+        public override IEnumerable<Zona> LoadAll()
+        {
+            Lista<Zona> zonas = new Lista<Zona>(base.LoadAll());
+
+            try
+            {
+                CargarVertices(zonas);
+            }
+            catch (MySqlException ex) when (ex.ErrorCode == MySqlErrorCode.NoSuchTable)
+            {
+                // Todavía no se corrió db/migracion_zona_vertice.sql: las zonas usan ancho × largo
+            }
+
+            return zonas;
+        }
+
+        private static void CargarVertices(Lista<Zona> zonas)
+        {
+            using (MySqlConnection con = Database.CreateConnection())
+            {
+                con.Open();
+                using (MySqlCommand cmd = new MySqlCommand("SELECT id_zona, x, y FROM zona_vertice ORDER BY id_zona, orden", con))
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int idZona = reader.GetInt32(reader.GetOrdinal("id_zona"));
+                        Zona? zona = zonas.FirstOrDefault(z => z.Id == idZona);
+                        if (zona == null) continue;
+
+                        zona.Vertices.Add(new Punto(
+                            reader.GetDouble(reader.GetOrdinal("x")),
+                            reader.GetDouble(reader.GetOrdinal("y"))));
+                    }
+                }
             }
         }
 

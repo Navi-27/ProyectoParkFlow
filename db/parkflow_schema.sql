@@ -192,6 +192,21 @@ CREATE TABLE `arista_ruta` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
+-- zona_vertice (borde de cada zona, para el teorema de Green)
+CREATE TABLE `zona_vertice` (
+  `id_vertice` INT NOT NULL AUTO_INCREMENT,
+  `id_zona` INT NOT NULL,
+  `orden` INT NOT NULL,
+  `x` DOUBLE NOT NULL,
+  `y` DOUBLE NOT NULL,
+  PRIMARY KEY (`id_vertice`),
+  UNIQUE INDEX `uq_vertice_orden` (`id_zona`, `orden`),
+  CONSTRAINT `fk_vertice_zona`
+    FOREIGN KEY (`id_zona`)
+    REFERENCES `zona` (`id_zona`)
+    ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE = InnoDB;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
