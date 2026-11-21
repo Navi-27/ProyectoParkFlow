@@ -1,9 +1,5 @@
 ﻿namespace ParkFlow.Logica
 {
-    // Ruta más corta desde un nodo de origen (la entrada) hasta todos los demás.
-    // Se puede usar porque todas las distancias son positivas.
-    // Costo con lista de adyacencia + min-heap: O((V + E) · log V).
-    // Sin heap (buscando el mínimo en una lista) costaría O(V²).
     internal static class Dijkstra
     {
         public static ResultadoDijkstra Calcular(Grafo grafo, int origen)
@@ -29,7 +25,6 @@
             {
                 (int u, double distanciaU) = cola.ExtraerMinimo();
 
-                // Entrada vieja de la cola: ya se encontró un camino más corto a u
                 if (distanciaU > distancias[u]) continue;
 
                 foreach (AristaGrafo arista in grafo.Vecinos(u))
@@ -72,8 +67,6 @@
             return !double.IsPositiveInfinity(DistanciaA(nodo));
         }
 
-        // Reconstruye el camino siguiendo los "previos" desde el destino hasta el origen.
-        // Se usa una pila porque los nodos salen al revés: el último en entrar es el origen.
         public List<int> CaminoHasta(int destino)
         {
             List<int> camino = new List<int>();

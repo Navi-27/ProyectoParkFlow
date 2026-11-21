@@ -27,5 +27,19 @@
                 campo.Clear();
             }
         }
+
+        public static void SeleccionarTipoDocumento(ComboBox combo, string tipo)
+        {
+            combo.SelectedIndex = -1;
+            foreach (object item in combo.Items)
+            {
+                if (item.ToString()!.StartsWith(tipo + " "))
+                {
+                    combo.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        
     }
 }

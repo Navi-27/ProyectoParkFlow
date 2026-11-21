@@ -2,7 +2,6 @@
 
 namespace ParkFlow.Logica
 {
-    // Un tramo que sale de un nodo: a dónde llega y cuánto mide
     internal class AristaGrafo
     {
         public int Destino { get; }
@@ -15,9 +14,6 @@ namespace ParkFlow.Logica
         }
     }
 
-    // Grafo del parqueadero como lista de adyacencia.
-    // Cada nodo guarda sus vecinos en una Lista<T> propia (lista doblemente enlazada).
-    // Memoria: O(V + E). Una matriz de adyacencia ocuparía O(V²) y estaría casi vacía.
     internal class Grafo
     {
         private readonly Dictionary<int, Lista<AristaGrafo>> _adyacencia = new Dictionary<int, Lista<AristaGrafo>>();
@@ -34,7 +30,6 @@ namespace ParkFlow.Logica
             get { return _adyacencia.Keys; }
         }
 
-        // O(1)
         public void AgregarNodo(int id)
         {
             if (!_adyacencia.ContainsKey(id))
@@ -48,7 +43,6 @@ namespace ParkFlow.Logica
             return _adyacencia.ContainsKey(id);
         }
 
-        // O(1): se agrega al final de la lista enlazada de cada nodo
         public void AgregarArista(int origen, int destino, double peso, bool bidireccional = true)
         {
             if (peso < 0)
@@ -67,7 +61,6 @@ namespace ParkFlow.Logica
             CantidadAristas++;
         }
 
-        // O(grado del nodo)
         public IEnumerable<AristaGrafo> Vecinos(int id)
         {
             if (_adyacencia.TryGetValue(id, out Lista<AristaGrafo>? vecinos))

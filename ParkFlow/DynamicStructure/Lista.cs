@@ -52,7 +52,7 @@ namespace ParkFlow.DynamicStructure
             else
             {
                 n.Back = Last;
-                Last.Next = n;
+                Last!.Next = n;
                 Last = n;
             }
             _count++;

@@ -1,8 +1,5 @@
 ﻿namespace ParkFlow.Logica
 {
-    // Cola de prioridad implementada por el equipo con un montículo binario (min-heap)
-    // sobre un arreglo. El elemento de menor prioridad siempre queda en la raíz (posición 0).
-    // Para la posición i: padre = (i − 1) / 2, hijo izquierdo = 2i + 1, hijo derecho = 2i + 2.
     internal class MinHeap<T>
     {
         private T[] _valores;
@@ -27,7 +24,6 @@
             get { return _count == 0; }
         }
 
-        // O(log n): se pone al final y se sube mientras sea menor que su padre
         public void Insertar(T valor, double prioridad)
         {
             if (_count == _valores.Length)
@@ -49,14 +45,12 @@
             }
         }
 
-        // O(1)
         public (T Valor, double Prioridad) VerMinimo()
         {
             if (EstaVacia) throw new InvalidOperationException("La cola de prioridad está vacía.");
             return (_valores[0], _prioridades[0]);
         }
 
-        // O(log n): se saca la raíz, el último pasa a la raíz y se baja hasta su lugar
         public (T Valor, double Prioridad) ExtraerMinimo()
         {
             if (EstaVacia) throw new InvalidOperationException("La cola de prioridad está vacía.");
@@ -92,7 +86,6 @@
             (_prioridades[a], _prioridades[b]) = (_prioridades[b], _prioridades[a]);
         }
 
-        // Duplica el arreglo cuando se llena: O(n), pero ocurre pocas veces (costo amortizado O(1))
         private void Crecer()
         {
             int nuevaCapacidad = _valores.Length * 2;

@@ -62,29 +62,6 @@ namespace ParkFlow.Infraestructure
         {
             return _repository.GetAll().Where(p => p.Libre).ToList();
         }
-
-        public Parqueadero? BuscarPlazaLibre(Persona? dueno)
-        {
-            if (dueno == null) return null;
-
-            Lista<Parqueadero> libres = new Lista<Parqueadero>(GetLibres());
-
-            Parqueadero? fija = libres.FirstOrDefault(p => p.PersonaDocumento == dueno.Id);
-            if (fija != null) return fija;
-
-            if (dueno.MovilidadReducida)
-            {
-                Parqueadero? movilidad = libres.FirstOrDefault(p => p.Tipo == "MOVILIDAD_REDUCIDA" && p.PersonaDocumento == "");
-                if (movilidad != null) return movilidad;
-            }
-
-            if (dueno is Residente)
-            {
-                return libres.FirstOrDefault(p => p.Tipo == "RESIDENTE" && p.PersonaDocumento == "");
-            }
-
-            return libres.FirstOrDefault(p => p.Tipo == "VISITANTE");
-        }
         
         public void Commit()
         {

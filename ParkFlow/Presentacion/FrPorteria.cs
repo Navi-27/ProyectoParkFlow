@@ -20,7 +20,7 @@ namespace ParkFlow.Presentacion
         private RepositoryEstancias? _estancias;
         private int? _idEstanciaSeleccionada;
         private AsignadorPlazas? _asignador;
-
+    
         private void FrPorteria_Load(object sender, EventArgs e)
         {
             try
@@ -42,7 +42,6 @@ namespace ParkFlow.Presentacion
             CargarRutas();
         }
 
-        // Grafo de rutas: si no se puede cargar, la portería sigue funcionando sin rutas
         private void CargarRutas()
         {
             try
@@ -58,18 +57,12 @@ namespace ParkFlow.Presentacion
             }
         }
 
-        // Con grafo: la plaza libre más cercana a la entrada (Dijkstra). Sin grafo: la primera libre.
-        private Asignacion? BuscarPlaza(Persona? dueno)
+        private Asignacion? BuscarPlaza(Persona? dueño)
         {
             if (_parqueaderos == null) return null;
 
-            if (_asignador != null && _asignador.TieneGrafo)
-            {
-                return _asignador.Asignar(dueno, _parqueaderos.GetAll());
-            }
+            return _asignador?.Asignar(dueño, _parqueaderos.GetAll());
 
-            Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(dueno);
-            return plaza == null ? null : Asignacion.SinRuta(plaza);
         }
 
         private string RutaDe(string? codigoPlaza)

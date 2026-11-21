@@ -1,6 +1,5 @@
 ﻿namespace ParkFlow.Logica
 {
-    // Un punto del plano del parqueadero (un solo nivel, por eso solo x, y)
     internal readonly struct Punto
     {
         public double X { get; }

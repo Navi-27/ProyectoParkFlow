@@ -117,15 +117,7 @@ namespace ParkFlow.Presentacion
                 txtCorreo.Text = r.Correo;
                 chkMovilidad.Checked = r.MovilidadReducida;
 
-                cmbTipoDocumento.SelectedIndex = -1;
-                foreach (object item in cmbTipoDocumento.Items)
-                {
-                    if (item.ToString()!.StartsWith(r.TipoDocumento + " "))
-                    {
-                        cmbTipoDocumento.SelectedItem = item;
-                        break;
-                    }
-                }
+                FormHelper.SeleccionarTipoDocumento(cmbTipoDocumento, r.TipoDocumento);
 
                 txtDocumento.Enabled = false;
                 btnAgregar.Enabled = false;

@@ -13,6 +13,14 @@ namespace ParkFlow
         private void MostrarUsuario()
         {
             Text = $"ParkFlow - {Sesion.UsuarioActual?.NombreUsuario} ({Sesion.UsuarioActual?.Rol})";
+
+            if (Sesion.EsAdmin)
+            {
+                return;
+            }
+
+            listaResidentesToolStripMenuItem.Visible = false;
+           
         }
 
         private void listaResidentesToolStripMenuItem_Click(object sender, EventArgs e)

@@ -1,5 +1,6 @@
 using MySqlConnector;
 using ParkFlow.Infraestructure;
+using ParkFlow.Logica;
 using ParkFlow.models;
 using ParkFlow.Persistence;
 using ParkFlow.Tools;
@@ -20,6 +21,7 @@ namespace ParkFlow.Presentacion
         private RepositoryViviendas? _viviendas;
         private RepositoryRegistros? _registros;
         private int? _idVisitaSeleccionada;
+        private AsignadorPlazas? _asignador;
 
         private void FrVisitas_Load(object sender, EventArgs e)
         {
@@ -40,6 +42,7 @@ namespace ParkFlow.Presentacion
             {
                 Mensajes.Error("No se pudieron cargar los datos de visitas:", ex, "Visitas");
             }
+            CargarRutas();
         }
 
         private void CargarVisitas()
@@ -101,6 +104,32 @@ namespace ParkFlow.Presentacion
 
         }
 
+        private void CargarRutas()
+        {
+            try
+            {
+                RepositoryNodos nodos = RepositoryNodos.GetInstance(new NodoRutaSqlStore());
+                RepositoryAristas aristas = RepositoryAristas.GetInstance(new AristaRutaSqlStore());
+                _asignador = new AsignadorPlazas(nodos.GetAll(), aristas.GetAll());
+            }
+            catch (MySqlException ex)
+            {
+                _asignador = null;
+                Mensajes.Error("No se pudo cargar el grafo de rutas; las plazas se asignarán sin ruta:", ex, "Visitas");
+            }
+        }
+
+        private void MostrarVisitante(Persona persona)
+        {
+            txtDocumento.Text = persona.Id;
+            txtNombre.Text = persona.Nombre;
+            txtApellido.Text = persona.Apellido;
+            txtTelefono.Text = persona.Telefono;
+            chkMovilidad.Checked = persona.MovilidadReducida;
+            FormHelper.SeleccionarTipoDocumento(cmbTipoDocumento, persona.TipoDocumento);
+        }
+    
+
         private void cmbResidente_SelectedIndexChanged(object sender, EventArgs e)
         {
             CargarViviendas();
@@ -125,21 +154,7 @@ namespace ParkFlow.Presentacion
             Persona? persona = _personas.GetById(visita.PersonaVisitante);
             if (persona != null)
             {
-                txtDocumento.Text = persona.Id;
-                txtNombre.Text = persona.Nombre;
-                txtApellido.Text = persona.Apellido;
-                txtTelefono.Text = persona.Telefono;
-                chkMovilidad.Checked = persona.MovilidadReducida;
-
-                cmbTipoDocumento.SelectedIndex = -1;
-                foreach (object item in cmbTipoDocumento.Items)
-                {
-                    if (item.ToString()!.StartsWith(persona.TipoDocumento + " "))
-                    {
-                        cmbTipoDocumento.SelectedItem = item;
-                        break;
-                    }
-                }
+                MostrarVisitante(persona);
             }
 
             cmbResidente.SelectedValue = visita.PersonaVisitada;
@@ -233,7 +248,8 @@ namespace ParkFlow.Presentacion
                         .Where(v => v.PersonaDocumento == documento)
                         .FirstOrDefault(v => !_estancias.GetActivas().Any(es => es.VehiculoPlaca == v.Id));
 
-                    Parqueadero? plaza = _parqueaderos.BuscarPlazaLibre(visitante);
+                    
+                    Parqueadero? plaza = _asignador?.Asignar(visitante, _parqueaderos.GetAll())?.Plaza;
 
                     if (carro == null)
                     {
@@ -359,25 +375,7 @@ namespace ParkFlow.Presentacion
 
             if (_personas.GetById(documento) is not Visitante visitante) return;
 
-            txtNombre.Text = visitante.Nombre;
-            txtApellido.Text = visitante.Apellido;
-            txtTelefono.Text = visitante.Telefono;
-            chkMovilidad.Checked = visitante.MovilidadReducida;
-
-            cmbTipoDocumento.SelectedIndex = -1;
-            foreach (object item in cmbTipoDocumento.Items)
-            {
-                if (item.ToString()!.StartsWith(visitante.TipoDocumento + " "))
-                {
-                    cmbTipoDocumento.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-
-        private void btnLimpiar_Click(object sender, EventArgs e)
-        {
-            Limpiar();
+            MostrarVisitante(visitante);
         }
 
         private void Limpiar()
@@ -392,6 +390,12 @@ namespace ParkFlow.Presentacion
             txtDocumento.Focus();
         }
 
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
+
+       
        
     }
 }

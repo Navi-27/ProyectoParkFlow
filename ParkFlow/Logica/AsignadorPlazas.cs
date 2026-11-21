@@ -1,9 +1,7 @@
 ﻿using ParkFlow.models;
 
 namespace ParkFlow.Logica
-{
-    // Arma el grafo con los nodos y aristas de la base, corre Dijkstra desde la entrada
-    // y elige la plaza libre más cercana del tipo que le corresponde a cada persona.
+{ 
     internal class AsignadorPlazas
     {
         private readonly Grafo _grafo = new Grafo();
@@ -31,7 +29,6 @@ namespace ParkFlow.Logica
                 if (!_nodos.TryGetValue(arista.NodoOrigen, out NodoRuta? origen)) continue;
                 if (!_nodos.TryGetValue(arista.NodoDestino, out NodoRuta? destino)) continue;
 
-                // El peso de cada arista es la norma del vector entre sus dos puntos
                 double peso = Geometria.Distancia(origen.Posicion, destino.Posicion);
                 _grafo.AgregarArista(origen.Id, destino.Id, peso, arista.Bidireccional);
                 _tramos.Add(new Tramo(origen, destino, peso, arista.Distancia));
@@ -40,7 +37,6 @@ namespace ParkFlow.Logica
             Entrada = _nodos.Values.FirstOrDefault(n => n.Tipo == "ENTRADA");
             if (Entrada != null)
             {
-                // Dijkstra se corre una sola vez: da la distancia desde la entrada a todos los nodos
                 _rutas = Dijkstra.Calcular(_grafo, Entrada.Id);
             }
         }
@@ -85,9 +81,6 @@ namespace ParkFlow.Logica
             return new Asignacion(plaza, _rutas.DistanciaA(nodo.Id), ruta);
         }
 
-        // Mismas reglas de BuscarPlazaLibre, pero dentro de cada grupo se escoge la plaza más cercana:
-        // 1. La plaza fija del dueño. 2. Movilidad reducida, si la necesita.
-        // 3. Residente o visitante, según la persona.
         public Asignacion? Asignar(Persona? dueno, IEnumerable<Parqueadero> plazas)
         {
             if (dueno == null) return null;
@@ -111,8 +104,6 @@ namespace ParkFlow.Logica
             return plaza == null ? null : RutaHasta(plaza);
         }
 
-        // Menor distancia desde la entrada; si empatan, la de código menor.
-        // Las plazas que no están en el grafo quedan de últimas (distancia infinita).
         private Parqueadero? MasCercana(IEnumerable<Parqueadero> candidatas)
         {
             Parqueadero? mejor = null;
@@ -166,7 +157,6 @@ namespace ParkFlow.Logica
         }
     }
 
-    // Una arista ya con su peso calculado, para mostrarla y dibujarla
     internal class Tramo
     {
         public NodoRuta Origen { get; }
