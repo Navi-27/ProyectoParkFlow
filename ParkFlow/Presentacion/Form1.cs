@@ -8,6 +8,7 @@ namespace ParkFlow
         {
             InitializeComponent();
             MostrarUsuario();
+
         }
 
         private void MostrarUsuario()
@@ -16,11 +17,15 @@ namespace ParkFlow
 
             if (Sesion.EsAdmin)
             {
+                listaResidentesToolStripMenuItem.Visible = true;
+                reportesToolStripMenuItem.Visible = true;
                 return;
             }
 
-            listaResidentesToolStripMenuItem.Visible = false;
-           
+            listaResidentesToolStripMenuItem.Visible = false; 
+            reportesToolStripMenuItem.Visible = false;
+
+
         }
 
         private void listaResidentesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,6 +47,12 @@ namespace ParkFlow
         {
             FormHelper.OpenForm<FrMapa>(this);
         }
+
+        private void reportesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormHelper.OpenForm<FrReportes>(this);
+        }
+
 
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -67,5 +78,7 @@ namespace ParkFlow
             MostrarUsuario();
             Show();
         }
+
+       
     }
 }

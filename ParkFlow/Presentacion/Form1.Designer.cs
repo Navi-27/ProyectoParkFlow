@@ -34,44 +34,46 @@
             visitasToolStripMenuItem = new ToolStripMenuItem();
             mapaToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesionToolStripMenuItem = new ToolStripMenuItem();
+            reportesToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, porteriaToolStripMenuItem, visitasToolStripMenuItem, mapaToolStripMenuItem, cerrarSesionToolStripMenuItem });
             menuStrip1.ImageScalingSize = new Size(24, 24);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { listaResidentesToolStripMenuItem, porteriaToolStripMenuItem, visitasToolStripMenuItem, mapaToolStripMenuItem, cerrarSesionToolStripMenuItem, reportesToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.Padding = new Padding(7, 3, 0, 3);
+            menuStrip1.Size = new Size(914, 34);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
             // listaResidentesToolStripMenuItem
             // 
             listaResidentesToolStripMenuItem.Name = "listaResidentesToolStripMenuItem";
-            listaResidentesToolStripMenuItem.Size = new Size(102, 20);
+            listaResidentesToolStripMenuItem.Size = new Size(128, 28);
             listaResidentesToolStripMenuItem.Text = "Lista Residentes";
             listaResidentesToolStripMenuItem.Click += listaResidentesToolStripMenuItem_Click;
             // 
             // porteriaToolStripMenuItem
             // 
             porteriaToolStripMenuItem.Name = "porteriaToolStripMenuItem";
-            porteriaToolStripMenuItem.Size = new Size(64, 28);
+            porteriaToolStripMenuItem.Size = new Size(74, 28);
             porteriaToolStripMenuItem.Text = "Portería";
             porteriaToolStripMenuItem.Click += porteriaToolStripMenuItem_Click;
             // 
             // visitasToolStripMenuItem
             // 
             visitasToolStripMenuItem.Name = "visitasToolStripMenuItem";
-            visitasToolStripMenuItem.Size = new Size(53, 20);
+            visitasToolStripMenuItem.Size = new Size(65, 28);
             visitasToolStripMenuItem.Text = "Visitas";
             visitasToolStripMenuItem.Click += visitasToolStripMenuItem_Click;
             // 
             // mapaToolStripMenuItem
             // 
             mapaToolStripMenuItem.Name = "mapaToolStripMenuItem";
-            mapaToolStripMenuItem.Size = new Size(104, 20);
+            mapaToolStripMenuItem.Size = new Size(128, 28);
             mapaToolStripMenuItem.Text = "Mapa de plazas";
             mapaToolStripMenuItem.Click += mapaToolStripMenuItem_Click;
             // 
@@ -81,18 +83,26 @@
             cerrarSesionToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.Image;
             cerrarSesionToolStripMenuItem.Image = Properties.Resources.apagar;
             cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
-            cerrarSesionToolStripMenuItem.Size = new Size(36, 28);
+            cerrarSesionToolStripMenuItem.Size = new Size(38, 28);
             cerrarSesionToolStripMenuItem.Text = "Cerrar sesión";
             cerrarSesionToolStripMenuItem.ToolTipText = "Cerrar sesión";
             cerrarSesionToolStripMenuItem.Click += cerrarSesionToolStripMenuItem_Click;
             // 
+            // reportesToolStripMenuItem
+            // 
+            reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
+            reportesToolStripMenuItem.Size = new Size(82, 28);
+            reportesToolStripMenuItem.Text = "Reportes";
+            reportesToolStripMenuItem.Click += reportesToolStripMenuItem_Click;
+            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(914, 600);
             Controls.Add(menuStrip1);
             IsMdiContainer = true;
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
@@ -110,5 +120,6 @@
         private ToolStripMenuItem visitasToolStripMenuItem;
         private ToolStripMenuItem mapaToolStripMenuItem;
         private ToolStripMenuItem cerrarSesionToolStripMenuItem;
+        private ToolStripMenuItem reportesToolStripMenuItem;
     }
 }
