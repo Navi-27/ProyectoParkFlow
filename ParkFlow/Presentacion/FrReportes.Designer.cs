@@ -77,7 +77,7 @@
             lstReportes.Font = new Font("Segoe UI", 10F);
             lstReportes.FormattingEnabled = true;
             lstReportes.IntegralHeight = false;
-            lstReportes.Items.AddRange(new object[] { "Ocupación de plazas", "Vehículos", "Movimientos de portería", "Visitas", "Residentes", "Indicadores" });
+            lstReportes.Items.AddRange(new object[] { "Ocupación de plazas", "Vehículos", "Movimientos de portería", "Visitas", "Residentes" });
             lstReportes.Location = new Point(8, 36);
             lstReportes.Name = "lstReportes";
             lstReportes.Size = new Size(206, 509);

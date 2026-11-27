@@ -20,7 +20,8 @@ namespace ParkFlow.Presentacion
         private RepositoryEstancias? _estancias;
         private int? _idEstanciaSeleccionada;
         private AsignadorPlazas? _asignador;
-    
+
+        private RepositoryRegistros? _registro;
         private void FrPorteria_Load(object sender, EventArgs e)
         {
             try
@@ -29,6 +30,7 @@ namespace ParkFlow.Presentacion
                 _personas = RepositoryPersonas.GetInstance(new PersonaSqlStore());
                 _parqueaderos = RepositoryParqueaderos.GetInstance(new ParqueaderoSqlStore());
                 _estancias = RepositoryEstancias.GetInstance(new EstanciaSqlStore());
+                _registro = RepositoryRegistros.GetInstance(new  RegistroSqlStore());
 
                 CargarContadores();
                 CargarVehiculos();
@@ -238,16 +240,22 @@ namespace ParkFlow.Presentacion
             }
 
             Estancia? estancia = _estancias.GetById(_idEstanciaSeleccionada.Value);
-
             if (estancia == null) return;
 
-            if(estancia.FechaSalida != null)
+            if (estancia.FechaSalida != null)
             {
                 Mensajes.Aviso("Este vehiculo ya salio", "Portería");
                 return;
             }
 
-            if (!Mensajes.Confirmar($"¿Registrar la salida de {estancia.VehiculoPlaca}?", "Portería")) return;
+            string? idDueño = _vehiculos?.GetById(estancia.VehiculoPlaca)?.PersonaDocumento;
+            Registro? visitaActiva = _registro?.GetActivas().FirstOrDefault(r => r.PersonaVisitante == idDueño);
+
+            string mensaje = visitaActiva != null
+                ? $"El vehículo {estancia.VehiculoPlaca} es de un visitante con visita activa. ¿Registrar la salida del vehículo y de la visita?"
+                : $"¿Registrar la salida de {estancia.VehiculoPlaca}?";
+
+            if (!Mensajes.Confirmar(mensaje, "Portería")) return;
 
             try
             {
@@ -256,11 +264,18 @@ namespace ParkFlow.Presentacion
                 _estancias.Commit();
 
                 Parqueadero? plaza = _parqueaderos.GetById(estancia.IdParqueadero);
-                if(plaza != null)
+                if (plaza != null)
                 {
                     plaza.VehiculoPlaca = "";
                     _parqueaderos.Update(plaza);
                     _parqueaderos.Commit();
+                }
+
+                if (visitaActiva != null && _registro != null)
+                {
+                    visitaActiva.FechaSalida = DateTime.Now;
+                    _registro.Update(visitaActiva);
+                    _registro.Commit();
                 }
 
                 CargarVehiculos();
@@ -271,6 +286,12 @@ namespace ParkFlow.Presentacion
             {
                 Mensajes.Error("No se pudo registrar la salida:", ex, "Portería");
             }
+        }
+
+        private void FrPorteria_Activated(object sender, EventArgs e)
+        {
+            CargarContadores();
+            CargarVehiculos();
         }
     }
 }

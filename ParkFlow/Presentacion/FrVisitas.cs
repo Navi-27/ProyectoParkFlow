@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using MySqlConnector;
 using ParkFlow.Infraestructure;
 using ParkFlow.Logica;
@@ -332,27 +333,32 @@ namespace ParkFlow.Presentacion
                     Estancia? estancia = _estancias.GetActivas().FirstOrDefault(es => placas.Contains(es.VehiculoPlaca));
                     if (estancia != null)
                     {
-                        estancia.FechaSalida = DateTime.Now;
-                        _estancias.Update(estancia);
-                        _estancias.Commit();
-
-                        Parqueadero? plaza = _parqueaderos.GetById(estancia.IdParqueadero);
-                        if (plaza != null)
+                        if (Mensajes.Confirmar($"El visitante tiene el vehículo {estancia.VehiculoPlaca} dentro. ¿Registrar también la salida del vehículo ? ", "Visitas"))
                         {
-                            try
+                            estancia.FechaSalida = DateTime.Now;
+                            _estancias.Update(estancia);
+                            _estancias.Commit();
+
+                            Parqueadero? plaza = _parqueaderos.GetById(estancia.IdParqueadero);
+                            if (plaza != null)
                             {
-                                plaza.VehiculoPlaca = "";
-                                _parqueaderos.Update(plaza);
-                                _parqueaderos.Commit();
-                            }
-                            catch (MySqlException)
-                            {
-                                estancia.FechaSalida = null;
-                                _estancias.Update(estancia);
-                                _estancias.Commit();
-                                throw;
+                                try
+                                {
+                                    plaza.VehiculoPlaca = "";
+                                    _parqueaderos.Update(plaza);
+                                    _parqueaderos.Commit();
+                                }
+                                catch (MySqlException)
+                                {
+                                    estancia.FechaSalida = null;
+                                    _estancias.Update(estancia);
+                                    _estancias.Commit();
+                                    throw;
+                                }
                             }
                         }
+
+                       
                     }
                 }
 
@@ -393,6 +399,11 @@ namespace ParkFlow.Presentacion
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             Limpiar();
+        }
+
+        private void FrVisitas_Activated(object sender, EventArgs e)
+        {
+            CargarVisitas();
         }
 
        

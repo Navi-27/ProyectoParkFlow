@@ -261,7 +261,7 @@ namespace ParkFlow.Presentacion
             lblRuta.AutoSize = true;
             lblRuta.Location = new Point(12, 206);
             lblRuta.Name = "lblRuta";
-            lblRuta.Size = new Size(141, 20);
+            lblRuta.Size = new Size(154, 20);
             lblRuta.TabIndex = 6;
             lblRuta.Text = "Ruta desde la entrada";
             // 
@@ -437,6 +437,7 @@ namespace ParkFlow.Presentacion
             MinimumSize = new Size(1018, 647);
             Name = "FrPorteria";
             Text = "Portería";
+            Activated += FrPorteria_Activated;
             Load += FrPorteria_Load;
             tlpContadores.ResumeLayout(false);
             pnlLibres.ResumeLayout(false);

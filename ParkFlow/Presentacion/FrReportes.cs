@@ -21,7 +21,6 @@ namespace ParkFlow.Presentacion
         {
             InitializeComponent();
         }
-
         private RepositoryVehiculos? _vehiculos;
         private RepositoryPersonas? _personas;
         private RepositoryEstancias? _estancias;
@@ -51,26 +50,29 @@ namespace ParkFlow.Presentacion
             LimpiarReporte();
         }
 
-        private void ReporteVehiculos()
+        private async Task ReporteVehiculos()
         {
             if (_vehiculos == null || _personas == null || _estancias == null || _parqueaderos == null) return;
 
-            dgvReporte.DataSource = null;
-            dgvReporte.DataSource = _vehiculos.GetAll()
-                .Select(v => new
-                {
-                    Placa = v.Id,
-                    Tipo = v.Tipo(),
-                    Marca = v.Marca,
-                    Modelo = v.Modelo,
-                    DocDueño = v.PersonaDocumento,
-                    Dueño = _personas.GetById(v.PersonaDocumento)?.Nombre + " " + _personas.GetById(v.PersonaDocumento)?.Apellido,
-                    TipoDueño = _personas.GetById(v.PersonaDocumento) is Residente ? "RESIDENTE" : "VISITANTE",
-                    Estado = _estancias.GetAll().Any(e => e.VehiculoPlaca == v.Id && e.Activa) ? "DENTRO" : "FUERA",
-                    Plaza = _parqueaderos.GetAll().FirstOrDefault(p => p.VehiculoPlaca == v.Id)?.Codigo ?? "SIN PLAZA",
+            var datos = await Task.Run(() =>
+                   _vehiculos.GetAll()
+                   .Select(v => new
+                   {
+                       Placa = v.Id,
+                       Tipo = v.Tipo(),
+                       Marca = v.Marca,
+                       Modelo = v.Modelo,
+                       DocDueño = v.PersonaDocumento,
+                       Dueño = _personas.GetById(v.PersonaDocumento)?.Nombre + " " + _personas.GetById(v.PersonaDocumento)?.Apellido,
+                       TipoDueño = _personas.GetById(v.PersonaDocumento) is Residente ? "RESIDENTE" : "VISITANTE",
+                       Estado = _estancias.GetAll().Any(e => e.VehiculoPlaca == v.Id && e.Activa) ? "DENTRO" : "FUERA",
+                       Plaza = _parqueaderos.GetAll().FirstOrDefault(p => p.VehiculoPlaca == v.Id)?.Codigo ?? "SIN PLAZA",
 
-                })
-                .ToList();
+                   })
+                   .ToList());
+
+            dgvReporte.DataSource = null;
+            dgvReporte.DataSource = datos;
 
             dgvReporte.Columns["TipoDueño"]?.HeaderText = "Tipo de Dueño";
             dgvReporte.Columns["DocDueño"]?.HeaderText = "Doc. Dueño";
@@ -82,26 +84,28 @@ namespace ParkFlow.Presentacion
             lblValor2.Text = _vehiculos.GetAll().Count(v => v.Tipo() == "CARRO").ToString();
             lblValor3.Text = _vehiculos.GetAll().Count(v => v.Tipo() == "MOTO").ToString();
             lblValor4.Text = _estancias.GetActivas().Count().ToString();
-
         }
 
-        private void ReportePlazas()
+        private async Task ReportePlazas()
         {
             if (_parqueaderos == null || _zonas == null) return;
 
-            dgvReporte.DataSource = null;
-            dgvReporte.DataSource = _parqueaderos.GetAll()
+            var datos = await Task.Run(() =>
+                   _parqueaderos.GetAll()
+                   .Select(p => new
+                   {
+                       Plaza = p.Codigo,
+                       Zona = _zonas.GetById(p.IdZona)?.Nombre,
+                       Tipo = p.Tipo,
+                       Estado = p.Libre ? "LIBRE" : "OCUPADA",
+                       Vehiculo = p.VehiculoPlaca == "" ? "VACÍA" : p.VehiculoPlaca,
+                       PlazaFija = p.PersonaDocumento == "" ? "VACÍA" : p.PersonaDocumento,
+                   })
+                   .ToList());
 
-                .Select(p => new
-                {
-                    Plaza = p.Codigo,
-                    Zona = _zonas.GetById(p.IdZona)?.Nombre,
-                    Tipo = p.Tipo,
-                    Estado = p.Libre ? "LIBRE" : "OCUPADA",
-                    Vehiculo = p.VehiculoPlaca == "" ? "VACÍA" : p.VehiculoPlaca,
-                    PlazaFija = p.PersonaDocumento == "" ? "VACÍA" : p.PersonaDocumento,
-                })
-                .ToList();
+
+            dgvReporte.DataSource = null;
+            dgvReporte.DataSource = datos;
 
             dgvReporte.Columns["PlazaFija"]?.HeaderText = "Plaza fija de";
             lblTitulo1.Text = "Total Plazas";
@@ -114,29 +118,32 @@ namespace ParkFlow.Presentacion
             lblValor4.Text = _parqueaderos.GetAll().Count(p => p.Libre && p.Tipo == "VISITANTE").ToString();
         }
 
-        private void ReporteResidentes()
+        private async Task ReporteResidentes()
         {
             if (_personas == null || _vehiculos == null || _parqueaderos == null || _casas == null) return;
 
-            dgvReporte.DataSource = null;
-            dgvReporte.DataSource = _personas.GetAll()
-                .Where(r => r is Residente)
-                .Select(r => new
-                {
-                    Documento = r.Id,
-                    Residente = r.Nombre + " " + r.Apellido,
-                    Telefono = r.Telefono,
-                    Correo = r.Correo,
-                    Vivienda = _casas.GetByPersona(r.Id)
+            var datos = await Task.Run(() =>
+                  _personas.GetAll()
+                  .Where(r => r is Residente)
+                  .Select(r => new
+                  {
+                      Documento = r.Id,
+                      Residente = r.Nombre + " " + r.Apellido,
+                      Telefono = r.Telefono,
+                      Correo = r.Correo,
+                      Vivienda = _casas.GetByPersona(r.Id)
                     .Select(c =>
                         $"{c.Torre}-{c.Piso}-{c.Apartamento}"
                         )?
                     .FirstOrDefault() ?? "SIN VIVIENDA",
-                    CantVehiculos = _vehiculos.GetAll().Count(v => v.PersonaDocumento == r.Id),
-                    PlazaFija = _parqueaderos.GetAll().FirstOrDefault(p => p.PersonaDocumento == r.Id)?.Codigo ?? "SIN PLAZA",
-                    MovilidadReducida = (r.MovilidadReducida) ? "SI" : "NO"
-                })
-                .ToList();
+                      CantVehiculos = _vehiculos.GetAll().Count(v => v.PersonaDocumento == r.Id),
+                      PlazaFija = _parqueaderos.GetAll().FirstOrDefault(p => p.PersonaDocumento == r.Id)?.Codigo ?? "SIN PLAZA",
+                      MovilidadReducida = (r.MovilidadReducida) ? "SI" : "NO"
+                  })
+                  .ToList());
+
+            dgvReporte.DataSource = null;
+            dgvReporte.DataSource = datos;
 
             dgvReporte.Columns["PlazaFija"]?.HeaderText = "Plaza fija";
             dgvReporte.Columns["CantVehiculos"]?.HeaderText = "Cantidad de Vehiculos";
@@ -153,31 +160,34 @@ namespace ParkFlow.Presentacion
             lblValor4.Text = _personas.GetAll().Count(p => p.MovilidadReducida && p is Residente).ToString();
         }
 
-        private void ReporteVisitas()
+        private async Task ReporteVisitas()
         {
             if (_registros == null || _casas == null || _personas == null || _vehiculos == null) return;
 
-            dgvReporte.DataSource = null;
-            dgvReporte.DataSource = _registros.GetAll()
-                .GroupBy(g => g.IdVivienda)
-                .Select(g => new
-                {
-                    Vivienda = _casas.GetAll()
-                    .Where(c => c.Id == g.Key)
-                    .Select(c =>
-                        $"{c.Torre}-{c.Piso}-{c.Apartamento}"
-                        )?
-                    .FirstOrDefault(),
-                    PersonaVisitada = g.First().PersonaVisitada,
-                    Visitas = g.Count(),
-                    TiempoPromedio = Math.Round(g.Where(r => r.FechaSalida != null)
-                                        .Select(r => r.TiempoVisita.TotalHours)
-                                        .DefaultIfEmpty(0)
-                                        .Average(), 1) + " horas",
-                    UltimaVisita = g.Max(r => r.FechaIngreso)
+            var datos = await Task.Run(() =>
+                   _registros.GetAll()
+                   .GroupBy(g => g.IdVivienda)
+                   .Select(g => new
+                   {
+                       Vivienda = _casas.GetAll()
+                   .Where(c => c.Id == g.Key)
+                   .Select(c =>
+                       $"{c.Torre}-{c.Piso}-{c.Apartamento}"
+                       )?
+                   .FirstOrDefault(),
+                       PersonaVisitada = g.First().PersonaVisitada,
+                       Visitas = g.Count(),
+                       TiempoPromedio = Math.Round(g.Where(r => r.FechaSalida != null)
+                                       .Select(r => r.TiempoVisita.TotalHours)
+                                       .DefaultIfEmpty(0)
+                                       .Average(), 1) + " horas",
+                       UltimaVisita = g.Max(r => r.FechaIngreso)
 
-                })
-                .ToList();
+                   })
+                   .ToList());
+
+            dgvReporte.DataSource = null;
+            dgvReporte.DataSource = datos;
 
             dgvReporte.Columns["PersonaVisitada"]?.HeaderText = "Persona Visitada";
             dgvReporte.Columns["TiempoPromedio"]?.HeaderText = "Tiempo promedio Visitas";
@@ -185,7 +195,7 @@ namespace ParkFlow.Presentacion
             lblTitulo2.Text = "Visitas Activas";
             lblTitulo3.Text = "Visitas Hoy";
             lblTitulo4.Text = "Tiempo Promedio General";
-            lblValor1.Text = _registros.GetAll().Count().ToString(); 
+            lblValor1.Text = _registros.GetAll().Count().ToString();
             lblValor2.Text = _registros.GetActivas().Count().ToString();
             lblValor3.Text = _registros.GetAll().Count(r => r.FechaIngreso.Date == DateTime.Today).ToString();
             lblValor4.Text = Math.Round(_registros.GetAll()
@@ -195,26 +205,30 @@ namespace ParkFlow.Presentacion
                                 .Average(), 1) + " horas";
         }
 
-        private void ReportePorteria()
+        private async Task ReportePorteria()
         {
             if (_estancias == null || _vehiculos == null || _personas == null) return;
-            dgvReporte.DataSource = null;
-            dgvReporte.DataSource = _estancias.GetAll()
-                .GroupBy(g => g.VehiculoPlaca)
-                .Select(g => new
-                {
-                    Placa = g.First().VehiculoPlaca,
-                    Propietario = _vehiculos.GetById(g.Key)?.PersonaDocumento,
-                    VecesEntro = g.Count(),
-                    TiempoTotal = Math.Round(g.Sum(e => e.TiempoOcupado.TotalHours),1) + " horas",
-                    TiempoPromedio = Math.Round(g.Where(e => e.FechaSalida != null)
-                                         .Select(e => e.TiempoOcupado.TotalHours)
-                                         .DefaultIfEmpty(0)
-                                         .Average(),1) + " horas",
-                    UltimaEntrada = g.Max(e => e.FechaLlegada)
 
-                })
-                .ToList();
+            var datos = await Task.Run(() =>
+                  _estancias.GetAll()
+                  .GroupBy(g => g.VehiculoPlaca)
+                  .Select(g => new
+                  {
+                      Placa = g.First().VehiculoPlaca,
+                      Propietario = _vehiculos.GetById(g.Key)?.PersonaDocumento,
+                      VecesEntro = g.Count(),
+                      TiempoTotal = Math.Round(g.Sum(e => e.TiempoOcupado.TotalHours), 1) + " horas",
+                      TiempoPromedio = Math.Round(g.Where(e => e.FechaSalida != null)
+                                             .Select(e => e.TiempoOcupado.TotalHours)
+                                             .DefaultIfEmpty(0)
+                                             .Average(), 1) + " horas",
+                      UltimaEntrada = g.Max(e => e.FechaLlegada)
+
+                  })
+                .ToList());
+
+            dgvReporte.DataSource = null;
+            dgvReporte.DataSource = datos;
 
             dgvReporte.Columns["VecesEntro"]?.HeaderText = "Veces que Entro";
             dgvReporte.Columns["TiempoTotal"]?.HeaderText = "Tiempo Total Ocupación";
@@ -231,9 +245,7 @@ namespace ParkFlow.Presentacion
                                  .Where(e => e.FechaSalida != null)
                                  .Select(e => e.TiempoOcupado.TotalHours)
                                  .DefaultIfEmpty(0)
-                                 .Average(),1) + " horas";
-
-
+                                 .Average(), 1) + " horas";
         }
 
         private void LimpiarReporte()
@@ -250,29 +262,39 @@ namespace ParkFlow.Presentacion
 
         }
 
-        private void btnGenerar_Click(object sender, EventArgs e)
+        private async void btnGenerar_Click(object sender, EventArgs e)
         {
-            switch (lstReportes.Text)
+            btnGenerar.Enabled = false;
+
+            try
             {
-                case "Vehículos":
-                    ReporteVehiculos();
-                    break;
-                case "Ocupación de plazas":
-                    ReportePlazas();
-                    break;
-                case "Residentes":
-                    ReporteResidentes();
-                    break;
-                case "Visitas":
-                    ReporteVisitas();
-                    break;
-                case "Movimientos de portería":
-                    ReportePorteria();
-                    break; 
-                default:
-                    MessageBox.Show("No se puede generar el reporte debe eligir una opción ", "Reportes");
-                    break;
+                switch (lstReportes.Text)
+                {
+                    case "Vehículos":
+                        await ReporteVehiculos();
+                        break;
+                    case "Ocupación de plazas":
+                        await ReportePlazas();
+                        break;
+                    case "Residentes":
+                        await ReporteResidentes();
+                        break;
+                    case "Visitas":
+                        await ReporteVisitas();
+                        break;
+                    case "Movimientos de portería":
+                        await ReportePorteria();
+                        break;
+                    default:
+                        Mensajes.Aviso("No se puede generar el reporte debe elegir una opción de reporte ", "Reportes");
+                        break;
+                }
             }
+            finally
+            {
+                btnGenerar.Enabled = true;
+            }
+
         }
 
         private void lstReportes_MouseClick(object sender, MouseEventArgs e)

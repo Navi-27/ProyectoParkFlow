@@ -432,6 +432,7 @@ namespace ParkFlow.Presentacion
             MinimumSize = new Size(1308, 662);
             Name = "FrVisitas";
             Text = "Visitas";
+            Activated += FrVisitas_Activated;
             Load += FrVisitas_Load;
             gbVisitante.ResumeLayout(false);
             gbVisitante.PerformLayout();
